@@ -3,26 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PhD Research Command Center Pro</title>
+  <title>PhD Research Command Center Pro v3.0</title>
   
+  <!-- FontAwesome, KaTeX & html2pdf -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface-border: #30363d;
+      --bg: #0b0f14;
+      --surface: #121820;
+      --surface-hover: #1b222d;
+      --surface-border: #263140;
       --primary: #58a6ff;
       --primary-hover: #1f6feb;
-      --accent: #2ea043;
+      --accent-green: #2ea043;
+      --accent-yellow: #d29922;
+      --accent-blue: #388bfd;
       --accent-danger: #f85149;
-      --accent-warn: #d29922;
       --text: #c9d1d9;
       --text-muted: #8b949e;
       --text-bright: #f0f6fc;
-      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --font-mono: "SF Mono", Monaco, Consolas, "Liberation Mono", Menlo, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,24 +41,26 @@
       touch-action: manipulation;
     }
 
+    /* BARA LATERALĂ */
     aside {
-      width: 250px;
+      width: 260px;
       background: var(--surface);
       border-right: 1px solid var(--surface-border);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
+      z-index: 10;
     }
 
     .brand {
-      padding: 1.25rem 1rem;
+      padding: 1.2rem 1.1rem;
       border-bottom: 1px solid var(--surface-border);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-    .brand h1 { font-size: 1.05rem; color: var(--text-bright); font-weight: 700; }
-    .brand span { font-size: 0.7rem; background: var(--primary-hover); color: #fff; padding: 2px 6px; border-radius: 4px; }
+    .brand h1 { font-size: 1.05rem; color: var(--text-bright); font-weight: 700; letter-spacing: -0.3px; }
+    .brand span { font-size: 0.68rem; background: var(--primary-hover); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
 
     nav { flex: 1; overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; gap: 4px; }
     .nav-btn {
@@ -66,16 +72,16 @@
       border: 1px solid transparent;
       color: var(--text);
       border-radius: 8px;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 500;
       cursor: pointer;
       text-align: left;
       transition: all 0.2s ease;
       width: 100%;
     }
-    .nav-btn i { width: 18px; color: var(--text-muted); text-align: center; }
-    .nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-bright); }
-    .nav-btn.active { background: rgba(88, 166, 255, 0.15); color: var(--primary); border-color: rgba(88, 166, 255, 0.3); }
+    .nav-btn i { width: 18px; color: var(--text-muted); text-align: center; font-size: 0.95rem; }
+    .nav-btn:hover { background: var(--surface-hover); color: var(--text-bright); }
+    .nav-btn.active { background: rgba(88, 166, 255, 0.12); color: var(--primary); border-color: rgba(88, 166, 255, 0.35); font-weight: 600; }
     .nav-btn.active i { color: var(--primary); }
 
     .sidebar-footer {
@@ -86,16 +92,18 @@
       gap: 6px;
     }
 
+    /* ZONA PRINCIPALĂ */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       background: var(--bg);
+      position: relative;
     }
 
     header {
-      height: 55px;
+      height: 56px;
       background: var(--surface);
       border-bottom: 1px solid var(--surface-border);
       display: flex;
@@ -114,9 +122,10 @@
     }
 
     .view-section { display: none; }
-    .view-section.active { display: block; animation: fadeIn 0.15s ease; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .view-section.active { display: block; animation: fadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* CARDURI ȘI BUTOANE */
     button, input, select, textarea { font-family: inherit; color: inherit; }
     .btn {
       background: var(--surface);
@@ -130,13 +139,13 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: all 0.18s;
     }
-    .btn:hover { background: rgba(255,255,255,0.08); }
+    .btn:hover { background: var(--surface-hover); border-color: var(--primary); }
     .btn-sm { padding: 5px 8px; font-size: 0.78rem; }
-    .btn-primary { background: var(--primary); color: #0d1117; border-color: var(--primary); font-weight: 600; }
+    .btn-primary { background: var(--primary); color: #0b0f14; border-color: var(--primary); font-weight: 600; }
     .btn-primary:hover { background: var(--primary-hover); color: #fff; }
-    .btn-success { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-success { background: var(--accent-green); color: #fff; border-color: var(--accent-green); }
     .btn-danger { background: rgba(248, 81, 73, 0.15); color: var(--accent-danger); border-color: rgba(248, 81, 73, 0.4); }
 
     .card {
@@ -168,8 +177,135 @@
       font-size: 0.88rem;
     }
     .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2); }
-    textarea.form-control { resize: vertical; }
 
+    /* BRIEF COORDONATOR - THEMED BORDERS & BADGES */
+    .brief-card-green { border-left: 4px solid var(--accent-green); }
+    .brief-card-yellow { border-left: 4px solid var(--accent-yellow); }
+    .brief-card-blue { border-left: 4px solid var(--accent-blue); }
+
+    /* POMODORO NEON ANIMATED RING */
+    .pomodoro-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+    }
+    .timer-ring-container {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    .timer-ring-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+    .timer-ring-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 8;
+    }
+    .timer-ring-bar {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 691;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s;
+      filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.4));
+    }
+    .timer-text-content {
+      position: absolute;
+      text-align: center;
+    }
+    .timer-display-animated {
+      font-size: 3.2rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: -1px;
+    }
+    .timer-phase-badge {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* LATEX CHEAT SHEET */
+    .latex-cheat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .latex-chip {
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      transition: all 0.15s;
+    }
+    .latex-chip:hover { border-color: var(--primary); background: rgba(88,166,255,0.08); transform: translateY(-1px); }
+    .latex-chip span.math-lbl { font-family: var(--font-mono); color: var(--primary); font-size: 0.72rem; }
+
+    /* CALENDAR GRID */
+    .calendar-container {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .calendar-header-day {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 4px 0;
+    }
+    .calendar-cell {
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      min-height: 85px;
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .calendar-cell.today { border-color: var(--primary); background: rgba(88,166,255,0.05); }
+    .calendar-cell .day-num { font-weight: 700; color: var(--text-muted); }
+    .calendar-cell.today .day-num { color: var(--primary); }
+    .cal-event-pill {
+      font-size: 0.68rem;
+      padding: 2px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+    }
+    .cal-event-pill.deadline { background: rgba(248,81,73,0.25); color: #ff7b72; }
+    .cal-event-pill.conf { background: rgba(56,139,253,0.25); color: #79c0ff; }
+    .cal-event-pill.milestone { background: rgba(46,160,67,0.25); color: #7ee787; }
+
+    /* TABELE & ALTELE */
     .table-responsive { overflow-x: auto; border: 1px solid var(--surface-border); border-radius: 6px; }
     table.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.82rem; }
     table.data-table th { background: rgba(255,255,255,0.03); color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--surface-border); }
@@ -180,8 +316,8 @@
     #canvas-container {
       position: relative;
       width: 100%;
-      height: 540px;
-      background: #111418;
+      height: 520px;
+      background: #0f141c;
       border: 1px solid var(--surface-border);
       border-radius: 8px;
       overflow: hidden;
@@ -201,43 +337,21 @@
     }
     .canvas-toolbar .btn.active { background: var(--primary); color: #000; font-weight: 600; }
 
-    .timer-display {
-      font-size: 4rem;
-      font-weight: 700;
-      font-family: var(--font-mono);
-      color: var(--primary);
-      text-align: center;
-      margin: 1.5rem 0;
-    }
-    .timer-controls { display: flex; justify-content: center; gap: 10px; }
-
     .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
     @media (max-width: 900px) { .split-grid { grid-template-columns: 1fr; } aside { width: 210px; } }
-    .code-block {
-      background: #090d12;
-      border: 1px solid var(--surface-border);
-      border-radius: 6px;
-      padding: 10px;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      color: #79c0ff;
-      overflow-x: auto;
-      white-space: pre-wrap;
-    }
+    
     .math-preview {
-      background: #111418;
+      background: #0b0f14;
       border: 1px solid var(--surface-border);
       border-radius: 6px;
       padding: 1.5rem;
-      min-height: 120px;
+      min-height: 110px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       overflow-x: auto;
     }
-    .badge-urgent { background: rgba(248, 81, 73, 0.2); color: var(--accent-danger); padding: 3px 6px; border-radius: 4px; font-weight: 600; }
-    .badge-ok { background: rgba(46, 160, 67, 0.2); color: var(--accent); padding: 3px 6px; border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -247,7 +361,7 @@
       <i class="fa-solid fa-graduation-cap" style="color: var(--primary); font-size: 1.3rem;"></i>
       <div>
         <h1>PhD Workspace</h1>
-        <span>v2.2 Pro</span>
+        <span>v3.0 Pro</span>
       </div>
     </div>
 
@@ -255,23 +369,26 @@
       <button class="nav-btn active" onclick="switchTab('lit-matrix')">
         <i class="fa-solid fa-book-bookmark"></i> Matrice Literatură
       </button>
-      <button class="nav-btn" onclick="switchTab('stylus-canvas')">
-        <i class="fa-solid fa-pen-ruler"></i> Stylus / Diagrame
-      </button>
-      <button class="nav-btn" onclick="switchTab('exp-bench')">
-        <i class="fa-solid fa-flask-vial"></i> Benchmark & Log
-      </button>
-      <button class="nav-btn" onclick="switchTab('deadlines-view')">
-        <i class="fa-solid fa-calendar-check"></i> Termene & Conferințe
-      </button>
-      <button class="nav-btn" onclick="switchTab('deep-work')">
-        <i class="fa-solid fa-stopwatch"></i> Focus & Pomodoro
-      </button>
       <button class="nav-btn" onclick="switchTab('meeting-brief')">
         <i class="fa-solid fa-user-tie"></i> Brief Coordonator
       </button>
       <button class="nav-btn" onclick="switchTab('math-tools')">
         <i class="fa-solid fa-square-root-variable"></i> Math & LaTeX Gen
+      </button>
+      <button class="nav-btn" onclick="switchTab('deep-work')">
+        <i class="fa-solid fa-stopwatch"></i> Focus & Pomodoro
+      </button>
+      <button class="nav-btn" onclick="switchTab('calendar-view')">
+        <i class="fa-solid fa-calendar-days"></i> Calendar & Termene
+      </button>
+      <button class="nav-btn" onclick="switchTab('qos-calc')">
+        <i class="fa-solid fa-calculator"></i> QoS & Network Calc
+      </button>
+      <button class="nav-btn" onclick="switchTab('stylus-canvas')">
+        <i class="fa-solid fa-pen-ruler"></i> Stylus / Diagrame
+      </button>
+      <button class="nav-btn" onclick="switchTab('exp-bench')">
+        <i class="fa-solid fa-flask-vial"></i> Benchmark & Log
       </button>
       <button class="nav-btn" onclick="switchTab('state-log')">
         <i class="fa-solid fa-location-arrow"></i> Where I Left Off
@@ -313,7 +430,7 @@
           
           <div id="bibtex-import-box" style="display: none; margin-bottom: 1rem; padding: 10px; background: rgba(255,255,255,0.02); border: 1px dashed var(--surface-border); border-radius: 6px;">
             <label class="form-label">Lipește textul BibTeX:</label>
-            <textarea id="bibtex-bulk-input" class="form-control" rows="4" placeholder="@article{key, title={...}, author={...}, year={2026}}"></textarea>
+            <textarea id="bibtex-bulk-input" class="form-control" rows="4" placeholder="@article{ref2026,\n  title={Real-Time Middleware},\n  author={Smith, J.},\n  year={2026}\n}"></textarea>
             <button class="btn btn-primary btn-sm" style="margin-top: 6px;" onclick="parseBulkBibtex()"><i class="fa-solid fa-bolt"></i> Procesează și Adaugă</button>
           </div>
 
@@ -324,11 +441,11 @@
             </div>
             <div class="form-group">
               <label class="form-label">Autori & An</label>
-              <input type="text" id="paper-authors" class="form-control" placeholder="ex. Smith et al., 2025">
+              <input type="text" id="paper-authors" class="form-control" placeholder="ex. Smith et al., 2026">
             </div>
             <div class="form-group">
               <label class="form-label">Metodologie / Arhitectură</label>
-              <input type="text" id="paper-method" class="form-control" placeholder="ex. CycloneDDS vs rmw_zenoh pe LAN">
+              <input type="text" id="paper-method" class="form-control" placeholder="ex. CycloneDDS vs rmw_zenoh">
             </div>
             <div class="form-group">
               <label class="form-label">Tag-uri / Topic</label>
@@ -368,895 +485,31 @@
         </div>
       </section>
 
-      <!-- 2. STYLUS CANVAS -->
-      <section id="stylus-canvas" class="view-section">
-        <div class="canvas-toolbar">
-          <button class="btn active" onclick="setTool('pen')" id="tool-pen"><i class="fa-solid fa-pen"></i> Pen</button>
-          <button class="btn" onclick="setTool('line')" id="tool-line"><i class="fa-solid fa-slash"></i> Linie</button>
-          <button class="btn" onclick="setTool('arrow')" id="tool-arrow"><i class="fa-solid fa-arrow-right"></i> Săgeată</button>
-          <button class="btn" onclick="setTool('rect')" id="tool-rect"><i class="fa-regular fa-square"></i> Bloc Nod</button>
-          <button class="btn" onclick="setTool('eraser')" id="tool-eraser"><i class="fa-solid fa-eraser"></i> Radieră</button>
-          
-          <input type="color" id="pen-color" value="#58a6ff" style="background:none; border:none; width:28px; height:28px; cursor:pointer;" onchange="updateColor(this.value)">
-          
-          <select id="pen-size" class="form-control" style="width: 110px;" onchange="updateSize(this.value)">
-            <option value="2">Subțire (2px)</option>
-            <option value="4" selected>Mediu (4px)</option>
-            <option value="8">Gros (8px)</option>
-          </select>
-
-          <button class="btn" onclick="undoCanvas()" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
-          <button class="btn" onclick="redoCanvas()" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
-          <button class="btn btn-danger" onclick="clearCanvas()"><i class="fa-solid fa-trash"></i> Șterge Tot</button>
-
-          <div style="flex:1;"></div>
-          <button class="btn" onclick="exportCanvasPNG(false)"><i class="fa-solid fa-image"></i> Export PNG (Dark)</button>
-          <button class="btn btn-success" onclick="exportCanvasPNG(true)"><i class="fa-solid fa-print"></i> Export Paper (Fundal Alb)</button>
-        </div>
-        <div id="canvas-container">
-          <canvas id="sketch-canvas"></canvas>
-        </div>
-      </section>
-
-      <!-- 3. BENCHMARK & EXPERIMENTE -->
-      <section id="exp-bench" class="view-section">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-vial"></i> Înregistrare Rulare Experimentală</div>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
-            <div class="form-group">
-              <label class="form-label">ID Rulare / Scenariu</label>
-              <input type="text" id="exp-name" class="form-control" placeholder="ex. Test_01_LAN_1Gbps">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Middleware / Config</label>
-              <input type="text" id="exp-config" class="form-control" placeholder="ex. rmw_zenoh (Peer-to-Peer)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">RTT Latență P50 (ms)</label>
-              <input type="number" step="0.01" id="exp-p50" class="form-control" placeholder="ex. 2.15">
-            </div>
-            <div class="form-group">
-              <label class="form-label">RTT Latență P99 (ms)</label>
-              <input type="number" step="0.01" id="exp-p99" class="form-control" placeholder="ex. 4.80">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Packet Loss (%) / Jitter</label>
-              <input type="text" id="exp-loss" class="form-control" placeholder="ex. 0.05% / 0.12ms">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Observații Tehnice</label>
-            <input type="text" id="exp-notes" class="form-control" placeholder="ex. CPU usage stabil la 14%, fără memory leaks detectate">
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-primary" onclick="addExperiment()"><i class="fa-solid fa-plus"></i> Salvează Rulare</button>
-            <button class="btn" onclick="exportExperimentsToLatex()"><i class="fa-solid fa-table"></i> Generează Tabel LaTeX</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Jurnal Experimente (<span id="exp-count">0</span>)</div>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Scenariu</th>
-                  <th>Middleware</th>
-                  <th>Latență P50</th>
-                  <th>Latență P99</th>
-                  <th>Loss / Jitter</th>
-                  <th>Observații</th>
-                  <th>Acțiuni</th>
-                </tr>
-              </thead>
-              <tbody id="exp-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 4. TERMENE SI CONFERINTE -->
-      <section id="deadlines-view" class="view-section">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-clock"></i> Adaugă Conferință / Termen Limită</div>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-            <div class="form-group">
-              <label class="form-label">Nume Eveniment / Obiectiv</label>
-              <input type="text" id="deadline-name" class="form-control" placeholder="ex. IEEE IROS / Raport Progres">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Data Limită (Deadline)</label>
-              <input type="date" id="deadline-date" class="form-control">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Tip / Indexare</label>
-              <select id="deadline-type" class="form-control">
-                <option value="Conferință IEEE/ACM">Conferință IEEE/ACM</option>
-                <option value="Jurnal ISI Q1/Q2">Jurnal ISI Q1/Q2</option>
-                <option value="Raport Doctorat SCOSAAR">Raport Doctorat SCOSAAR</option>
-                <option value="Milestone Tehnic">Milestone Tehnic</option>
-              </select>
-            </div>
-          </div>
-          <button class="btn btn-primary" onclick="addDeadline()"><i class="fa-solid fa-calendar-plus"></i> Salvează Termen</button>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Calendar Termene & Zile Rămase</div>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Eveniment</th>
-                  <th>Tip</th>
-                  <th>Data Limită</th>
-                  <th>Timp Rămas</th>
-                  <th>Acțiuni</th>
-                </tr>
-              </thead>
-              <tbody id="deadlines-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 5. FOCUS & POMODORO -->
-      <section id="deep-work" class="view-section">
-        <div class="split-grid">
-          <div class="card" style="text-align: center;">
-            <div class="card-title" style="justify-content: center;"><i class="fa-solid fa-brain"></i> Deep Work Session</div>
-            <div class="timer-display" id="pomodoro-timer">25:00</div>
-            <div class="timer-controls">
-              <button class="btn btn-primary" id="timer-toggle-btn" onclick="toggleTimer()"><i class="fa-solid fa-play"></i> Start</button>
-              <button class="btn" onclick="resetTimer(25)"><i class="fa-solid fa-rotate-left"></i> 25m Focus</button>
-              <button class="btn" onclick="resetTimer(5)"><i class="fa-solid fa-mug-hot"></i> 5m Pauză</button>
-              <button class="btn" onclick="resetTimer(15)"><i class="fa-solid fa-battery-half"></i> 15m Lung</button>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-title"><i class="fa-solid fa-list-check"></i> Obiectiv Sesiune Curentă</div>
-            <div class="form-group" style="margin-top: 10px;">
-              <textarea id="focus-task" class="form-control" rows="5" placeholder="ex. Finalizează secțiunea III.B din paper (Arhitectura QoS Zenoh vs CycloneDDS)..."></textarea>
-            </div>
-            <button class="btn btn-success btn-sm" onclick="saveFocusTask()"><i class="fa-solid fa-check"></i> Salvează Obiectiv</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 6. BRIEF COORDONATOR -->
+      <!-- 2. BRIEF COORDONATOR (CU CELE 3 CULORI & EXPORT PDF) -->
       <section id="meeting-brief" class="view-section">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-file-lines"></i> Generator Sinteză Întâlnire Coordonator</div>
-            <button class="btn btn-primary btn-sm" onclick="generateMeetingBrief()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generează Document</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.1rem; color: var(--text-bright);">Pregătire Sinteză Ședință Îndrumător</h2>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="generateBriefPDF()"><i class="fa-solid fa-file-pdf"></i> Export Raport PDF (A4)</button>
+            <button class="btn btn-success" onclick="copyBriefText()"><i class="fa-solid fa-copy"></i> Copiază Text Formatat</button>
           </div>
-          <div class="split-grid">
-            <div>
-              <div class="form-group">
-                <label class="form-label">1. Progres Realizat în Ultima Perioadă</label>
-                <textarea id="brief-progress" class="form-control" rows="3" placeholder="- Implementat nodul de teleoperare în ROS 2&#10;- Măsurat latența pe rmw_zenoh"></textarea>
+        </div>
+
+        <div class="split-grid">
+          <!-- Coloana de Editare -->
+          <div>
+            <!-- Card Verde: Progres -->
+            <div class="card brief-card-green">
+              <div class="card-header">
+                <div class="card-title" style="color: #7ee787;"><i class="fa-solid fa-circle-check"></i> 1. Progres Realizat & Rezultate</div>
               </div>
               <div class="form-group">
-                <label class="form-label">2. Blocaje Tehnice / Întrebări Decizionale</label>
-                <textarea id="brief-blockers" class="form-control" rows="3" placeholder="- Jitter ridicat peste rețele Wi-Fi degradate&#10;- Alegerea structurii mesajelor custom"></textarea>
-              </div>
-              <div class="form-group">
-                <label class="form-label">3. Obiective pentru Următorul Interval</label>
-                <textarea id="brief-next" class="form-control" rows="3" placeholder="- Rulare teste automate în Gazebo&#10;- Redactare capitolul de rezultate experimentale"></textarea>
+                <label class="form-label">Ce s-a finalizat concret de la ultima întâlnire:</label>
+                <textarea id="brief-green" class="form-control" rows="4" placeholder="- Configurat Zenoh router pe nodul edge&#10;- Măsurat latența RTT pe 100k pachete&#10;- Redactat secțiunea III.A"></textarea>
               </div>
             </div>
-            <div>
-              <label class="form-label">Text Formatat (Gata de Copiat / Email / Raport)</label>
-              <textarea id="brief-output" class="form-control" rows="11" readonly></textarea>
-              <button class="btn btn-sm" style="margin-top: 6px;" onclick="copyBrief()"><i class="fa-solid fa-copy"></i> Copiază în Clipboard</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <!-- 7. MATH & LATEX GEN -->
-      <section id="math-tools" class="view-section">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-square-root-variable"></i> KaTeX Preview & LaTeX Helper</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Cod LaTeX Formulă</label>
-            <textarea id="latex-input" class="form-control" rows="3" onkeyup="renderLatexPreview()">L_{RTT} = \frac{1}{N} \sum_{i=1}^{N} (t_{rx, i} - t_{tx, i})</textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Randare Live KaTeX</label>
-            <div id="katex-render-box" class="math-preview"></div>
-          </div>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn btn-sm" onclick="setLatexTemplate('rtt')">Formulă RTT Latență</button>
-            <button class="btn btn-sm" onclick="setLatexTemplate('jitter')">Formulă Jitter RFC 3550</button>
-            <button class="btn btn-sm" onclick="setLatexTemplate('state_space')">Sistem State-Space Control</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 8. WHERE I LEFT OFF -->
-      <section id="state-log" class="view-section">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-bookmark"></i> Salvare Context Curent (Context Switch)</div>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
-            <div class="form-group">
-              <label class="form-label">Git Branch / Repo</label>
-              <input type="text" id="state-git" class="form-control" placeholder="ex. feature/zenoh-latency-test">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Ultimul Fișier Deschis / Comandă</label>
-              <input type="text" id="state-file" class="form-control" placeholder="ex. ros2_teleop_node.py | colcon build">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Ce urmează să fac exact la reluare?</label>
-            <textarea id="state-next-action" class="form-control" rows="3" placeholder="ex. Corectează rata de publicare pe topicul de comandă și rulează scriptul de evaluare..."></textarea>
-          </div>
-          <button class="btn btn-primary" onclick="saveStateLog()"><i class="fa-solid fa-floppy-disk"></i> Salvează Stare</button>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Istoric Stări Salvate</div>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th style="width: 20%;">Data & Ora</th>
-                  <th style="width: 20%;">Branch / Repo</th>
-                  <th style="width: 25%;">Fișier / Comandă</th>
-                  <th style="width: 35%;">Următorul Pas</th>
-                </tr>
-              </thead>
-              <tbody id="state-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <script>
-    // --- 1. ROUTING & TAB NAVIGATION ---
-    const tabTitles = {
-      'lit-matrix': 'Matrice Analiză Literatură',
-      'stylus-canvas': 'Stylus & Diagrame Tehnice',
-      'exp-bench': 'Benchmark & Jurnal Experimente',
-      'deadlines-view': 'Termene Limită & Conferințe',
-      'deep-work': 'Focus & Deep Work Pomodoro',
-      'meeting-brief': 'Generator Brief Coordonator',
-      'math-tools': 'Formule Matematice & Generator LaTeX',
-      'state-log': 'Where I Left Off (Context Switch)'
-    };
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
-      const targetSec = document.getElementById(tabId);
-      if (targetSec) targetSec.classList.add('active');
-
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        const onclickAttr = btn.getAttribute('onclick');
-        if (onclickAttr && onclickAttr.includes(tabId)) {
-          btn.classList.add('active');
-        }
-      });
-
-      const titleEl = document.getElementById('page-title');
-      if (titleEl && tabTitles[tabId]) {
-        titleEl.textContent = tabTitles[tabId];
-      }
-
-      if (tabId === 'stylus-canvas') {
-        setTimeout(initCanvasDimensions, 50);
-      }
-      if (tabId === 'math-tools') {
-        renderLatexPreview();
-      }
-    }
-
-    // --- 2. PERSISTENCE STORAGE HELPERS ---
-    const DB = {
-      get: (key, fallback) => {
-        try {
-          const val = localStorage.getItem('phd_' + key);
-          return val ? JSON.parse(val) : fallback;
-        } catch(e) { return fallback; }
-      },
-      set: (key, val) => {
-        try {
-          localStorage.setItem('phd_' + key, JSON.stringify(val));
-        } catch(e) {}
-      }
-    };
-
-    // --- 3. MATRICE LITERATURA ---
-    let papers = DB.get('papers', []);
-
-    function toggleBibtexImport() {
-      const el = document.getElementById('bibtex-import-box');
-      el.style.display = el.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function addPaper() {
-      const title = document.getElementById('paper-title').value.trim();
-      const authors = document.getElementById('paper-authors').value.trim();
-      const method = document.getElementById('paper-method').value.trim();
-      const tags = document.getElementById('paper-tags').value.trim();
-      const notes = document.getElementById('paper-notes').value.trim();
-
-      if (!title) return alert('Introdu cel puțin titlul articolului.');
-
-      papers.unshift({ id: Date.now(), title, authors, method, tags, notes });
-      DB.set('papers', papers);
-      
-      document.getElementById('paper-title').value = '';
-      document.getElementById('paper-authors').value = '';
-      document.getElementById('paper-method').value = '';
-      document.getElementById('paper-tags').value = '';
-      document.getElementById('paper-notes').value = '';
-
-      renderPapers();
-    }
-
-    function deletePaper(id) {
-      papers = papers.filter(p => p.id !== id);
-      DB.set('papers', papers);
-      renderPapers();
-    }
-
-    function renderPapers() {
-      const tbody = document.getElementById('papers-table-body');
-      const search = (document.getElementById('search-papers').value || '').toLowerCase();
-      tbody.innerHTML = '';
-
-      const filtered = papers.filter(p => 
-        p.title.toLowerCase().includes(search) ||
-        p.authors.toLowerCase().includes(search) ||
-        p.method.toLowerCase().includes(search) ||
-        p.tags.toLowerCase().includes(search)
-      );
-
-      document.getElementById('paper-count').textContent = filtered.length;
-
-      filtered.forEach(p => {
-        const tagSpans = p.tags.split(' ').filter(t => t.trim()).map(t => `<span class="tag">${t}</span>`).join('');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${p.title}</strong><br><small style="color:var(--text-muted);">${p.authors}</small></td>
-          <td>${p.method}</td>
-          <td>${p.notes}</td>
-          <td>${tagSpans}</td>
-          <td><button class="btn btn-danger btn-sm" onclick="deletePaper(${p.id})"><i class="fa-solid fa-trash"></i></button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function parseBulkBibtex() {
-      const raw = document.getElementById('bibtex-bulk-input').value;
-      if (!raw.trim()) return;
-
-      const entries = raw.split(/@\w+\s*\{/g).filter(e => e.trim());
-      let added = 0;
-
-      entries.forEach(entry => {
-        const titleMatch = entry.match(/title\s*=\s*[\{"]([^"\}]+)[\}"]/i);
-        const authorMatch = entry.match(/author\s*=\s*[\{"]([^"\}]+)[\}"]/i);
-        const yearMatch = entry.match(/year\s*=\s*[\{"]?(\d{4})[\}"]?/i);
-
-        if (titleMatch) {
-          const title = titleMatch[1];
-          const authors = (authorMatch ? authorMatch[1] : 'Unknown') + (yearMatch ? `, ${yearMatch[1]}` : '');
-          papers.unshift({
-            id: Date.now() + Math.random(),
-            title,
-            authors,
-            method: 'Importat BibTeX',
-            tags: '#bibtex',
-            notes: ''
-          });
-          added++;
-        }
-      });
-
-      DB.set('papers', papers);
-      renderPapers();
-      document.getElementById('bibtex-bulk-input').value = '';
-      toggleBibtexImport();
-      alert(`S-au importat ${added} articole.`);
-    }
-
-    function exportBibtex() {
-      let out = '';
-      papers.forEach((p, idx) => {
-        out += `@article{ref_${idx+1},\n  title={${p.title}},\n  author={${p.authors}},\n  note={${p.notes}}\n}\n\n`;
-      });
-      downloadFile('phd_papers.bib', out, 'text/plain');
-    }
-
-    function exportCSV() {
-      let csv = 'Titlu,Autori,Metoda,Taguri,Note\n';
-      papers.forEach(p => {
-        csv += `"${p.title.replace(/"/g, '""')}","${p.authors.replace(/"/g, '""')}","${p.method.replace(/"/g, '""')}","${p.tags}","${p.notes.replace(/"/g, '""')}"\n`;
-      });
-      downloadFile('phd_papers.csv', csv, 'text/csv');
-    }
-
-    // --- 4. STYLUS CANVAS ENGINE ---
-    const canvas = document.getElementById('sketch-canvas');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
-    let currentTool = 'pen';
-    let penColor = '#58a6ff';
-    let penSize = 4;
-    let startX = 0, startY = 0;
-    let undoStack = [];
-    let redoStack = [];
-
-    function initCanvasDimensions() {
-      const container = document.getElementById('canvas-container');
-      const rect = container.getBoundingClientRect();
-      if (canvas.width !== rect.width || canvas.height !== rect.height) {
-        const tempImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        if (tempImage.width > 0) ctx.putImageData(tempImage, 0, 0);
-      }
-    }
-
-    function setTool(t) {
-      currentTool = t;
-      document.querySelectorAll('.canvas-toolbar button[id^="tool-"]').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById('tool-' + t);
-      if (activeBtn) activeBtn.classList.add('active');
-    }
-
-    function updateColor(c) { penColor = c; }
-    function updateSize(s) { penSize = parseInt(s, 10); }
-
-    function getCanvasCoords(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
-      };
-    }
-
-    function pushCanvasState() {
-      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-      redoStack = [];
-      if (undoStack.length > 25) undoStack.shift();
-    }
-
-    canvas.addEventListener('pointerdown', (e) => {
-      isDrawing = true;
-      pushCanvasState();
-      const p = getCanvasCoords(e);
-      startX = p.x;
-      startY = p.y;
-      ctx.beginPath();
-      ctx.moveTo(startX, startY);
-    });
-
-    canvas.addEventListener('pointermove', (e) => {
-      if (!isDrawing) return;
-      const p = getCanvasCoords(e);
-
-      ctx.lineWidth = penSize;
-      ctx.strokeStyle = (currentTool === 'eraser') ? '#111418' : penColor;
-
-      if (currentTool === 'pen' || currentTool === 'eraser') {
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
-      }
-    });
-
-    window.addEventListener('pointerup', (e) => {
-      if (!isDrawing) return;
-      isDrawing = false;
-      const p = getCanvasCoords(e);
-
-      ctx.lineWidth = penSize;
-      ctx.strokeStyle = penColor;
-
-      if (currentTool === 'line') {
-        ctx.beginPath();
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
-      } else if (currentTool === 'rect') {
-        ctx.strokeRect(startX, startY, p.x - startX, p.y - startY);
-      } else if (currentTool === 'arrow') {
-        drawArrow(startX, startY, p.x, p.y);
-      }
-    });
-
-    function drawArrow(fromx, fromy, tox, toy) {
-      const headlen = 12;
-      const angle = Math.atan2(toy - fromy, tox - fromx);
-      ctx.beginPath();
-      ctx.moveTo(fromx, fromy);
-      ctx.lineTo(tox, toy);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(tox, toy);
-      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-      ctx.moveTo(tox, toy);
-      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-      ctx.stroke();
-    }
-
-    function undoCanvas() {
-      if (undoStack.length === 0) return;
-      redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-      const prev = undoStack.pop();
-      ctx.putImageData(prev, 0, 0);
-    }
-
-    function redoCanvas() {
-      if (redoStack.length === 0) return;
-      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-      const next = redoStack.pop();
-      ctx.putImageData(next, 0, 0);
-    }
-
-    function clearCanvas() {
-      if (confirm('Sigur vrei să ștergi întreaga diagramă?')) {
-        pushCanvasState();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-
-    function exportCanvasPNG(whiteBackground) {
-      const exportCanvas = document.createElement('canvas');
-      exportCanvas.width = canvas.width;
-      exportCanvas.height = canvas.height;
-      const expCtx = exportCanvas.getContext('2d');
-
-      if (whiteBackground) {
-        expCtx.fillStyle = '#ffffff';
-        expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
-      } else {
-        expCtx.fillStyle = '#111418';
-        expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
-      }
-
-      expCtx.drawImage(canvas, 0, 0);
-      const link = document.createElement('a');
-      link.download = `phd_diagram_${Date.now()}.png`;
-      link.href = exportCanvas.toDataURL('image/png');
-      link.click();
-    }
-
-    // --- 5. EXPERIMENTE & BENCHMARK ---
-    let experiments = DB.get('experiments', []);
-
-    function addExperiment() {
-      const name = document.getElementById('exp-name').value.trim();
-      const config = document.getElementById('exp-config').value.trim();
-      const p50 = document.getElementById('exp-p50').value.trim();
-      const p99 = document.getElementById('exp-p99').value.trim();
-      const loss = document.getElementById('exp-loss').value.trim();
-      const notes = document.getElementById('exp-notes').value.trim();
-
-      if (!name) return alert('Introdu ID-ul rulării experimentale.');
-
-      experiments.unshift({ id: Date.now(), name, config, p50, p99, loss, notes });
-      DB.set('experiments', experiments);
-
-      document.getElementById('exp-name').value = '';
-      document.getElementById('exp-config').value = '';
-      document.getElementById('exp-p50').value = '';
-      document.getElementById('exp-p99').value = '';
-      document.getElementById('exp-loss').value = '';
-      document.getElementById('exp-notes').value = '';
-
-      renderExperiments();
-    }
-
-    function deleteExperiment(id) {
-      experiments = experiments.filter(e => e.id !== id);
-      DB.set('experiments', experiments);
-      renderExperiments();
-    }
-
-    function renderExperiments() {
-      const tbody = document.getElementById('exp-table-body');
-      tbody.innerHTML = '';
-      document.getElementById('exp-count').textContent = experiments.length;
-
-      experiments.forEach(e => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${e.name}</strong></td>
-          <td><span class="tag">${e.config}</span></td>
-          <td>${e.p50} ms</td>
-          <td>${e.p99} ms</td>
-          <td>${e.loss}</td>
-          <td><small>${e.notes}</small></td>
-          <td><button class="btn btn-danger btn-sm" onclick="deleteExperiment(${e.id})"><i class="fa-solid fa-trash"></i></button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function exportExperimentsToLatex() {
-      let latex = `\\begin{table}[htbp]\n\\centering\n\\caption{Rezultate Experimentale Latență și Fiabilitate Middleware}\n\\label{tab:benchmark_results}\n\\begin{tabular}{lcccc}\n\\hline\n\\textbf{Scenariu} & \\textbf{Middleware} & \\textbf{RTT P50 (ms)} & \\textbf{RTT P99 (ms)} & \\textbf{Loss / Jitter} \\\\\n\\hline\n`;
-      experiments.forEach(e => {
-        latex += `${e.name} & ${e.config} & ${e.p50} & ${e.p99} & ${e.loss} \\\\\n`;
-      });
-      latex += `\\hline\n\\end{tabular}\n\\end{table}`;
-      
-      navigator.clipboard.writeText(latex).then(() => {
-        alert('Codul tabelului LaTeX a fost copiat în clipboard!');
-      });
-    }
-
-    // --- 6. TERMENE & CONFERINTE ---
-    let deadlines = DB.get('deadlines', []);
-
-    function addDeadline() {
-      const name = document.getElementById('deadline-name').value.trim();
-      const date = document.getElementById('deadline-date').value;
-      const type = document.getElementById('deadline-type').value;
-
-      if (!name || !date) return alert('Introdu numele și data limită.');
-
-      deadlines.push({ id: Date.now(), name, date, type });
-      deadlines.sort((a,b) => new Date(a.date) - new Date(b.date));
-      DB.set('deadlines', deadlines);
-
-      document.getElementById('deadline-name').value = '';
-      document.getElementById('deadline-date').value = '';
-
-      renderDeadlines();
-    }
-
-    function deleteDeadline(id) {
-      deadlines = deadlines.filter(d => d.id !== id);
-      DB.set('deadlines', deadlines);
-      renderDeadlines();
-    }
-
-    function renderDeadlines() {
-      const tbody = document.getElementById('deadlines-table-body');
-      tbody.innerHTML = '';
-      const now = new Date();
-
-      deadlines.forEach(d => {
-        const target = new Date(d.date + 'T23:59:59');
-        const diffDays = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
-        
-        let badge = `<span class="badge-ok">${diffDays} zile rămase</span>`;
-        if (diffDays < 0) badge = `<span style="color:var(--text-muted)">Expirat</span>`;
-        else if (diffDays <= 14) badge = `<span class="badge-urgent">URGENT: ${diffDays} zile</span>`;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${d.name}</strong></td>
-          <td><span class="tag">${d.type}</span></td>
-          <td>${d.date}</td>
-          <td>${badge}</td>
-          <td><button class="btn btn-danger btn-sm" onclick="deleteDeadline(${d.id})"><i class="fa-solid fa-trash"></i></button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // --- 7. POMODORO TIMER ---
-    let timerDuration = 25 * 60;
-    let timerRemaining = timerDuration;
-    let timerInterval = null;
-
-    function updateTimerDisplay() {
-      const m = Math.floor(timerRemaining / 60).toString().padStart(2, '0');
-      const s = (timerRemaining % 60).toString().padStart(2, '0');
-      document.getElementById('pomodoro-timer').textContent = `${m}:${s}`;
-    }
-
-    function toggleTimer() {
-      const btn = document.getElementById('timer-toggle-btn');
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        btn.innerHTML = '<i class="fa-solid fa-play"></i> Start';
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pauză';
-        timerInterval = setInterval(() => {
-          if (timerRemaining > 0) {
-            timerRemaining--;
-            updateTimerDisplay();
-          } else {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            btn.innerHTML = '<i class="fa-solid fa-play"></i> Start';
-            alert('Sesiunea de Focus s-a încheiat! Fă o pauză.');
-          }
-        }, 1000);
-      }
-    }
-
-    function resetTimer(mins) {
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = null;
-      document.getElementById('timer-toggle-btn').innerHTML = '<i class="fa-solid fa-play"></i> Start';
-      timerDuration = mins * 60;
-      timerRemaining = timerDuration;
-      updateTimerDisplay();
-    }
-
-    function saveFocusTask() {
-      const task = document.getElementById('focus-task').value;
-      DB.set('current_focus_task', task);
-      alert('Obiectivul sesiunii a fost salvat.');
-    }
-
-    // --- 8. BRIEF COORDONATOR ---
-    function generateMeetingBrief() {
-      const prog = document.getElementById('brief-progress').value.trim();
-      const block = document.getElementById('brief-blockers').value.trim();
-      const next = document.getElementById('brief-next').value.trim();
-      const dateStr = new Date().toLocaleDateString('ro-RO');
-
-      const briefText = `=== SINTEZĂ ACTIVITATE DOCTORAT [${dateStr}] ===\n\n1. PROGRES REALIZAT:\n${prog || '- Fără intrări'}\n\n2. BLOCAJE / SUBIECTE DE DEZBATERE:\n${block || '- Fără blocaje active'}\n\n3. OBIECTIVE PENTRU INTERVALUL URMĂTOR:\n${next || '- Continuarea programului de cercetare'}\n\n==============================================`;
-
-      document.getElementById('brief-output').value = briefText;
-    }
-
-    function copyBrief() {
-      const out = document.getElementById('brief-output');
-      if (!out.value) return;
-      navigator.clipboard.writeText(out.value).then(() => {
-        alert('Brief-ul a fost copiat în clipboard.');
-      });
-    }
-
-    // --- 9. MATH & LATEX TOOLS ---
-    function renderLatexPreview() {
-      const input = document.getElementById('latex-input').value;
-      const box = document.getElementById('katex-render-box');
-      if (window.katex) {
-        try {
-          katex.render(input, box, { displayMode: true, throwOnError: false });
-        } catch(e) {
-          box.textContent = e.message;
-        }
-      }
-    }
-
-    function setLatexTemplate(type) {
-      const el = document.getElementById('latex-input');
-      if (type === 'rtt') {
-        el.value = `L_{RTT} = \\frac{1}{N} \\sum_{i=1}^{N} (t_{rx, i} - t_{tx, i})`;
-      } else if (type === 'jitter') {
-        el.value = `J(i) = J(i-1) + \\frac{|D(i-1, i)| - J(i-1)}{16}`;
-      } else if (type === 'state_space') {
-        el.value = `\\begin{aligned} \\dot{x}(t) &= A x(t) + B u(t - \\tau(t)) \\\\ y(t) &= C x(t) \\end{aligned}`;
-      }
-      renderLatexPreview();
-    }
-
-    // --- 10. WHERE I LEFT OFF (STATE LOG) ---
-    let stateLogs = DB.get('statelogs', []);
-
-    function saveStateLog() {
-      const git = document.getElementById('state-git').value.trim();
-      const file = document.getElementById('state-file').value.trim();
-      const next = document.getElementById('state-next-action').value.trim();
-      const time = new Date().toLocaleString('ro-RO');
-
-      if (!next && !git) return alert('Introdu detaliile stării curente.');
-
-      stateLogs.unshift({ id: Date.now(), time, git, file, next });
-      DB.set('statelogs', stateLogs);
-
-      document.getElementById('state-git').value = '';
-      document.getElementById('state-file').value = '';
-      document.getElementById('state-next-action').value = '';
-
-      renderStateLogs();
-    }
-
-    function renderStateLogs() {
-      const tbody = document.getElementById('state-table-body');
-      tbody.innerHTML = '';
-
-      stateLogs.forEach(s => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><small style="color:var(--text-muted);">${s.time}</small></td>
-          <td><code>${s.git}</code></td>
-          <td><code>${s.file}</code></td>
-          <td><strong>${s.next}</strong></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // --- 11. EXPORT / IMPORT FULL SYNC ---
-    function exportFullBackup() {
-      const fullData = {
-        papers: DB.get('papers', []),
-        experiments: DB.get('experiments', []),
-        deadlines: DB.get('deadlines', []),
-        statelogs: DB.get('statelogs', []),
-        focusTask: DB.get('current_focus_task', '')
-      };
-      downloadFile(`phd_workspace_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
-    }
-
-    function importFullBackup(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = JSON.parse(e.target.result);
-          if (data.papers) DB.set('papers', data.papers);
-          if (data.experiments) DB.set('experiments', data.experiments);
-          if (data.deadlines) DB.set('deadlines', data.deadlines);
-          if (data.statelogs) DB.set('statelogs', data.statelogs);
-          if (data.focusTask) DB.set('current_focus_task', data.focusTask);
-          
-          alert('Sincronizarea s-a realizat cu succes!');
-          location.reload();
-        } catch(err) {
-          alert('Eroare la parsarea fișierului JSON.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function downloadFile(filename, content, mime) {
-      const blob = new Blob([content], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // --- INITIALIZARE LA INCARCARE ---
-    window.addEventListener('DOMContentLoaded', () => {
-      renderPapers();
-      renderExperiments();
-      renderDeadlines();
-      renderStateLogs();
-      updateTimerDisplay();
-      
-      const savedTask = DB.get('current_focus_task', '');
-      if (savedTask) document.getElementById('focus-task').value = savedTask;
-    });
-
-    window.addEventListener('resize', () => {
-      if (document.getElementById('stylus-canvas').classList.contains('active')) {
-        initCanvasDimensions();
-      }
-    });
-  </script>
-</body>
-</html>
+            <!-- Card Galben: Blocaje -->
+            <div class="card brief-card-yellow">
+              <div class="card-header">
+                <div class="card-title" style="color: #e3b341;"><i class="fa-solid fa-triangle-exclamat
