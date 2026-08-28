@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PhD Research Command Center Pro v3.5</title>
+  <title>PhD Research Command Center Ultimate v4.0</title>
   
-  <!-- FontAwesome, KaTeX, html2pdf & Mermaid.js -->
+  <!-- CDN-uri: FontAwesome, KaTeX, html2pdf, Mermaid.js & Chart.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <style>
     :root {
-      --bg: #0b0f14;
+      --bg: #090d12;
       --surface: #121820;
-      --surface-hover: #1b222d;
+      --surface-hover: #1b232e;
       --surface-border: #263140;
       --primary: #58a6ff;
       --primary-hover: #1f6feb;
       --accent-green: #2ea043;
       --accent-yellow: #d29922;
       --accent-blue: #388bfd;
+      --accent-purple: #bc8cff;
       --accent-danger: #f85149;
       --text: #c9d1d9;
       --text-muted: #8b949e;
@@ -43,7 +45,7 @@
     }
 
     aside {
-      width: 260px;
+      width: 265px;
       background: var(--surface);
       border-right: 1px solid var(--surface-border);
       display: flex;
@@ -63,16 +65,17 @@
     .brand span { font-size: 0.68rem; background: var(--primary-hover); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
 
     nav { flex: 1; overflow-y: auto; padding: 0.6rem; display: flex; flex-direction: column; gap: 3px; }
+    .nav-category { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin: 8px 6px 3px 6px; letter-spacing: 0.6px; }
     .nav-btn {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 12px;
+      padding: 8px 10px;
       background: transparent;
       border: 1px solid transparent;
       color: var(--text);
-      border-radius: 8px;
-      font-size: 0.85rem;
+      border-radius: 7px;
+      font-size: 0.83rem;
       font-weight: 500;
       cursor: pointer;
       text-align: left;
@@ -144,6 +147,7 @@
     .btn-primary { background: var(--primary); color: #0b0f14; border-color: var(--primary); font-weight: 600; }
     .btn-primary:hover { background: var(--primary-hover); color: #fff; }
     .btn-success { background: var(--accent-green); color: #fff; border-color: var(--accent-green); }
+    .btn-purple { background: rgba(188, 140, 255, 0.18); color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.4); }
     .btn-danger { background: rgba(248, 81, 73, 0.15); color: var(--accent-danger); border-color: rgba(248, 81, 73, 0.4); }
 
     .card {
@@ -176,12 +180,10 @@
     }
     .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2); }
 
-    /* BRIEF THEMES */
     .brief-card-green { border-left: 4px solid var(--accent-green); }
     .brief-card-yellow { border-left: 4px solid var(--accent-yellow); }
     .brief-card-blue { border-left: 4px solid var(--accent-blue); }
 
-    /* PROGRESS BARS PENTRU PAPER TRACKER */
     .progress-bar-container {
       width: 100%;
       height: 8px;
@@ -196,7 +198,6 @@
       transition: width 0.3s ease;
     }
 
-    /* POMODORO NEON RING */
     .pomodoro-box {
       display: flex;
       flex-direction: column;
@@ -229,7 +230,6 @@
     .timer-text-content { position: absolute; text-align: center; }
     .timer-display-animated { font-size: 3.2rem; font-family: var(--font-mono); font-weight: 700; color: var(--text-bright); }
 
-    /* CHEAT SHEET */
     .latex-cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; margin-top: 8px; }
     .latex-chip {
       background: var(--bg);
@@ -242,16 +242,16 @@
       flex-direction: column;
       align-items: center;
       gap: 2px;
+      transition: all 0.15s;
     }
     .latex-chip:hover { border-color: var(--primary); background: rgba(88,166,255,0.08); }
     .latex-chip span.math-lbl { font-family: var(--font-mono); color: var(--primary); font-size: 0.72rem; }
 
-    /* MERMAID CONTAINER */
     #mermaid-render-output {
       background: #0d1117;
       border: 1px solid var(--surface-border);
       border-radius: 6px;
-      min-height: 380px;
+      min-height: 420px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -259,7 +259,6 @@
       padding: 1rem;
     }
 
-    /* CALENDAR */
     .calendar-container { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 10px; }
     .calendar-header-day { text-align: center; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
     .calendar-cell {
@@ -278,14 +277,13 @@
     .cal-event-pill.deadline { background: rgba(248,81,73,0.25); color: #ff7b72; }
     .cal-event-pill.conf { background: rgba(56,139,253,0.25); color: #79c0ff; }
 
-    /* CANVAS */
     #canvas-container { position: relative; width: 100%; height: 500px; background: #0f141c; border: 1px solid var(--surface-border); border-radius: 8px; overflow: hidden; touch-action: none; }
     #sketch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; }
     .canvas-toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; background: var(--surface); padding: 8px; border-radius: 8px; border: 1px solid var(--surface-border); }
     .canvas-toolbar .btn.active { background: var(--primary); color: #000; font-weight: 600; }
 
     .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-    @media (max-width: 900px) { .split-grid { grid-template-columns: 1fr; } aside { width: 210px; } }
+    @media (max-width: 950px) { .split-grid { grid-template-columns: 1fr; } aside { width: 210px; } }
     
     .table-responsive { overflow-x: auto; border: 1px solid var(--surface-border); border-radius: 6px; }
     table.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.82rem; }
@@ -304,19 +302,17 @@
       <i class="fa-solid fa-graduation-cap" style="color: var(--primary); font-size: 1.3rem;"></i>
       <div>
         <h1>PhD Workspace</h1>
-        <span>v3.5 Pro</span>
+        <span>v4.0 Ultimate</span>
       </div>
     </div>
 
     <nav>
+      <div class="nav-category">Scriere & Documentare</div>
       <button class="nav-btn active" onclick="switchTab('lit-matrix')">
         <i class="fa-solid fa-book-bookmark"></i> Matrice Literatură
       </button>
       <button class="nav-btn" onclick="switchTab('paper-tracker')">
-        <i class="fa-solid fa-file-waveform"></i> Paper & Word Tracker
-      </button>
-      <button class="nav-btn" onclick="switchTab('mermaid-studio')">
-        <i class="fa-solid fa-diagram-project"></i> Mermaid Diagram Studio
+        <i class="fa-solid fa-file-waveform"></i> IEEE Paper Tracker
       </button>
       <button class="nav-btn" onclick="switchTab('meeting-brief')">
         <i class="fa-solid fa-user-tie"></i> Brief Coordonator
@@ -324,20 +320,33 @@
       <button class="nav-btn" onclick="switchTab('math-tools')">
         <i class="fa-solid fa-square-root-variable"></i> Math & LaTeX Gen
       </button>
+
+      <div class="nav-category">Diagrame & Date</div>
+      <button class="nav-btn" onclick="switchTab('plot-studio')">
+        <i class="fa-solid fa-chart-line"></i> Scientific Plot Studio
+      </button>
+      <button class="nav-btn" onclick="switchTab('mermaid-studio')">
+        <i class="fa-solid fa-diagram-project"></i> Mermaid Studio & Help
+      </button>
+      <button class="nav-btn" onclick="switchTab('dataset-indexer')">
+        <i class="fa-solid fa-database"></i> Datasets & Log Indexer
+      </button>
+      <button class="nav-btn" onclick="switchTab('qos-calc')">
+        <i class="fa-solid fa-calculator"></i> QoS & Network Calc
+      </button>
+
+      <div class="nav-category">Experimente & Focus</div>
+      <button class="nav-btn" onclick="switchTab('exp-bench')">
+        <i class="fa-solid fa-flask-vial"></i> Benchmark & Log
+      </button>
       <button class="nav-btn" onclick="switchTab('deep-work')">
         <i class="fa-solid fa-stopwatch"></i> Focus & Pomodoro
       </button>
       <button class="nav-btn" onclick="switchTab('calendar-view')">
         <i class="fa-solid fa-calendar-days"></i> Calendar & Termene
       </button>
-      <button class="nav-btn" onclick="switchTab('qos-calc')">
-        <i class="fa-solid fa-calculator"></i> QoS & Network Calc
-      </button>
       <button class="nav-btn" onclick="switchTab('stylus-canvas')">
         <i class="fa-solid fa-pen-ruler"></i> Stylus / Diagrame
-      </button>
-      <button class="nav-btn" onclick="switchTab('exp-bench')">
-        <i class="fa-solid fa-flask-vial"></i> Benchmark & Log
       </button>
       <button class="nav-btn" onclick="switchTab('state-log')">
         <i class="fa-solid fa-location-arrow"></i> Where I Left Off
@@ -432,29 +441,27 @@
         </div>
       </section>
 
-      <!-- 2. PAPER WORDCOUNT & SECTION TRACKER (NOU) -->
+      <!-- 2. IEEE MANUSCRIPT TRACKER STRUCTURAT (I - VII) -->
       <section id="paper-tracker" class="view-section">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-gauge"></i> Progres Redactare Lucrare Științifică (IEEE Standard)</div>
+            <div class="card-title"><i class="fa-solid fa-file-lines"></i> Monitorizare Structură Manuscris IEEE (2-Coloane)</div>
             <div style="display: flex; align-items: center; gap: 10px;">
-              <label class="form-label" style="margin:0;">Țintă Format:</label>
-              <select id="paper-target-format" class="form-control" style="width: 170px;" onchange="updatePaperStats()">
-                <option value="6">IEEE Conference (6 Pagini ~ 3,500 cuvinte)</option>
-                <option value="8">IEEE Conference (8 Pagini ~ 4,800 cuvinte)</option>
-                <option value="12">Journal ISI (12 Pagini ~ 7,500 cuvinte)</option>
+              <select id="paper-target-format" class="form-control" style="width: 190px;" onchange="updatePaperStats()">
+                <option value="6">IEEE Conference (6 Pagini ~ 3.900 cuvinte)</option>
+                <option value="8">IEEE Conference (8 Pagini ~ 5.200 cuvinte)</option>
+                <option value="12">IEEE Transactions (12 Pagini ~ 8.000 cuvinte)</option>
               </select>
             </div>
           </div>
 
-          <!-- Total Metrics Overview -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1rem;">
             <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
               <span style="font-size: 0.75rem; color: var(--text-muted);">TOTAL CUVINTE</span>
               <h3 id="stat-total-words" style="color: var(--primary); font-size: 1.6rem; font-family: var(--font-mono);">0</h3>
             </div>
             <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">PAGINI ESTIMATE (2-Col)</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">ESTIMARE PAGINI IEEE</span>
               <h3 id="stat-est-pages" style="color: #7ee787; font-size: 1.6rem; font-family: var(--font-mono);">0.0 / 6</h3>
             </div>
             <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
@@ -467,80 +474,118 @@
           </div>
         </div>
 
-        <!-- Section Breakdown -->
         <div class="split-grid">
           <div>
-            <!-- Abstract & Intro -->
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">I. Abstract & Introduction</div>
-                <span class="tag" id="tag-words-sec1">0 cuvinte</span>
-              </div>
-              <div class="form-group">
-                <textarea id="section-text-1" class="form-control" rows="5" placeholder="Introdu textul sau schița pentru Abstract și Introducere..." oninput="updatePaperStats()"></textarea>
-              </div>
-              <div class="progress-bar-container"><div id="pbar-sec1" class="progress-bar-fill" style="width:0%;"></div></div>
+              <div class="card-header"><div class="card-title">Title, Abstract & Keywords</div><span class="tag" id="tag-words-sec0">0 cuv</span></div>
+              <textarea id="section-text-0" class="form-control" rows="4" placeholder="Abstract (max. 200-250 cuvinte), Index Terms / Keywords..." oninput="updatePaperStats()"></textarea>
             </div>
 
-            <!-- Related Work / SOTA -->
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">II. Related Work & Background</div>
-                <span class="tag" id="tag-words-sec2">0 cuvinte</span>
-              </div>
-              <div class="form-group">
-                <textarea id="section-text-2" class="form-control" rows="5" placeholder="SOTA, Middleware comparison (DDS vs Zenoh), analiza literaturii..." oninput="updatePaperStats()"></textarea>
-              </div>
-              <div class="progress-bar-container"><div id="pbar-sec2" class="progress-bar-fill" style="width:0%;"></div></div>
+              <div class="card-header"><div class="card-title">I. Introduction & Problem Formulation</div><span class="tag" id="tag-words-sec1">0 cuv</span></div>
+              <textarea id="section-text-1" class="form-control" rows="4" placeholder="Context teleoperare, provocări rețea nedeterministă, contribuții principale..." oninput="updatePaperStats()"></textarea>
             </div>
 
-            <!-- Proposed Architecture -->
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">III. Proposed Architecture & System Design</div>
-                <span class="tag" id="tag-words-sec3">0 cuvinte</span>
-              </div>
-              <div class="form-group">
-                <textarea id="section-text-3" class="form-control" rows="5" placeholder="Arhitectura nodurilor ROS 2, Zenoh router, topologie rețea, QoS profile..." oninput="updatePaperStats()"></textarea>
-              </div>
-              <div class="progress-bar-container"><div id="pbar-sec3" class="progress-bar-fill" style="width:0%;"></div></div>
+              <div class="card-header"><div class="card-title">II. Related Work & State of the Art</div><span class="tag" id="tag-words-sec2">0 cuv</span></div>
+              <textarea id="section-text-2" class="form-control" rows="4" placeholder="Comparație middleware (Zenoh, DDS, MQTT, gRPC), teleoperare robotică..." oninput="updatePaperStats()"></textarea>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><div class="card-title">III. Proposed System Architecture & Model</div><span class="tag" id="tag-words-sec3">0 cuv</span></div>
+              <textarea id="section-text-3" class="form-control" rows="5" placeholder="Topologie ROS 2 - Zenoh router, profil QoS, model matematic de control..." oninput="updatePaperStats()"></textarea>
             </div>
           </div>
 
           <div>
-            <!-- Experimental Evaluation -->
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">IV. Experimental Evaluation & Results</div>
-                <span class="tag" id="tag-words-sec4">0 cuvinte</span>
-              </div>
-              <div class="form-group">
-                <textarea id="section-text-4" class="form-control" rows="5" placeholder="Măsurători RTT P50/P99, jitter, packet loss, bandwidth, grafice Gazebo..." oninput="updatePaperStats()"></textarea>
-              </div>
-              <div class="progress-bar-container"><div id="pbar-sec4" class="progress-bar-fill" style="width:0%;"></div></div>
+              <div class="card-header"><div class="card-title">IV. Experimental Setup & Testbed</div><span class="tag" id="tag-words-sec4">0 cuv</span></div>
+              <textarea id="section-text-4" class="form-control" rows="4" placeholder="Hardware (Roboți, edge nodes), emulator de rețea (NetEm), parametri de test..." oninput="updatePaperStats()"></textarea>
             </div>
 
-            <!-- Conclusions & Future Work -->
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">V. Discussion & Conclusions</div>
-                <span class="tag" id="tag-words-sec5">0 cuvinte</span>
-              </div>
-              <div class="form-group">
-                <textarea id="section-text-5" class="form-control" rows="5" placeholder="Concluzii finale, limitări identificate și direcții de cercetare viitoare..." oninput="updatePaperStats()"></textarea>
-              </div>
-              <div class="progress-bar-container"><div id="pbar-sec5" class="progress-bar-fill" style="width:0%;"></div></div>
+              <div class="card-header"><div class="card-title">V. Performance Evaluation & Results</div><span class="tag" id="tag-words-sec5">0 cuv</span></div>
+              <textarea id="section-text-5" class="form-control" rows="5" placeholder="Analiză comparativă latență RTT P50/P99, CDF, jitter, utilizare bandwidth/CPU..." oninput="updatePaperStats()"></textarea>
             </div>
 
-            <!-- Export Section Drafts -->
-            <div class="card" style="text-align: center;">
-              <button class="btn btn-primary" onclick="exportFullPaperDraft()"><i class="fa-solid fa-file-arrow-down"></i> Descarcă Manuscris Complet (.MD / .TXT)</button>
+            <div class="card">
+              <div class="card-header"><div class="card-title">VI. Discussion, Limitations & Safety</div><span class="tag" id="tag-words-sec6">0 cuv</span></div>
+              <textarea id="section-text-6" class="form-control" rows="4" placeholder="Comportament la pierderi severe de conexiune, mecanisme Fail-Safe/ESTOP..." oninput="updatePaperStats()"></textarea>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><div class="card-title">VII. Conclusion & Future Work</div><span class="tag" id="tag-words-sec7">0 cuv</span></div>
+              <textarea id="section-text-7" class="form-control" rows="3" placeholder="Sinteza concluziilor și direcții viitoare de extindere..." oninput="updatePaperStats()"></textarea>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="exportFullPaperDraft()">
+              <i class="fa-solid fa-file-arrow-down"></i> Descarcă Manuscris Complet (.MD / .TXT)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. SCIENTIFIC PLOT STUDIO (CHART.JS) -->
+      <section id="plot-studio" class="view-section">
+        <div class="split-grid">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-chart-line"></i> Generator Grafice Publicații Științifice</div>
+                <button class="btn btn-success btn-sm" onclick="exportPlotPNG()"><i class="fa-solid fa-image"></i> Export PNG Paper (High-Res)</button>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Șablon Grafic Cercetare:</label>
+                <select id="plot-preset" class="form-control" onchange="loadPlotPreset(this.value)">
+                  <option value="latency_cdf">1. Funcție de Distribuție Cumulativă (CDF Latență RTT)</option>
+                  <option value="jitter_loss">2. Jitter vs. Packet Loss (Rețele Wi-Fi/LTE Degradate)</option>
+                  <option value="throughput_freq">3. Throughput (KB/s) vs. Frecvență Publicare (Hz)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Etichete Axa X (separate prin virgulă):</label>
+                <input type="text" id="plot-x-labels" class="form-control" value="0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0" oninput="updateScientificChart()">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Set Date 1 (ex. rmw_zenoh):</label>
+                <input type="text" id="plot-data-1" class="form-control" value="0.05, 0.20, 0.55, 0.82, 0.93, 0.97, 0.99, 1.0, 1.0, 1.0" oninput="updateScientificChart()">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Set Date 2 (ex. CycloneDDS):</label>
+                <input type="text" id="plot-data-2" class="form-control" value="0.01, 0.08, 0.25, 0.50, 0.70, 0.83, 0.90, 0.94, 0.98, 1.0" oninput="updateScientificChart()">
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                  <label class="form-label">Titlu Axa X</label>
+                  <input type="text" id="plot-x-title" class="form-control" value="Latență RTT (ms)" oninput="updateScientificChart()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Titlu Axa Y</label>
+                  <input type="text" id="plot-y-title" class="form-control" value="Probabilitate Cumulativă P(X ≤ x)" oninput="updateScientificChart()">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card" style="height: 100%;">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-chart-area"></i> Previzualizare Grafic 2D</div>
+              </div>
+              <div style="position: relative; height: 380px; width: 100%; background: #0d1117; padding: 10px; border-radius: 6px; border: 1px solid var(--surface-border);">
+                <canvas id="scientificChartCanvas"></canvas>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 3. MERMAID DIAGRAM STUDIO (NOU) -->
+      <!-- 4. MERMAID STUDIO & SINTAXA HELPER -->
       <section id="mermaid-studio" class="view-section">
         <div class="split-grid">
           <div>
@@ -552,8 +597,7 @@
                   <button class="btn btn-sm" onclick="exportMermaidSVG()"><i class="fa-solid fa-download"></i> SVG</button>
                 </div>
               </div>
-              <div class="form-group">
-                <textarea id="mermaid-code-input" class="form-control" rows="14" style="font-family: var(--font-mono); font-size: 0.82rem;" onkeyup="scheduleMermaidRender()">
+              <textarea id="mermaid-code-input" class="form-control" rows="12" style="font-family: var(--font-mono); font-size: 0.82rem;" onkeyup="scheduleMermaidRender()">
 flowchart TD
     subgraph Operator_Station["Operator Station (ROS 2 Humble)"]
         UI[Teleop UI / Joystick Node] -->|JointCmd / Twist| ZenohBridgeTX[rmw_zenoh Router]
@@ -567,15 +611,40 @@ flowchart TD
         ZenohBridgeRX[rmw_zenoh Router] -->|cmd_vel / JointState| MotorDriver[Motor Controller Node]
         Sensors[LiDAR / Odometry Node] -->|Feedback State| ZenohBridgeRX
     end
-                </textarea>
-              </div>
+              </textarea>
 
-              <!-- Template Buttons -->
-              <label class="form-label">Șabloane Diagrame Cercetare:</label>
+              <label class="form-label" style="margin-top: 10px;">Șabloane Rapide Cercetare:</label>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <button class="btn btn-sm" onclick="setMermaidTemplate('ros2_flow')">Flux Noduri ROS2 & Zenoh</button>
+                <button class="btn btn-sm" onclick="setMermaidTemplate('ros2_flow')">Flux Noduri ROS 2 & Zenoh</button>
                 <button class="btn btn-sm" onclick="setMermaidTemplate('state_machine')">State Machine Teleoperare</button>
                 <button class="btn btn-sm" onclick="setMermaidTemplate('sequence')">Diagramă Secvență RTT</button>
+              </div>
+            </div>
+
+            <!-- MERMAID CHEAT SHEET & SYNTAX HELPER -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-circle-question"></i> Ghid Sintaxă Mermaid (Click pentru inserare)</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Forme Noduri (Flowcharts)</label>
+                <div class="latex-cheat-grid">
+                  <div class="latex-chip" onclick="insertMermaidSnippet('id1[Bloc Dreptunghi]')"><span>Dreptunghi</span><span class="math-lbl">[text]</span></div>
+                  <div class="latex-chip" onclick="insertMermaidSnippet('id2(Bloc Rotunjit)')"><span>Rotunjit</span><span class="math-lbl">(text)</span></div>
+                  <div class="latex-chip" onclick="insertMermaidSnippet('id3{Decizie / Logică}')"><span>Romb Decizie</span><span class="math-lbl">{text}</span></div>
+                  <div class="latex-chip" onclick="insertMermaidSnippet('id4[(Bază de date)]')"><span>Cilindru / DB</span><span class="math-lbl">[(text)]</span></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Legături & Conexiuni</label>
+                <div class="latex-cheat-grid">
+                  <div class="latex-chip" onclick="insertMermaidSnippet('A --> B')"><span>Săgeată Simplă</span><span class="math-lbl">--></span></div>
+                  <div class="latex-chip" onclick="insertMermaidSnippet('A -->|Etichetă| B')"><span>Săgeată cu Text</span><span class="math-lbl">---|text|</span></div>
+                  <div class="latex-chip" onclick="insertMermaidSnippet('A -.->|Punctată| B')"><span>Linie Punctată</span><span class="math-lbl">-.-></span></div>
+                  <div class="latex-chip" onclick="insertMermaidSnippet('A ==>|Gros / Bus| B')"><span>Conexiune Groasă</span><span class="math-lbl">==></span></div>
+                </div>
               </div>
             </div>
           </div>
@@ -591,7 +660,65 @@ flowchart TD
         </div>
       </section>
 
-      <!-- 4. BRIEF COORDONATOR -->
+      <!-- 5. DATASET & ARTIFACT INDEXER -->
+      <section id="dataset-indexer" class="view-section">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-database"></i> Indexare Dataset-uri, PCAP Traces & ROS 2 Bag-uri</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+            <div class="form-group">
+              <label class="form-label">Nume Dataset / Log</label>
+              <input type="text" id="ds-name" class="form-control" placeholder="ex. rosbag2_teleop_wifi_loss_5pct">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Format / Tip</label>
+              <select id="ds-type" class="form-control">
+                <option value="MCAP / ROS 2 Bag">MCAP / ROS 2 Bag</option>
+                <option value="Wireshark PCAP">Wireshark PCAP</option>
+                <option value="CSV Telemetry">CSV Telemetry</option>
+                <option value="Gazebo Simulation Log">Gazebo Simulation Log</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dimensiune / Mesaje</label>
+              <input type="text" id="ds-size" class="form-control" placeholder="ex. 1.4 GB / 250k msgs">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hash SHA256 / Checksum</label>
+              <input type="text" id="ds-hash" class="form-control" placeholder="ex. e3b0c44298fc1c149afb...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cale Locală / Link Storage / Parametri de Rulare</label>
+            <input type="text" id="ds-path" class="form-control" placeholder="ex. /mnt/nvme_data/exp_01/ | Zenoh 100Hz, NetEm delay 20ms loss 2%">
+          </div>
+          <button class="btn btn-primary" onclick="addDataset()"><i class="fa-solid fa-plus"></i> Înregistrează Dataset</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Catalog Artefacte de Cercetare (<span id="ds-count">0</span>)</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nume Dataset</th>
+                  <th>Format</th>
+                  <th>Dimensiune</th>
+                  <th>Cale / Parametri</th>
+                  <th>Checksum</th>
+                  <th>Acțiuni</th>
+                </tr>
+              </thead>
+              <tbody id="ds-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. BRIEF COORDONATOR -->
       <section id="meeting-brief" class="view-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
           <h2 style="font-size: 1.1rem; color: var(--text-bright);">Pregătire Sinteză Ședință Îndrumător</h2>
@@ -605,23 +732,17 @@ flowchart TD
           <div>
             <div class="card brief-card-green">
               <div class="card-header"><div class="card-title" style="color: #7ee787;"><i class="fa-solid fa-circle-check"></i> 1. Progres Realizat & Rezultate</div></div>
-              <div class="form-group">
-                <textarea id="brief-green" class="form-control" rows="4" placeholder="- Configurat Zenoh router pe nodul edge&#10;- Măsurat latența RTT pe 100k pachete"></textarea>
-              </div>
+              <textarea id="brief-green" class="form-control" rows="4" placeholder="- Configurat Zenoh router pe nodul edge&#10;- Măsurat latența RTT pe 100k pachete"></textarea>
             </div>
 
             <div class="card brief-card-yellow">
               <div class="card-header"><div class="card-title" style="color: #e3b341;"><i class="fa-solid fa-triangle-exclamation"></i> 2. Blocaje & Întrebări Decizionale</div></div>
-              <div class="form-group">
-                <textarea id="brief-yellow" class="form-control" rows="4" placeholder="- Packet loss mare la simularea pe rețea degradată&#10;- Alegerea între serializare CDR vs JSON"></textarea>
-              </div>
+              <textarea id="brief-yellow" class="form-control" rows="4" placeholder="- Packet loss mare la simularea pe rețea degradată&#10;- Alegerea între serializare CDR vs JSON"></textarea>
             </div>
 
             <div class="card brief-card-blue">
               <div class="card-header"><div class="card-title" style="color: #79c0ff;"><i class="fa-solid fa-bullseye"></i> 3. Obiective pentru Perioada Următoare</div></div>
-              <div class="form-group">
-                <textarea id="brief-blue" class="form-control" rows="4" placeholder="- Rulare teste automate în Gazebo&#10;- Generat grafice CDF pentru latență"></textarea>
-              </div>
+              <textarea id="brief-blue" class="form-control" rows="4" placeholder="- Rulare teste automate în Gazebo&#10;- Generat grafice CDF pentru latență"></textarea>
             </div>
           </div>
 
@@ -632,7 +753,7 @@ flowchart TD
                 <span class="tag" id="brief-date-tag">Azi</span>
               </div>
               
-              <div id="brief-printable-sheet" style="background: #ffffff; color: #1f2328; padding: 25px; border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 0.9rem; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+              <div id="brief-printable-sheet" style="background: #ffffff; color: #1f2328; padding: 25px; border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 0.9rem; line-height: 1.5;">
                 <div style="border-bottom: 2px solid #0969da; padding-bottom: 12px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:flex-end;">
                   <div>
                     <h2 style="font-size: 1.2rem; font-weight: 700; color: #1f2328; margin: 0;">RAPORT DE PROGRES CERCETARE DOCTORALĂ</h2>
@@ -664,13 +785,12 @@ flowchart TD
                   <div id="preview-blue" style="white-space: pre-wrap; font-size: 0.85rem; color: #24292f; padding-left: 6px;">Fără date completate.</div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 5. MATH & LATEX TOOLS -->
+      <!-- 7. MATH & LATEX TOOLS -->
       <section id="math-tools" class="view-section">
         <div class="split-grid">
           <div>
@@ -679,15 +799,13 @@ flowchart TD
                 <div class="card-title"><i class="fa-solid fa-code"></i> Editor Formule LaTeX</div>
                 <button class="btn btn-sm" onclick="copyLatex()"><i class="fa-solid fa-copy"></i> Copiază</button>
               </div>
-              <div class="form-group">
-                <textarea id="latex-input" class="form-control" rows="4" onkeyup="renderLatexPreview()">L_{RTT} = \frac{1}{N} \sum_{i=1}^{N} \left( t_{rx, i} - t_{tx, i} \right)</textarea>
-              </div>
-              <label class="form-label">Randare Live KaTeX</label>
+              <textarea id="latex-input" class="form-control" rows="4" onkeyup="renderLatexPreview()">L_{RTT} = \frac{1}{N} \sum_{i=1}^{N} \left( t_{rx, i} - t_{tx, i} \right)</textarea>
+              <label class="form-label" style="margin-top: 10px;">Randare Live KaTeX</label>
               <div id="katex-render-box" class="math-preview"></div>
             </div>
 
             <div class="card">
-              <div class="card-title" style="margin-bottom: 8px;"><i class="fa-solid fa-layer-group"></i> Șabloane Cercetare</div>
+              <div class="card-title" style="margin-bottom: 8px;"><i class="fa-solid fa-layer-group"></i> Șabloane Formule</div>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <button class="btn btn-sm" onclick="setLatexTemplate('rtt')">Latență RTT Medie</button>
                 <button class="btn btn-sm" onclick="setLatexTemplate('jitter')">Jitter RFC 3550</button>
@@ -699,13 +817,9 @@ flowchart TD
 
           <div>
             <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fa-solid fa-circle-question"></i> LaTeX Syntax Cheat Sheet</div>
-                <small style="color: var(--text-muted);">Click pentru inserare</small>
-              </div>
-              
+              <div class="card-header"><div class="card-title"><i class="fa-solid fa-circle-question"></i> LaTeX Cheat Sheet</div></div>
               <div class="form-group">
-                <label class="form-label">Operații & Fracții</label>
+                <label class="form-label">Operații Comune</label>
                 <div class="latex-cheat-grid">
                   <div class="latex-chip" onclick="insertLatexSnippet('\\frac{a}{b}')"><span>Fracție</span><span class="math-lbl">\frac{a}{b}</span></div>
                   <div class="latex-chip" onclick="insertLatexSnippet('x^{2}')"><span>Putere</span><span class="math-lbl">x^{n}</span></div>
@@ -727,13 +841,12 @@ flowchart TD
                   <div class="latex-chip" onclick="insertLatexSnippet('\\le')"><span>&le; Egal</span><span class="math-lbl">\le</span></div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 6. POMODORO TIMER -->
+      <!-- 8. POMODORO TIMER -->
       <section id="deep-work" class="view-section">
         <div class="split-grid">
           <div class="card pomodoro-box">
@@ -764,25 +877,19 @@ flowchart TD
           </div>
 
           <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa-solid fa-crosshairs"></i> Obiectiv Sesiune Curentă</div>
-            </div>
-            <div class="form-group">
-              <textarea id="focus-task" class="form-control" rows="5" placeholder="ex. Finalizează scriptul de evaluare pentru măsurarea latenței Zenoh..."></textarea>
-            </div>
-            <button class="btn btn-success btn-sm" onclick="saveFocusTask()"><i class="fa-solid fa-check"></i> Salvează Obiectiv</button>
+            <div class="card-header"><div class="card-title"><i class="fa-solid fa-crosshairs"></i> Obiectiv Sesiune Curentă</div></div>
+            <textarea id="focus-task" class="form-control" rows="6" placeholder="ex. Finalizează scriptul de benchmark pentru măsurarea latenței Zenoh pe rețea Wi-Fi degradată..."></textarea>
+            <button class="btn btn-success btn-sm" style="margin-top: 10px;" onclick="saveFocusTask()"><i class="fa-solid fa-check"></i> Salvează Obiectiv</button>
           </div>
         </div>
       </section>
 
-      <!-- 7. CALENDAR VIEW -->
+      <!-- 9. CALENDAR VIEW -->
       <section id="calendar-view" class="view-section">
         <div class="split-grid">
           <div>
             <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fa-solid fa-calendar-plus"></i> Adaugă Termen Limită</div>
-              </div>
+              <div class="card-header"><div class="card-title"><i class="fa-solid fa-calendar-plus"></i> Adaugă Termen Limită</div></div>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                 <div class="form-group">
                   <label class="form-label">Nume Eveniment</label>
@@ -806,18 +913,11 @@ flowchart TD
             </div>
 
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">Listă Termene Active</div>
-              </div>
+              <div class="card-header"><div class="card-title">Listă Termene Active</div></div>
               <div class="table-responsive">
                 <table class="data-table">
                   <thead>
-                    <tr>
-                      <th>Eveniment</th>
-                      <th>Data</th>
-                      <th>Timp Rămas</th>
-                      <th>Acțiuni</th>
-                    </tr>
+                    <tr><th>Eveniment</th><th>Data</th><th>Timp Rămas</th><th>Acțiuni</th></tr>
                   </thead>
                   <tbody id="deadlines-table-body"></tbody>
                 </table>
@@ -827,22 +927,18 @@ flowchart TD
 
           <div>
             <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fa-solid fa-calendar-days"></i> <span id="current-month-display">Calendar</span></div>
-              </div>
+              <div class="card-header"><div class="card-title"><i class="fa-solid fa-calendar-days"></i> <span id="current-month-display">Calendar</span></div></div>
               <div class="calendar-container" id="calendar-grid"></div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 8. QOS & NETWORK CALCULATOR -->
+      <!-- 10. QOS CALCULATOR -->
       <section id="qos-calc" class="view-section">
         <div class="split-grid">
           <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa-solid fa-network-wired"></i> Parametri Transmisie Robot</div>
-            </div>
+            <div class="card-header"><div class="card-title"><i class="fa-solid fa-network-wired"></i> Parametri Transmisie Robot</div></div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div class="form-group">
                 <label class="form-label">Frecvență ($Hz$)</label>
@@ -861,13 +957,11 @@ flowchart TD
                 <input type="number" id="calc-rtt" class="form-control" value="3.5" oninput="calculateQoS()">
               </div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="calculateQoS()"><i class="fa-solid fa-calculator"></i> Calculează</button>
+            <button class="btn btn-primary btn-sm" onclick="calculateQoS()"><i class="fa-solid fa-calculator"></i> Recalculează</button>
           </div>
 
           <div class="card">
-            <div class="card-header">
-              <div class="card-title"><i class="fa-solid fa-gauge-high"></i> Rezultate Teoretice</div>
-            </div>
+            <div class="card-header"><div class="card-title"><i class="fa-solid fa-gauge-high"></i> Rezultate Teoretice</div></div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
                 <span style="color:var(--text-muted);">Bandwidth Necesar:</span>
@@ -890,7 +984,7 @@ flowchart TD
         </div>
       </section>
 
-      <!-- 9. STYLUS CANVAS -->
+      <!-- 11. STYLUS CANVAS -->
       <section id="stylus-canvas" class="view-section">
         <div class="canvas-toolbar">
           <button class="btn active" onclick="setTool('pen')" id="tool-pen"><i class="fa-solid fa-pen"></i> Pen</button>
@@ -914,12 +1008,10 @@ flowchart TD
         <div id="canvas-container"><canvas id="sketch-canvas"></canvas></div>
       </section>
 
-      <!-- 10. EXPERIMENTE & BENCHMARK -->
+      <!-- 12. EXPERIMENTE & BENCHMARK -->
       <section id="exp-bench" class="view-section">
         <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-vial"></i> Înregistrare Rulare Experimentală</div>
-          </div>
+          <div class="card-header"><div class="card-title"><i class="fa-solid fa-vial"></i> Înregistrare Rulare Experimentală</div></div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
             <div class="form-group">
               <label class="form-label">ID Rulare</label>
@@ -953,9 +1045,7 @@ flowchart TD
         </div>
 
         <div class="card">
-          <div class="card-header">
-            <div class="card-title">Jurnal Experimente (<span id="exp-count">0</span>)</div>
-          </div>
+          <div class="card-header"><div class="card-title">Jurnal Experimente (<span id="exp-count">0</span>)</div></div>
           <div class="table-responsive">
             <table class="data-table">
               <thead>
@@ -975,12 +1065,10 @@ flowchart TD
         </div>
       </section>
 
-      <!-- 11. WHERE I LEFT OFF -->
+      <!-- 13. WHERE I LEFT OFF -->
       <section id="state-log" class="view-section">
         <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-bookmark"></i> Salvare Context Curent</div>
-          </div>
+          <div class="card-header"><div class="card-title"><i class="fa-solid fa-bookmark"></i> Salvare Context Curent</div></div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
             <div class="form-group">
               <label class="form-label">Git Branch / Repo</label>
@@ -999,9 +1087,7 @@ flowchart TD
         </div>
 
         <div class="card">
-          <div class="card-header">
-            <div class="card-title">Istoric Stări Salvate</div>
-          </div>
+          <div class="card-header"><div class="card-title">Istoric Stări Salvate</div></div>
           <div class="table-responsive">
             <table class="data-table">
               <thead>
@@ -1022,21 +1108,23 @@ flowchart TD
   </main>
 
   <script>
-    // --- INITIALIZE MERMAID ---
+    // --- 1. INITIALIZARE MERMAID ---
     if (window.mermaid) {
       mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
     }
 
-    // --- 1. ROBUST TAB NAVIGATION ---
+    // --- 2. ROBUST TAB NAVIGATION ---
     const tabTitles = {
       'lit-matrix': 'Matrice Analiză Literatură',
-      'paper-tracker': 'Paper Wordcount & Section Tracker (IEEE)',
-      'mermaid-studio': 'Mermaid.js Live Diagram & Statechart Studio',
+      'paper-tracker': 'Monitorizare Structură Manuscris IEEE (2-Coloane)',
+      'plot-studio': 'Scientific Plot Studio (Chart.js)',
+      'mermaid-studio': 'Mermaid.js Live Studio & Ghid Sintaxă',
+      'dataset-indexer': 'Indexare Dataset-uri, PCAP-uri & Loguri',
       'meeting-brief': 'Brief Coordonator & Export Raport PDF',
       'math-tools': 'LaTeX Equation Studio & Cheat Sheet',
       'deep-work': 'Focus & Deep Work Pomodoro',
-      'calendar-view': 'Calendar Activități & Termene',
-      'qos-calc': 'Calculator QoS, Bandwidth & Delays Teleoperare',
+      'calendar-view': 'Calendar Activități & Termene Conferințe',
+      'qos-calc': 'Calculator QoS & Delays Teleoperare',
       'stylus-canvas': 'Stylus & Diagrame Tehnice',
       'exp-bench': 'Benchmark & Jurnal Experimente',
       'state-log': 'Where I Left Off (Context Switch)'
@@ -1044,16 +1132,13 @@ flowchart TD
 
     function switchTab(tabId) {
       try {
-        const sections = document.querySelectorAll('.view-section');
-        const buttons = document.querySelectorAll('.nav-btn');
-
-        sections.forEach(sec => sec.classList.remove('active'));
-        buttons.forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
         const targetSec = document.getElementById(tabId);
         if (targetSec) targetSec.classList.add('active');
 
-        buttons.forEach(btn => {
+        document.querySelectorAll('.nav-btn').forEach(btn => {
           const onclickAttr = btn.getAttribute('onclick') || '';
           if (onclickAttr.includes(`'${tabId}'`)) btn.classList.add('active');
         });
@@ -1061,19 +1146,19 @@ flowchart TD
         const titleEl = document.getElementById('page-title');
         if (titleEl && tabTitles[tabId]) titleEl.textContent = tabTitles[tabId];
 
-        // Safe initializations per tab
         if (tabId === 'stylus-canvas') setTimeout(initCanvasDimensions, 50);
         if (tabId === 'math-tools') renderLatexPreview();
         if (tabId === 'calendar-view') renderCalendarGrid();
         if (tabId === 'meeting-brief') updateBriefLivePreview();
         if (tabId === 'paper-tracker') updatePaperStats();
         if (tabId === 'mermaid-studio') renderMermaidDiagram();
+        if (tabId === 'plot-studio') setTimeout(initScientificChart, 50);
       } catch (err) {
         console.error('Eroare navigare tab:', err);
       }
     }
 
-    // --- 2. STORAGE ENGINE ---
+    // --- 3. STORAGE ENGINE ---
     const DB = {
       get: (key, fallback) => {
         try {
@@ -1086,7 +1171,7 @@ flowchart TD
       }
     };
 
-    // --- 3. PAPER WORDCOUNT & SECTION TRACKER ---
+    // --- 4. IEEE PAPER TRACKER ---
     function countWords(str) {
       if (!str) return 0;
       return str.trim().split(/\s+/).filter(w => w.length > 0).length;
@@ -1094,31 +1179,21 @@ flowchart TD
 
     function updatePaperStats() {
       const targetFormatPages = parseInt(document.getElementById('paper-target-format').value, 10) || 6;
-      const targetWords = (targetFormatPages === 6) ? 3500 : (targetFormatPages === 8 ? 4800 : 7500);
+      const targetWords = (targetFormatPages === 6) ? 3900 : (targetFormatPages === 8 ? 5200 : 8000);
 
       let totalWords = 0;
-      const sectionTargets = {
-        1: targetWords * 0.15, // Abstract + Intro ~15%
-        2: targetWords * 0.20, // Related Work ~20%
-        3: targetWords * 0.25, // Architecture ~25%
-        4: targetWords * 0.30, // Evaluation ~30%
-        5: targetWords * 0.10  // Conclusions ~10%
-      };
-
+      const sectionWeights = [0.05, 0.15, 0.15, 0.20, 0.15, 0.20, 0.05, 0.05];
       const drafts = {};
 
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 0; i <= 7; i++) {
         const text = document.getElementById(`section-text-${i}`).value;
         drafts[`sec${i}`] = text;
         const wCount = countWords(text);
         totalWords += wCount;
 
+        const targetSecWords = Math.round(targetWords * sectionWeights[i]);
         const tagEl = document.getElementById(`tag-words-sec${i}`);
-        if (tagEl) tagEl.textContent = `${wCount} / ~${Math.round(sectionTargets[i])} cuvinte`;
-
-        const pct = Math.min(100, Math.round((wCount / sectionTargets[i]) * 100));
-        const pbar = document.getElementById(`pbar-sec${i}`);
-        if (pbar) pbar.style.width = `${pct}%`;
+        if (tagEl) tagEl.textContent = `${wCount} / ~${targetSecWords} cuv`;
       }
 
       DB.set('paper_drafts', drafts);
@@ -1134,20 +1209,126 @@ flowchart TD
 
     function exportFullPaperDraft() {
       let draft = `# IEEE RESEARCH MANUSCRIPT DRAFT\nData: ${new Date().toLocaleDateString('ro-RO')}\n\n`;
-      draft += `## I. ABSTRACT & INTRODUCTION\n${document.getElementById('section-text-1').value}\n\n`;
+      draft += `## TITLE & ABSTRACT\n${document.getElementById('section-text-0').value}\n\n`;
+      draft += `## I. INTRODUCTION & PROBLEM FORMULATION\n${document.getElementById('section-text-1').value}\n\n`;
       draft += `## II. RELATED WORK & SOTA\n${document.getElementById('section-text-2').value}\n\n`;
-      draft += `## III. PROPOSED ARCHITECTURE & DESIGN\n${document.getElementById('section-text-3').value}\n\n`;
-      draft += `## IV. EXPERIMENTAL EVALUATION\n${document.getElementById('section-text-4').value}\n\n`;
-      draft += `## V. DISCUSSION & CONCLUSIONS\n${document.getElementById('section-text-5').value}\n\n`;
+      draft += `## III. PROPOSED SYSTEM ARCHITECTURE & MODEL\n${document.getElementById('section-text-3').value}\n\n`;
+      draft += `## IV. EXPERIMENTAL SETUP & TESTBED\n${document.getElementById('section-text-4').value}\n\n`;
+      draft += `## V. PERFORMANCE EVALUATION & RESULTS\n${document.getElementById('section-text-5').value}\n\n`;
+      draft += `## VI. DISCUSSION, LIMITATIONS & SAFETY\n${document.getElementById('section-text-6').value}\n\n`;
+      draft += `## VII. CONCLUSION & FUTURE WORK\n${document.getElementById('section-text-7').value}\n\n`;
 
-      downloadFile(`phd_paper_manuscript_${Date.now()}.md`, draft, 'text/markdown');
+      downloadFile(`phd_manuscript_${Date.now()}.md`, draft, 'text/markdown');
     }
 
-    // --- 4. MERMAID DIAGRAM STUDIO ---
+    // --- 5. SCIENTIFIC PLOT STUDIO (CHART.JS) ---
+    let scientificChart = null;
+
+    function initScientificChart() {
+      const ctx = document.getElementById('scientificChartCanvas');
+      if (!ctx) return;
+
+      if (scientificChart) scientificChart.destroy();
+
+      scientificChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'rmw_zenoh',
+              data: [],
+              borderColor: '#58a6ff',
+              backgroundColor: 'rgba(88, 166, 255, 0.15)',
+              borderWidth: 2.5,
+              tension: 0.25,
+              pointRadius: 3
+            },
+            {
+              label: 'CycloneDDS',
+              data: [],
+              borderColor: '#f85149',
+              backgroundColor: 'rgba(248, 81, 73, 0.15)',
+              borderWidth: 2.5,
+              tension: 0.25,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#c9d1d9', font: { family: 'SF Mono, monospace' } } }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Axa X', color: '#8b949e' },
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: '#c9d1d9' }
+            },
+            y: {
+              title: { display: true, text: 'Axa Y', color: '#8b949e' },
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: '#c9d1d9' }
+            }
+          }
+        }
+      });
+
+      updateScientificChart();
+    }
+
+    function updateScientificChart() {
+      if (!scientificChart) return;
+      const xLabels = document.getElementById('plot-x-labels').value.split(',').map(s => s.trim());
+      const data1 = document.getElementById('plot-data-1').value.split(',').map(s => parseFloat(s) || 0);
+      const data2 = document.getElementById('plot-data-2').value.split(',').map(s => parseFloat(s) || 0);
+
+      scientificChart.data.labels = xLabels;
+      scientificChart.data.datasets[0].data = data1;
+      scientificChart.data.datasets[1].data = data2;
+
+      scientificChart.options.scales.x.title.text = document.getElementById('plot-x-title').value;
+      scientificChart.options.scales.y.title.text = document.getElementById('plot-y-title').value;
+      scientificChart.update();
+    }
+
+    function loadPlotPreset(preset) {
+      if (preset === 'latency_cdf') {
+        document.getElementById('plot-x-labels').value = '0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0';
+        document.getElementById('plot-data-1').value = '0.05, 0.20, 0.55, 0.82, 0.93, 0.97, 0.99, 1.0, 1.0, 1.0';
+        document.getElementById('plot-data-2').value = '0.01, 0.08, 0.25, 0.50, 0.70, 0.83, 0.90, 0.94, 0.98, 1.0';
+        document.getElementById('plot-x-title').value = 'Latență RTT (ms)';
+        document.getElementById('plot-y-title').value = 'Probabilitate Cumulativă P(X ≤ x)';
+      } else if (preset === 'jitter_loss') {
+        document.getElementById('plot-x-labels').value = '0%, 1%, 2%, 3%, 4%, 5%, 8%, 10%';
+        document.getElementById('plot-data-1').value = '0.12, 0.18, 0.29, 0.45, 0.62, 0.88, 1.45, 2.10';
+        document.getElementById('plot-data-2').value = '0.15, 0.35, 0.75, 1.40, 2.30, 3.80, 7.20, 12.50';
+        document.getElementById('plot-x-title').value = 'Packet Loss Injection (%)';
+        document.getElementById('plot-y-title').value = 'Jitter Mediu (ms)';
+      } else if (preset === 'throughput_freq') {
+        document.getElementById('plot-x-labels').value = '10, 50, 100, 200, 500, 1000';
+        document.getElementById('plot-data-1').value = '2.8, 14.2, 28.4, 56.8, 142.0, 284.0';
+        document.getElementById('plot-data-2').value = '3.5, 17.5, 35.0, 70.0, 175.0, 350.0';
+        document.getElementById('plot-x-title').value = 'Frecvență Transmisie (Hz)';
+        document.getElementById('plot-y-title').value = 'Throughput Utilizat (KB/s)';
+      }
+      updateScientificChart();
+    }
+
+    function exportPlotPNG() {
+      const link = document.createElement('a');
+      link.download = `phd_plot_${Date.now()}.png`;
+      link.href = scientificChart.toBase64Image('image/png', 1.0);
+      link.click();
+    }
+
+    // --- 6. MERMAID STUDIO ---
     let mermaidTimeout = null;
     function scheduleMermaidRender() {
       clearTimeout(mermaidTimeout);
-      mermaidTimeout = setTimeout(renderMermaidDiagram, 500);
+      mermaidTimeout = setTimeout(renderMermaidDiagram, 400);
     }
 
     async function renderMermaidDiagram() {
@@ -1161,8 +1342,20 @@ flowchart TD
         const { svg } = await mermaid.render(id, code);
         output.innerHTML = svg;
       } catch (err) {
-        output.innerHTML = `<div style="color:var(--accent-danger); font-size:0.85rem;"><i class="fa-solid fa-triangle-exclamation"></i> Sintaxă Mermaid invalidă:<br><pre style="margin-top:6px; color:var(--text-muted);">${err.message || err}</pre></div>`;
+        output.innerHTML = `<div style="color:var(--accent-danger); font-size:0.82rem;"><i class="fa-solid fa-triangle-exclamation"></i> Eroare sintaxă Mermaid:<br><pre style="margin-top:6px; color:var(--text-muted);">${err.message || err}</pre></div>`;
       }
+    }
+
+    function insertMermaidSnippet(snippet) {
+      const textarea = document.getElementById('mermaid-code-input');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+
+      textarea.value = text.substring(0, start) + snippet + text.substring(end);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+      scheduleMermaidRender();
     }
 
     function setMermaidTemplate(type) {
@@ -1175,24 +1368,24 @@ flowchart TD
       } else if (type === 'state_machine') {
         el.value = `stateDiagram-v2
     [*] --> IDLE
-    IDLE --> CONNECTING : Send Handshake
-    CONNECTING --> TELEOP_ACTIVE : Zenoh Session OK
+    IDLE --> CONNECTING : Handshake
+    CONNECTING --> TELEOP_ACTIVE : Session Established
     TELEOP_ACTIVE --> DEGRADED_MODE : Packet Loss > 5%
-    DEGRADED_MODE --> TELEOP_ACTIVE : Loss Restored
-    TELEOP_ACTIVE --> EMERGENCY_STOP : Heartbeat Timeout (>500ms)
+    DEGRADED_MODE --> TELEOP_ACTIVE : Recovery
+    TELEOP_ACTIVE --> EMERGENCY_STOP : Timeout > 500ms
     DEGRADED_MODE --> EMERGENCY_STOP : ESTOP Triggered
     EMERGENCY_STOP --> [*]`;
       } else if (type === 'sequence') {
         el.value = `sequenceDiagram
     autonumber
-    actor User as Teleoperator
+    actor Teleoperator
     participant Node as ROS 2 Pub Node
     participant Zenoh as rmw_zenoh Middleware
     participant Robot as Edge Controller
 
-    User->>Node: Joystick Input (Twist Cmd)
+    Teleoperator->>Node: Input Cmd (Twist)
     Node->>Zenoh: Publish /cmd_vel (t_tx)
-    Zenoh->>Robot: Routed over IP Network
+    Zenoh->>Robot: Routed Frame
     Robot->>Zenoh: Echo Feedback /joint_states (t_rx)
     Zenoh->>Node: Calculate RTT = t_rx - t_tx`;
       }
@@ -1202,12 +1395,60 @@ flowchart TD
     function exportMermaidSVG() {
       const output = document.getElementById('mermaid-render-output');
       const svg = output.querySelector('svg');
-      if (!svg) return alert('Nicio diagramă randată pentru descărcare.');
+      if (!svg) return alert('Nicio diagramă randată.');
       const svgData = new XMLSerializer().serializeToString(svg);
       downloadFile(`phd_diagram_${Date.now()}.svg`, svgData, 'image/svg+xml');
     }
 
-    // --- 5. BRIEF COORDONATOR (CULORI, LIVE PDF) ---
+    // --- 7. DATASETS INDEXER ---
+    let datasets = DB.get('datasets', []);
+
+    function addDataset() {
+      const name = document.getElementById('ds-name').value.trim();
+      const type = document.getElementById('ds-type').value;
+      const size = document.getElementById('ds-size').value.trim();
+      const hash = document.getElementById('ds-hash').value.trim();
+      const path = document.getElementById('ds-path').value.trim();
+
+      if (!name) return alert('Introdu numele dataset-ului.');
+
+      datasets.unshift({ id: Date.now(), name, type, size, hash, path });
+      DB.set('datasets', datasets);
+
+      document.getElementById('ds-name').value = '';
+      document.getElementById('ds-size').value = '';
+      document.getElementById('ds-hash').value = '';
+      document.getElementById('ds-path').value = '';
+
+      renderDatasets();
+    }
+
+    function deleteDataset(id) {
+      datasets = datasets.filter(d => d.id !== id);
+      DB.set('datasets', datasets);
+      renderDatasets();
+    }
+
+    function renderDatasets() {
+      const tbody = document.getElementById('ds-table-body');
+      tbody.innerHTML = '';
+      document.getElementById('ds-count').textContent = datasets.length;
+
+      datasets.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${d.name}</strong></td>
+          <td><span class="tag">${d.type}</span></td>
+          <td>${d.size || 'N/A'}</td>
+          <td><code>${d.path || 'N/A'}</code></td>
+          <td><small style="color:var(--text-muted); font-family:var(--font-mono);">${d.hash ? d.hash.substring(0, 12) + '...' : 'N/A'}</small></td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteDataset(${d.id})"><i class="fa-solid fa-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- 8. BRIEF COORDONATOR ---
     function updateBriefLivePreview() {
       const g = document.getElementById('brief-green').value;
       const y = document.getElementById('brief-yellow').value;
@@ -1256,7 +1497,7 @@ flowchart TD
       navigator.clipboard.writeText(fullText).then(() => alert('Sinteza a fost copiată în clipboard!'));
     }
 
-    // --- 6. MATH & LATEX GEN ---
+    // --- 9. MATH & LATEX TOOLS ---
     function renderLatexPreview() {
       const input = document.getElementById('latex-input').value;
       const box = document.getElementById('katex-render-box');
@@ -1300,7 +1541,7 @@ flowchart TD
       renderLatexPreview();
     }
 
-    // --- 7. POMODORO TIMER ---
+    // --- 10. POMODORO TIMER ---
     let timerDuration = 25 * 60;
     let timerRemaining = timerDuration;
     let timerInterval = null;
@@ -1336,7 +1577,7 @@ flowchart TD
             let streak = DB.get('pomo_streak', 0) + 1;
             DB.set('pomo_streak', streak);
             document.getElementById('pomo-streak-count').textContent = streak;
-            alert('Sesiune Pomodoro încheiată!');
+            alert('Sesiune Pomodoro finalizată!');
           }
         }, 1000);
       }
@@ -1379,7 +1620,7 @@ flowchart TD
 
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.value = 500;
+        filter.frequency.value = 450;
 
         const gainNode = audioCtx.createGain();
         gainNode.gain.value = 0.08;
@@ -1393,7 +1634,7 @@ flowchart TD
       }
     }
 
-    // --- 8. CALCULATOR QOS ---
+    // --- 11. CALCULATOR QOS ---
     function calculateQoS() {
       const freq = parseFloat(document.getElementById('calc-freq').value) || 0;
       const payload = parseFloat(document.getElementById('calc-payload').value) || 0;
@@ -1414,7 +1655,7 @@ flowchart TD
       document.getElementById('res-overhead-pct').textContent = `${overheadPct} %`;
     }
 
-    // --- 9. CALENDAR ENGINE ---
+    // --- 12. CALENDAR ENGINE ---
     let deadlines = DB.get('deadlines', []);
 
     function addDeadline() {
@@ -1514,7 +1755,7 @@ flowchart TD
       }
     }
 
-    // --- 10. MATRICE LITERATURA ---
+    // --- 13. MATRICE LITERATURA ---
     let papers = DB.get('papers', []);
     function toggleBibtexImport() {
       const el = document.getElementById('bibtex-import-box');
@@ -1627,7 +1868,7 @@ flowchart TD
       downloadFile('phd_papers.csv', csv, 'text/csv');
     }
 
-    // --- 11. STYLUS CANVAS ENGINE ---
+    // --- 14. STYLUS CANVAS ENGINE ---
     const canvas = document.getElementById('sketch-canvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false, currentTool = 'pen', penColor = '#58a6ff', penSize = 4;
@@ -1751,7 +1992,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 12. EXPERIMENTE & BENCHMARK ---
+    // --- 15. EXPERIMENTE & BENCHMARK ---
     let experiments = DB.get('experiments', []);
 
     function addExperiment() {
@@ -1814,7 +2055,7 @@ flowchart TD
       navigator.clipboard.writeText(latex).then(() => alert('Tabelul LaTeX a fost copiat!'));
     }
 
-    // --- 13. WHERE I LEFT OFF ---
+    // --- 16. WHERE I LEFT OFF ---
     let stateLogs = DB.get('statelogs', []);
 
     function saveStateLog() {
@@ -1852,7 +2093,7 @@ flowchart TD
       });
     }
 
-    // --- 14. SYNC & BACKUP ---
+    // --- 17. SYNC & BACKUP ---
     function exportFullBackup() {
       const fullData = {
         papers: DB.get('papers', []),
@@ -1862,7 +2103,8 @@ flowchart TD
         focusTask: DB.get('current_focus_task', ''),
         brief: DB.get('brief_data', {}),
         streak: DB.get('pomo_streak', 0),
-        drafts: DB.get('paper_drafts', {})
+        drafts: DB.get('paper_drafts', {}),
+        datasets: DB.get('datasets', [])
       };
       downloadFile(`phd_workspace_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
     }
@@ -1883,6 +2125,7 @@ flowchart TD
           if (data.brief) DB.set('brief_data', data.brief);
           if (data.streak) DB.set('pomo_streak', data.streak);
           if (data.drafts) DB.set('paper_drafts', data.drafts);
+          if (data.datasets) DB.set('datasets', data.datasets);
           
           alert('Sincronizarea s-a realizat cu succes!');
           location.reload();
@@ -1909,6 +2152,7 @@ flowchart TD
       renderExperiments();
       renderDeadlines();
       renderStateLogs();
+      renderDatasets();
       updateTimerDisplay();
       calculateQoS();
       renderCalendarGrid();
@@ -1926,8 +2170,9 @@ flowchart TD
 
       const drafts = DB.get('paper_drafts', null);
       if (drafts) {
-        for (let i = 1; i <= 5; i++) {
-          if (drafts[`sec${i}`]) document.getElementById(`section-text-${i}`).value = drafts[`sec${i}`];
+        for (let i = 0; i <= 7; i++) {
+          const el = document.getElementById(`section-text-${i}`);
+          if (el && drafts[`sec${i}`]) el.value = drafts[`sec${i}`];
         }
       }
       updatePaperStats();
