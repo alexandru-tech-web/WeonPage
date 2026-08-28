@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PhD Research Command Center Pro v3.0</title>
+  <title>PhD Research Command Center Pro v3.5</title>
   
-  <!-- FontAwesome, KaTeX & html2pdf -->
+  <!-- FontAwesome, KaTeX, html2pdf & Mermaid.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
   <style>
     :root {
@@ -41,7 +42,6 @@
       touch-action: manipulation;
     }
 
-    /* BARA LATERALĂ */
     aside {
       width: 260px;
       background: var(--surface);
@@ -53,7 +53,7 @@
     }
 
     .brand {
-      padding: 1.2rem 1.1rem;
+      padding: 1.1rem 1rem;
       border-bottom: 1px solid var(--surface-border);
       display: flex;
       align-items: center;
@@ -62,37 +62,36 @@
     .brand h1 { font-size: 1.05rem; color: var(--text-bright); font-weight: 700; letter-spacing: -0.3px; }
     .brand span { font-size: 0.68rem; background: var(--primary-hover); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
 
-    nav { flex: 1; overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; gap: 4px; }
+    nav { flex: 1; overflow-y: auto; padding: 0.6rem; display: flex; flex-direction: column; gap: 3px; }
     .nav-btn {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
+      gap: 10px;
+      padding: 9px 12px;
       background: transparent;
       border: 1px solid transparent;
       color: var(--text);
       border-radius: 8px;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
       text-align: left;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       width: 100%;
     }
-    .nav-btn i { width: 18px; color: var(--text-muted); text-align: center; font-size: 0.95rem; }
+    .nav-btn i { width: 18px; color: var(--text-muted); text-align: center; font-size: 0.9rem; }
     .nav-btn:hover { background: var(--surface-hover); color: var(--text-bright); }
     .nav-btn.active { background: rgba(88, 166, 255, 0.12); color: var(--primary); border-color: rgba(88, 166, 255, 0.35); font-weight: 600; }
     .nav-btn.active i { color: var(--primary); }
 
     .sidebar-footer {
-      padding: 0.85rem;
+      padding: 0.75rem;
       border-top: 1px solid var(--surface-border);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
-    /* ZONA PRINCIPALĂ */
     main {
       flex: 1;
       display: flex;
@@ -122,10 +121,9 @@
     }
 
     .view-section { display: none; }
-    .view-section.active { display: block; animation: fadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    .view-section.active { display: block; animation: fadeIn 0.12s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* CARDURI ȘI BUTOANE */
     button, input, select, textarea { font-family: inherit; color: inherit; }
     .btn {
       background: var(--surface);
@@ -139,7 +137,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.18s;
+      transition: all 0.15s;
     }
     .btn:hover { background: var(--surface-hover); border-color: var(--primary); }
     .btn-sm { padding: 5px 8px; font-size: 0.78rem; }
@@ -178,12 +176,27 @@
     }
     .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2); }
 
-    /* BRIEF COORDONATOR - THEMED BORDERS & BADGES */
+    /* BRIEF THEMES */
     .brief-card-green { border-left: 4px solid var(--accent-green); }
     .brief-card-yellow { border-left: 4px solid var(--accent-yellow); }
     .brief-card-blue { border-left: 4px solid var(--accent-blue); }
 
-    /* POMODORO NEON ANIMATED RING */
+    /* PROGRESS BARS PENTRU PAPER TRACKER */
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    /* POMODORO NEON RING */
     .pomodoro-box {
       display: flex;
       flex-direction: column;
@@ -194,23 +207,15 @@
     }
     .timer-ring-container {
       position: relative;
-      width: 250px;
-      height: 250px;
+      width: 240px;
+      height: 240px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 1rem 0;
+      margin: 0.8rem 0;
     }
-    .timer-ring-svg {
-      transform: rotate(-90deg);
-      width: 100%;
-      height: 100%;
-    }
-    .timer-ring-bg {
-      fill: none;
-      stroke: rgba(255,255,255,0.06);
-      stroke-width: 8;
-    }
+    .timer-ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .timer-ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
     .timer-ring-bar {
       fill: none;
       stroke: var(--primary);
@@ -221,32 +226,11 @@
       transition: stroke-dashoffset 1s linear, stroke 0.3s;
       filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.4));
     }
-    .timer-text-content {
-      position: absolute;
-      text-align: center;
-    }
-    .timer-display-animated {
-      font-size: 3.2rem;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      color: var(--text-bright);
-      letter-spacing: -1px;
-    }
-    .timer-phase-badge {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--primary);
-      font-weight: 700;
-    }
+    .timer-text-content { position: absolute; text-align: center; }
+    .timer-display-animated { font-size: 3.2rem; font-family: var(--font-mono); font-weight: 700; color: var(--text-bright); }
 
-    /* LATEX CHEAT SHEET */
-    .latex-cheat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 6px;
-      margin-top: 8px;
-    }
+    /* CHEAT SHEET */
+    .latex-cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; margin-top: 8px; }
     .latex-chip {
       background: var(--bg);
       border: 1px solid var(--surface-border);
@@ -257,101 +241,60 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 2px;
-      transition: all 0.15s;
     }
-    .latex-chip:hover { border-color: var(--primary); background: rgba(88,166,255,0.08); transform: translateY(-1px); }
+    .latex-chip:hover { border-color: var(--primary); background: rgba(88,166,255,0.08); }
     .latex-chip span.math-lbl { font-family: var(--font-mono); color: var(--primary); font-size: 0.72rem; }
 
-    /* CALENDAR GRID */
-    .calendar-container {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 10px;
+    /* MERMAID CONTAINER */
+    #mermaid-render-output {
+      background: #0d1117;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 1rem;
     }
-    .calendar-header-day {
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      padding: 4px 0;
-    }
+
+    /* CALENDAR */
+    .calendar-container { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 10px; }
+    .calendar-header-day { text-align: center; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
     .calendar-cell {
       background: var(--bg);
       border: 1px solid var(--surface-border);
-      min-height: 85px;
+      min-height: 75px;
       border-radius: 6px;
-      padding: 6px;
-      font-size: 0.75rem;
+      padding: 5px;
+      font-size: 0.72rem;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .calendar-cell.today { border-color: var(--primary); background: rgba(88,166,255,0.05); }
-    .calendar-cell .day-num { font-weight: 700; color: var(--text-muted); }
-    .calendar-cell.today .day-num { color: var(--primary); }
-    .cal-event-pill {
-      font-size: 0.68rem;
-      padding: 2px 4px;
-      border-radius: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 600;
-    }
+    .cal-event-pill { font-size: 0.65rem; padding: 2px 4px; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .cal-event-pill.deadline { background: rgba(248,81,73,0.25); color: #ff7b72; }
     .cal-event-pill.conf { background: rgba(56,139,253,0.25); color: #79c0ff; }
-    .cal-event-pill.milestone { background: rgba(46,160,67,0.25); color: #7ee787; }
 
-    /* TABELE & ALTELE */
+    /* CANVAS */
+    #canvas-container { position: relative; width: 100%; height: 500px; background: #0f141c; border: 1px solid var(--surface-border); border-radius: 8px; overflow: hidden; touch-action: none; }
+    #sketch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; }
+    .canvas-toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; background: var(--surface); padding: 8px; border-radius: 8px; border: 1px solid var(--surface-border); }
+    .canvas-toolbar .btn.active { background: var(--primary); color: #000; font-weight: 600; }
+
+    .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 900px) { .split-grid { grid-template-columns: 1fr; } aside { width: 210px; } }
+    
     .table-responsive { overflow-x: auto; border: 1px solid var(--surface-border); border-radius: 6px; }
     table.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.82rem; }
     table.data-table th { background: rgba(255,255,255,0.03); color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--surface-border); }
     table.data-table td { padding: 10px 12px; border-bottom: 1px solid var(--surface-border); vertical-align: top; }
     table.data-table tr:hover td { background: rgba(255,255,255,0.02); }
     .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; background: rgba(88, 166, 255, 0.15); color: var(--primary); margin: 2px; }
-
-    #canvas-container {
-      position: relative;
-      width: 100%;
-      height: 520px;
-      background: #0f141c;
-      border: 1px solid var(--surface-border);
-      border-radius: 8px;
-      overflow: hidden;
-      touch-action: none;
-    }
-    #sketch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; }
-    .canvas-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-      margin-bottom: 8px;
-      background: var(--surface);
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid var(--surface-border);
-    }
-    .canvas-toolbar .btn.active { background: var(--primary); color: #000; font-weight: 600; }
-
-    .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-    @media (max-width: 900px) { .split-grid { grid-template-columns: 1fr; } aside { width: 210px; } }
     
-    .math-preview {
-      background: #0b0f14;
-      border: 1px solid var(--surface-border);
-      border-radius: 6px;
-      padding: 1.5rem;
-      min-height: 110px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      overflow-x: auto;
-    }
+    .math-preview { background: #0b0f14; border: 1px solid var(--surface-border); border-radius: 6px; padding: 1.25rem; min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -361,13 +304,19 @@
       <i class="fa-solid fa-graduation-cap" style="color: var(--primary); font-size: 1.3rem;"></i>
       <div>
         <h1>PhD Workspace</h1>
-        <span>v3.0 Pro</span>
+        <span>v3.5 Pro</span>
       </div>
     </div>
 
     <nav>
       <button class="nav-btn active" onclick="switchTab('lit-matrix')">
         <i class="fa-solid fa-book-bookmark"></i> Matrice Literatură
+      </button>
+      <button class="nav-btn" onclick="switchTab('paper-tracker')">
+        <i class="fa-solid fa-file-waveform"></i> Paper & Word Tracker
+      </button>
+      <button class="nav-btn" onclick="switchTab('mermaid-studio')">
+        <i class="fa-solid fa-diagram-project"></i> Mermaid Diagram Studio
       </button>
       <button class="nav-btn" onclick="switchTab('meeting-brief')">
         <i class="fa-solid fa-user-tie"></i> Brief Coordonator
@@ -423,14 +372,12 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Înregistrare Articol</div>
-            <div>
-              <button class="btn btn-sm" onclick="toggleBibtexImport()"><i class="fa-solid fa-file-import"></i> Import BibTeX Masiv</button>
-            </div>
+            <button class="btn btn-sm" onclick="toggleBibtexImport()"><i class="fa-solid fa-file-import"></i> Import BibTeX Masiv</button>
           </div>
           
           <div id="bibtex-import-box" style="display: none; margin-bottom: 1rem; padding: 10px; background: rgba(255,255,255,0.02); border: 1px dashed var(--surface-border); border-radius: 6px;">
             <label class="form-label">Lipește textul BibTeX:</label>
-            <textarea id="bibtex-bulk-input" class="form-control" rows="4" placeholder="@article{ref2026,\n  title={Real-Time Middleware},\n  author={Smith, J.},\n  year={2026}\n}"></textarea>
+            <textarea id="bibtex-bulk-input" class="form-control" rows="4" placeholder="@article{key2026, title={...}, author={...}, year={2026}}"></textarea>
             <button class="btn btn-primary btn-sm" style="margin-top: 6px;" onclick="parseBulkBibtex()"><i class="fa-solid fa-bolt"></i> Procesează și Adaugă</button>
           </div>
 
@@ -485,7 +432,166 @@
         </div>
       </section>
 
-      <!-- 2. BRIEF COORDONATOR (CU CELE 3 CULORI & EXPORT PDF) -->
+      <!-- 2. PAPER WORDCOUNT & SECTION TRACKER (NOU) -->
+      <section id="paper-tracker" class="view-section">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-gauge"></i> Progres Redactare Lucrare Științifică (IEEE Standard)</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <label class="form-label" style="margin:0;">Țintă Format:</label>
+              <select id="paper-target-format" class="form-control" style="width: 170px;" onchange="updatePaperStats()">
+                <option value="6">IEEE Conference (6 Pagini ~ 3,500 cuvinte)</option>
+                <option value="8">IEEE Conference (8 Pagini ~ 4,800 cuvinte)</option>
+                <option value="12">Journal ISI (12 Pagini ~ 7,500 cuvinte)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Total Metrics Overview -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1rem;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">TOTAL CUVINTE</span>
+              <h3 id="stat-total-words" style="color: var(--primary); font-size: 1.6rem; font-family: var(--font-mono);">0</h3>
+            </div>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">PAGINI ESTIMATE (2-Col)</span>
+              <h3 id="stat-est-pages" style="color: #7ee787; font-size: 1.6rem; font-family: var(--font-mono);">0.0 / 6</h3>
+            </div>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">PROGRES GLOBAL</span>
+              <h3 id="stat-global-pct" style="color: #e3b341; font-size: 1.6rem; font-family: var(--font-mono);">0%</h3>
+            </div>
+          </div>
+          <div class="progress-bar-container" style="height: 10px;">
+            <div id="global-paper-progressbar" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Section Breakdown -->
+        <div class="split-grid">
+          <div>
+            <!-- Abstract & Intro -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">I. Abstract & Introduction</div>
+                <span class="tag" id="tag-words-sec1">0 cuvinte</span>
+              </div>
+              <div class="form-group">
+                <textarea id="section-text-1" class="form-control" rows="5" placeholder="Introdu textul sau schița pentru Abstract și Introducere..." oninput="updatePaperStats()"></textarea>
+              </div>
+              <div class="progress-bar-container"><div id="pbar-sec1" class="progress-bar-fill" style="width:0%;"></div></div>
+            </div>
+
+            <!-- Related Work / SOTA -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">II. Related Work & Background</div>
+                <span class="tag" id="tag-words-sec2">0 cuvinte</span>
+              </div>
+              <div class="form-group">
+                <textarea id="section-text-2" class="form-control" rows="5" placeholder="SOTA, Middleware comparison (DDS vs Zenoh), analiza literaturii..." oninput="updatePaperStats()"></textarea>
+              </div>
+              <div class="progress-bar-container"><div id="pbar-sec2" class="progress-bar-fill" style="width:0%;"></div></div>
+            </div>
+
+            <!-- Proposed Architecture -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">III. Proposed Architecture & System Design</div>
+                <span class="tag" id="tag-words-sec3">0 cuvinte</span>
+              </div>
+              <div class="form-group">
+                <textarea id="section-text-3" class="form-control" rows="5" placeholder="Arhitectura nodurilor ROS 2, Zenoh router, topologie rețea, QoS profile..." oninput="updatePaperStats()"></textarea>
+              </div>
+              <div class="progress-bar-container"><div id="pbar-sec3" class="progress-bar-fill" style="width:0%;"></div></div>
+            </div>
+          </div>
+
+          <div>
+            <!-- Experimental Evaluation -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">IV. Experimental Evaluation & Results</div>
+                <span class="tag" id="tag-words-sec4">0 cuvinte</span>
+              </div>
+              <div class="form-group">
+                <textarea id="section-text-4" class="form-control" rows="5" placeholder="Măsurători RTT P50/P99, jitter, packet loss, bandwidth, grafice Gazebo..." oninput="updatePaperStats()"></textarea>
+              </div>
+              <div class="progress-bar-container"><div id="pbar-sec4" class="progress-bar-fill" style="width:0%;"></div></div>
+            </div>
+
+            <!-- Conclusions & Future Work -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">V. Discussion & Conclusions</div>
+                <span class="tag" id="tag-words-sec5">0 cuvinte</span>
+              </div>
+              <div class="form-group">
+                <textarea id="section-text-5" class="form-control" rows="5" placeholder="Concluzii finale, limitări identificate și direcții de cercetare viitoare..." oninput="updatePaperStats()"></textarea>
+              </div>
+              <div class="progress-bar-container"><div id="pbar-sec5" class="progress-bar-fill" style="width:0%;"></div></div>
+            </div>
+
+            <!-- Export Section Drafts -->
+            <div class="card" style="text-align: center;">
+              <button class="btn btn-primary" onclick="exportFullPaperDraft()"><i class="fa-solid fa-file-arrow-down"></i> Descarcă Manuscris Complet (.MD / .TXT)</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MERMAID DIAGRAM STUDIO (NOU) -->
+      <section id="mermaid-studio" class="view-section">
+        <div class="split-grid">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-code-fork"></i> Mermaid Script Editor</div>
+                <div style="display: flex; gap: 6px;">
+                  <button class="btn btn-primary btn-sm" onclick="renderMermaidDiagram()"><i class="fa-solid fa-play"></i> Randează</button>
+                  <button class="btn btn-sm" onclick="exportMermaidSVG()"><i class="fa-solid fa-download"></i> SVG</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <textarea id="mermaid-code-input" class="form-control" rows="14" style="font-family: var(--font-mono); font-size: 0.82rem;" onkeyup="scheduleMermaidRender()">
+flowchart TD
+    subgraph Operator_Station["Operator Station (ROS 2 Humble)"]
+        UI[Teleop UI / Joystick Node] -->|JointCmd / Twist| ZenohBridgeTX[rmw_zenoh Router]
+    end
+
+    subgraph Network["Network Channel (Degraded Wi-Fi / LTE)"]
+        ZenohBridgeTX -.->|Zenoh Protocol / P2P UDP| ZenohBridgeRX
+    end
+
+    subgraph Robot_Base["Robot Hardware / Edge Controller"]
+        ZenohBridgeRX[rmw_zenoh Router] -->|cmd_vel / JointState| MotorDriver[Motor Controller Node]
+        Sensors[LiDAR / Odometry Node] -->|Feedback State| ZenohBridgeRX
+    end
+                </textarea>
+              </div>
+
+              <!-- Template Buttons -->
+              <label class="form-label">Șabloane Diagrame Cercetare:</label>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn btn-sm" onclick="setMermaidTemplate('ros2_flow')">Flux Noduri ROS2 & Zenoh</button>
+                <button class="btn btn-sm" onclick="setMermaidTemplate('state_machine')">State Machine Teleoperare</button>
+                <button class="btn btn-sm" onclick="setMermaidTemplate('sequence')">Diagramă Secvență RTT</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-image"></i> Previzualizare Live Diagramă</div>
+              </div>
+              <div id="mermaid-render-output"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BRIEF COORDONATOR -->
       <section id="meeting-brief" class="view-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
           <h2 style="font-size: 1.1rem; color: var(--text-bright);">Pregătire Sinteză Ședință Îndrumător</h2>
@@ -496,20 +602,1347 @@
         </div>
 
         <div class="split-grid">
-          <!-- Coloana de Editare -->
           <div>
-            <!-- Card Verde: Progres -->
             <div class="card brief-card-green">
-              <div class="card-header">
-                <div class="card-title" style="color: #7ee787;"><i class="fa-solid fa-circle-check"></i> 1. Progres Realizat & Rezultate</div>
-              </div>
+              <div class="card-header"><div class="card-title" style="color: #7ee787;"><i class="fa-solid fa-circle-check"></i> 1. Progres Realizat & Rezultate</div></div>
               <div class="form-group">
-                <label class="form-label">Ce s-a finalizat concret de la ultima întâlnire:</label>
-                <textarea id="brief-green" class="form-control" rows="4" placeholder="- Configurat Zenoh router pe nodul edge&#10;- Măsurat latența RTT pe 100k pachete&#10;- Redactat secțiunea III.A"></textarea>
+                <textarea id="brief-green" class="form-control" rows="4" placeholder="- Configurat Zenoh router pe nodul edge&#10;- Măsurat latența RTT pe 100k pachete"></textarea>
               </div>
             </div>
 
-            <!-- Card Galben: Blocaje -->
             <div class="card brief-card-yellow">
+              <div class="card-header"><div class="card-title" style="color: #e3b341;"><i class="fa-solid fa-triangle-exclamation"></i> 2. Blocaje & Întrebări Decizionale</div></div>
+              <div class="form-group">
+                <textarea id="brief-yellow" class="form-control" rows="4" placeholder="- Packet loss mare la simularea pe rețea degradată&#10;- Alegerea între serializare CDR vs JSON"></textarea>
+              </div>
+            </div>
+
+            <div class="card brief-card-blue">
+              <div class="card-header"><div class="card-title" style="color: #79c0ff;"><i class="fa-solid fa-bullseye"></i> 3. Obiective pentru Perioada Următoare</div></div>
+              <div class="form-group">
+                <textarea id="brief-blue" class="form-control" rows="4" placeholder="- Rulare teste automate în Gazebo&#10;- Generat grafice CDF pentru latență"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card" style="position: sticky; top: 0;">
               <div class="card-header">
-                <div class="card-title" style="color: #e3b341;"><i class="fa-solid fa-triangle-exclamat
+                <div class="card-title"><i class="fa-solid fa-eye"></i> Live PDF Sheet Preview</div>
+                <span class="tag" id="brief-date-tag">Azi</span>
+              </div>
+              
+              <div id="brief-printable-sheet" style="background: #ffffff; color: #1f2328; padding: 25px; border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 0.9rem; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                <div style="border-bottom: 2px solid #0969da; padding-bottom: 12px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:flex-end;">
+                  <div>
+                    <h2 style="font-size: 1.2rem; font-weight: 700; color: #1f2328; margin: 0;">RAPORT DE PROGRES CERCETARE DOCTORALĂ</h2>
+                    <p style="font-size: 0.8rem; color: #57606a; margin-top: 2px;">SCOSAAR / PhD Supervision Brief</p>
+                  </div>
+                  <div style="text-align: right; font-size: 0.8rem; color: #57606a;">
+                    <strong id="pdf-date">Data: Curentă</strong>
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                  <div style="background: #dafbe1; color: #1a7f37; font-weight: 700; font-size: 0.8rem; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px;">
+                    1. PROGRES REALIZAT ȘI REZULTATE OBȚINUTE
+                  </div>
+                  <div id="preview-green" style="white-space: pre-wrap; font-size: 0.85rem; color: #24292f; padding-left: 6px;">Fără date completate.</div>
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                  <div style="background: #fff8c5; color: #9a6700; font-weight: 700; font-size: 0.8rem; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px;">
+                    2. BLOCAJE TEHNICE & ÎNTREBĂRI DE DEZBATERE
+                  </div>
+                  <div id="preview-yellow" style="white-space: pre-wrap; font-size: 0.85rem; color: #24292f; padding-left: 6px;">Fără date completate.</div>
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                  <div style="background: #ddf4ff; color: #0969da; font-weight: 700; font-size: 0.8rem; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px;">
+                    3. OBIECTIVE PENTRU URMĂTOAREA ETAPĂ
+                  </div>
+                  <div id="preview-blue" style="white-space: pre-wrap; font-size: 0.85rem; color: #24292f; padding-left: 6px;">Fără date completate.</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. MATH & LATEX TOOLS -->
+      <section id="math-tools" class="view-section">
+        <div class="split-grid">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-code"></i> Editor Formule LaTeX</div>
+                <button class="btn btn-sm" onclick="copyLatex()"><i class="fa-solid fa-copy"></i> Copiază</button>
+              </div>
+              <div class="form-group">
+                <textarea id="latex-input" class="form-control" rows="4" onkeyup="renderLatexPreview()">L_{RTT} = \frac{1}{N} \sum_{i=1}^{N} \left( t_{rx, i} - t_{tx, i} \right)</textarea>
+              </div>
+              <label class="form-label">Randare Live KaTeX</label>
+              <div id="katex-render-box" class="math-preview"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="margin-bottom: 8px;"><i class="fa-solid fa-layer-group"></i> Șabloane Cercetare</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn btn-sm" onclick="setLatexTemplate('rtt')">Latență RTT Medie</button>
+                <button class="btn btn-sm" onclick="setLatexTemplate('jitter')">Jitter RFC 3550</button>
+                <button class="btn btn-sm" onclick="setLatexTemplate('state_space')">State-Space Delay $\tau(t)$</button>
+                <button class="btn btn-sm" onclick="setLatexTemplate('matrix_rot')">Matrice Rotație 3D</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-circle-question"></i> LaTeX Syntax Cheat Sheet</div>
+                <small style="color: var(--text-muted);">Click pentru inserare</small>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Operații & Fracții</label>
+                <div class="latex-cheat-grid">
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\frac{a}{b}')"><span>Fracție</span><span class="math-lbl">\frac{a}{b}</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('x^{2}')"><span>Putere</span><span class="math-lbl">x^{n}</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('x_{i}')"><span>Indice</span><span class="math-lbl">x_{i}</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\sqrt{x}')"><span>Radical</span><span class="math-lbl">\sqrt{x}</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\sum_{i=1}^{n}{x_i}')"><span>Sumă</span><span class="math-lbl">\sum</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\int_{a}^{b}{f(x)dx}')"><span>Integrală</span><span class="math-lbl">\int</span></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Simboluri & Litere Grecești</label>
+                <div class="latex-cheat-grid">
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\tau')"><span>Tau (Delay)</span><span class="math-lbl">\tau</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\Delta t')"><span>Delta (Timp)</span><span class="math-lbl">\Delta t</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\theta')"><span>Theta</span><span class="math-lbl">\theta</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\omega')"><span>Omega</span><span class="math-lbl">\omega</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}')"><span>Matrice 2x2</span><span class="math-lbl">Matrix</span></div>
+                  <div class="latex-chip" onclick="insertLatexSnippet('\\le')"><span>&le; Egal</span><span class="math-lbl">\le</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. POMODORO TIMER -->
+      <section id="deep-work" class="view-section">
+        <div class="split-grid">
+          <div class="card pomodoro-box">
+            <div class="timer-ring-container">
+              <svg class="timer-ring-svg" viewBox="0 0 240 240">
+                <circle class="timer-ring-bg" cx="120" cy="120" r="110"></circle>
+                <circle id="pomodoro-circle-bar" class="timer-ring-bar" cx="120" cy="120" r="110"></circle>
+              </svg>
+              <div class="timer-text-content">
+                <div class="timer-phase-badge" id="pomodoro-phase-label" style="color:var(--primary); font-weight:700;">Deep Focus</div>
+                <div class="timer-display-animated" id="pomodoro-timer">25:00</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);"><span id="pomo-streak-count">0</span> sesiuni azi 🔥</div>
+              </div>
+            </div>
+
+            <div class="timer-controls" style="display:flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 1rem;">
+              <button class="btn btn-primary" id="timer-toggle-btn" onclick="toggleTimer()"><i class="fa-solid fa-play"></i> Start Sesiune</button>
+              <button class="btn" onclick="setPomodoroMode(25, 'Deep Focus', '#58a6ff')">25m Focus</button>
+              <button class="btn" onclick="setPomodoroMode(5, 'Short Break', '#2ea043')">5m Pauză</button>
+              <button class="btn" onclick="setPomodoroMode(15, 'Long Break', '#d29922')">15m Pauză Lungă</button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 8px 14px; border-radius: 20px; border: 1px solid var(--surface-border);">
+              <i class="fa-solid fa-headphones" style="color: var(--primary);"></i>
+              <span style="font-size: 0.78rem;">Ambient Noise:</span>
+              <button class="btn btn-sm" id="ambient-audio-btn" onclick="toggleWhiteNoise()"><i class="fa-solid fa-volume-xmark"></i> Off</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-crosshairs"></i> Obiectiv Sesiune Curentă</div>
+            </div>
+            <div class="form-group">
+              <textarea id="focus-task" class="form-control" rows="5" placeholder="ex. Finalizează scriptul de evaluare pentru măsurarea latenței Zenoh..."></textarea>
+            </div>
+            <button class="btn btn-success btn-sm" onclick="saveFocusTask()"><i class="fa-solid fa-check"></i> Salvează Obiectiv</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. CALENDAR VIEW -->
+      <section id="calendar-view" class="view-section">
+        <div class="split-grid">
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-calendar-plus"></i> Adaugă Termen Limită</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                  <label class="form-label">Nume Eveniment</label>
+                  <input type="text" id="deadline-name" class="form-control" placeholder="ex. IEEE IROS / Raport SCOSAAR">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Data Limită</label>
+                  <input type="date" id="deadline-date" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tip Categorie</label>
+                <select id="deadline-type" class="form-control">
+                  <option value="Conferință IEEE/ACM">Conferință IEEE/ACM</option>
+                  <option value="Jurnal ISI">Jurnal ISI</option>
+                  <option value="Raport Doctorat">Raport Doctorat SCOSAAR</option>
+                  <option value="Milestone Tehnic">Milestone Tehnic</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="addDeadline()"><i class="fa-solid fa-plus"></i> Salvează</button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Listă Termene Active</div>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Eveniment</th>
+                      <th>Data</th>
+                      <th>Timp Rămas</th>
+                      <th>Acțiuni</th>
+                    </tr>
+                  </thead>
+                  <tbody id="deadlines-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-calendar-days"></i> <span id="current-month-display">Calendar</span></div>
+              </div>
+              <div class="calendar-container" id="calendar-grid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. QOS & NETWORK CALCULATOR -->
+      <section id="qos-calc" class="view-section">
+        <div class="split-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-network-wired"></i> Parametri Transmisie Robot</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div class="form-group">
+                <label class="form-label">Frecvență ($Hz$)</label>
+                <input type="number" id="calc-freq" class="form-control" value="100" oninput="calculateQoS()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Payload (Bytes)</label>
+                <input type="number" id="calc-payload" class="form-control" value="256" oninput="calculateQoS()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Overhead (Bytes)</label>
+                <input type="number" id="calc-overhead" class="form-control" value="28" oninput="calculateQoS()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">RTT Bază ($ms$)</label>
+                <input type="number" id="calc-rtt" class="form-control" value="3.5" oninput="calculateQoS()">
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="calculateQoS()"><i class="fa-solid fa-calculator"></i> Calculează</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-gauge-high"></i> Rezultate Teoretice</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
+                <span style="color:var(--text-muted);">Bandwidth Necesar:</span>
+                <strong id="res-bandwidth" style="color:var(--primary);">0.00 KB/s</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
+                <span style="color:var(--text-muted);">Timp între Pachete ($\Delta t$):</span>
+                <strong id="res-period" style="color:#7ee787;">10.00 ms</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
+                <span style="color:var(--text-muted);">Total Pachete / Minut:</span>
+                <strong id="res-ppm" style="color:var(--text-bright);">6000 pkts/min</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
+                <span style="color:var(--text-muted);">Overhead Protocol (%):</span>
+                <strong id="res-overhead-pct" style="color:#e3b341;">9.8 %</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. STYLUS CANVAS -->
+      <section id="stylus-canvas" class="view-section">
+        <div class="canvas-toolbar">
+          <button class="btn active" onclick="setTool('pen')" id="tool-pen"><i class="fa-solid fa-pen"></i> Pen</button>
+          <button class="btn" onclick="setTool('line')" id="tool-line"><i class="fa-solid fa-slash"></i> Linie</button>
+          <button class="btn" onclick="setTool('arrow')" id="tool-arrow"><i class="fa-solid fa-arrow-right"></i> Săgeată</button>
+          <button class="btn" onclick="setTool('rect')" id="tool-rect"><i class="fa-regular fa-square"></i> Bloc</button>
+          <button class="btn" onclick="setTool('eraser')" id="tool-eraser"><i class="fa-solid fa-eraser"></i> Radieră</button>
+          <input type="color" id="pen-color" value="#58a6ff" style="background:none; border:none; width:28px; height:28px; cursor:pointer;" onchange="updateColor(this.value)">
+          <select id="pen-size" class="form-control" style="width: 100px;" onchange="updateSize(this.value)">
+            <option value="2">2px</option>
+            <option value="4" selected>4px</option>
+            <option value="8">8px</option>
+          </select>
+          <button class="btn" onclick="undoCanvas()"><i class="fa-solid fa-rotate-left"></i></button>
+          <button class="btn" onclick="redoCanvas()"><i class="fa-solid fa-rotate-right"></i></button>
+          <button class="btn btn-danger" onclick="clearCanvas()"><i class="fa-solid fa-trash"></i></button>
+          <div style="flex:1;"></div>
+          <button class="btn" onclick="exportCanvasPNG(false)"><i class="fa-solid fa-image"></i> PNG Dark</button>
+          <button class="btn btn-success" onclick="exportCanvasPNG(true)"><i class="fa-solid fa-print"></i> PNG Alb</button>
+        </div>
+        <div id="canvas-container"><canvas id="sketch-canvas"></canvas></div>
+      </section>
+
+      <!-- 10. EXPERIMENTE & BENCHMARK -->
+      <section id="exp-bench" class="view-section">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-vial"></i> Înregistrare Rulare Experimentală</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+            <div class="form-group">
+              <label class="form-label">ID Rulare</label>
+              <input type="text" id="exp-name" class="form-control" placeholder="ex. Test_01_LAN_1Gbps">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Middleware</label>
+              <input type="text" id="exp-config" class="form-control" placeholder="ex. rmw_zenoh">
+            </div>
+            <div class="form-group">
+              <label class="form-label">RTT P50 (ms)</label>
+              <input type="number" step="0.01" id="exp-p50" class="form-control" placeholder="2.15">
+            </div>
+            <div class="form-group">
+              <label class="form-label">RTT P99 (ms)</label>
+              <input type="number" step="0.01" id="exp-p99" class="form-control" placeholder="4.80">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Loss / Jitter</label>
+              <input type="text" id="exp-loss" class="form-control" placeholder="0.05% / 0.12ms">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Observații</label>
+            <input type="text" id="exp-notes" class="form-control" placeholder="Fără packet loss detectat pe 10k mesaje...">
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="addExperiment()"><i class="fa-solid fa-plus"></i> Salvează</button>
+            <button class="btn" onclick="exportExperimentsToLatex()"><i class="fa-solid fa-table"></i> Generează LaTeX</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Jurnal Experimente (<span id="exp-count">0</span>)</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Scenariu</th>
+                  <th>Middleware</th>
+                  <th>RTT P50</th>
+                  <th>RTT P99</th>
+                  <th>Loss / Jitter</th>
+                  <th>Observații</th>
+                  <th>Acțiuni</th>
+                </tr>
+              </thead>
+              <tbody id="exp-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. WHERE I LEFT OFF -->
+      <section id="state-log" class="view-section">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-bookmark"></i> Salvare Context Curent</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+            <div class="form-group">
+              <label class="form-label">Git Branch / Repo</label>
+              <input type="text" id="state-git" class="form-control" placeholder="feature/zenoh-test">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fișier Deschis / Comandă</label>
+              <input type="text" id="state-file" class="form-control" placeholder="teleop_node.py | colcon build">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Următorul pas la reluare:</label>
+            <textarea id="state-next-action" class="form-control" rows="3" placeholder="Reia testul de latență cu setarea de QoS Best-Effort..."></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="saveStateLog()"><i class="fa-solid fa-floppy-disk"></i> Salvează Stare</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Istoric Stări Salvate</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Data & Ora</th>
+                  <th style="width: 20%;">Branch</th>
+                  <th style="width: 25%;">Fișier / Comandă</th>
+                  <th style="width: 35%;">Următorul Pas</th>
+                </tr>
+              </thead>
+              <tbody id="state-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // --- INITIALIZE MERMAID ---
+    if (window.mermaid) {
+      mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+    }
+
+    // --- 1. ROBUST TAB NAVIGATION ---
+    const tabTitles = {
+      'lit-matrix': 'Matrice Analiză Literatură',
+      'paper-tracker': 'Paper Wordcount & Section Tracker (IEEE)',
+      'mermaid-studio': 'Mermaid.js Live Diagram & Statechart Studio',
+      'meeting-brief': 'Brief Coordonator & Export Raport PDF',
+      'math-tools': 'LaTeX Equation Studio & Cheat Sheet',
+      'deep-work': 'Focus & Deep Work Pomodoro',
+      'calendar-view': 'Calendar Activități & Termene',
+      'qos-calc': 'Calculator QoS, Bandwidth & Delays Teleoperare',
+      'stylus-canvas': 'Stylus & Diagrame Tehnice',
+      'exp-bench': 'Benchmark & Jurnal Experimente',
+      'state-log': 'Where I Left Off (Context Switch)'
+    };
+
+    function switchTab(tabId) {
+      try {
+        const sections = document.querySelectorAll('.view-section');
+        const buttons = document.querySelectorAll('.nav-btn');
+
+        sections.forEach(sec => sec.classList.remove('active'));
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        const targetSec = document.getElementById(tabId);
+        if (targetSec) targetSec.classList.add('active');
+
+        buttons.forEach(btn => {
+          const onclickAttr = btn.getAttribute('onclick') || '';
+          if (onclickAttr.includes(`'${tabId}'`)) btn.classList.add('active');
+        });
+
+        const titleEl = document.getElementById('page-title');
+        if (titleEl && tabTitles[tabId]) titleEl.textContent = tabTitles[tabId];
+
+        // Safe initializations per tab
+        if (tabId === 'stylus-canvas') setTimeout(initCanvasDimensions, 50);
+        if (tabId === 'math-tools') renderLatexPreview();
+        if (tabId === 'calendar-view') renderCalendarGrid();
+        if (tabId === 'meeting-brief') updateBriefLivePreview();
+        if (tabId === 'paper-tracker') updatePaperStats();
+        if (tabId === 'mermaid-studio') renderMermaidDiagram();
+      } catch (err) {
+        console.error('Eroare navigare tab:', err);
+      }
+    }
+
+    // --- 2. STORAGE ENGINE ---
+    const DB = {
+      get: (key, fallback) => {
+        try {
+          const val = localStorage.getItem('phd_' + key);
+          return val ? JSON.parse(val) : fallback;
+        } catch(e) { return fallback; }
+      },
+      set: (key, val) => {
+        try { localStorage.setItem('phd_' + key, JSON.stringify(val)); } catch(e) {}
+      }
+    };
+
+    // --- 3. PAPER WORDCOUNT & SECTION TRACKER ---
+    function countWords(str) {
+      if (!str) return 0;
+      return str.trim().split(/\s+/).filter(w => w.length > 0).length;
+    }
+
+    function updatePaperStats() {
+      const targetFormatPages = parseInt(document.getElementById('paper-target-format').value, 10) || 6;
+      const targetWords = (targetFormatPages === 6) ? 3500 : (targetFormatPages === 8 ? 4800 : 7500);
+
+      let totalWords = 0;
+      const sectionTargets = {
+        1: targetWords * 0.15, // Abstract + Intro ~15%
+        2: targetWords * 0.20, // Related Work ~20%
+        3: targetWords * 0.25, // Architecture ~25%
+        4: targetWords * 0.30, // Evaluation ~30%
+        5: targetWords * 0.10  // Conclusions ~10%
+      };
+
+      const drafts = {};
+
+      for (let i = 1; i <= 5; i++) {
+        const text = document.getElementById(`section-text-${i}`).value;
+        drafts[`sec${i}`] = text;
+        const wCount = countWords(text);
+        totalWords += wCount;
+
+        const tagEl = document.getElementById(`tag-words-sec${i}`);
+        if (tagEl) tagEl.textContent = `${wCount} / ~${Math.round(sectionTargets[i])} cuvinte`;
+
+        const pct = Math.min(100, Math.round((wCount / sectionTargets[i]) * 100));
+        const pbar = document.getElementById(`pbar-sec${i}`);
+        if (pbar) pbar.style.width = `${pct}%`;
+      }
+
+      DB.set('paper_drafts', drafts);
+
+      const estPages = (totalWords / (targetWords / targetFormatPages)).toFixed(1);
+      const globalPct = Math.min(100, Math.round((totalWords / targetWords) * 100));
+
+      document.getElementById('stat-total-words').textContent = totalWords;
+      document.getElementById('stat-est-pages').textContent = `${estPages} / ${targetFormatPages}`;
+      document.getElementById('stat-global-pct').textContent = `${globalPct}%`;
+      document.getElementById('global-paper-progressbar').style.width = `${globalPct}%`;
+    }
+
+    function exportFullPaperDraft() {
+      let draft = `# IEEE RESEARCH MANUSCRIPT DRAFT\nData: ${new Date().toLocaleDateString('ro-RO')}\n\n`;
+      draft += `## I. ABSTRACT & INTRODUCTION\n${document.getElementById('section-text-1').value}\n\n`;
+      draft += `## II. RELATED WORK & SOTA\n${document.getElementById('section-text-2').value}\n\n`;
+      draft += `## III. PROPOSED ARCHITECTURE & DESIGN\n${document.getElementById('section-text-3').value}\n\n`;
+      draft += `## IV. EXPERIMENTAL EVALUATION\n${document.getElementById('section-text-4').value}\n\n`;
+      draft += `## V. DISCUSSION & CONCLUSIONS\n${document.getElementById('section-text-5').value}\n\n`;
+
+      downloadFile(`phd_paper_manuscript_${Date.now()}.md`, draft, 'text/markdown');
+    }
+
+    // --- 4. MERMAID DIAGRAM STUDIO ---
+    let mermaidTimeout = null;
+    function scheduleMermaidRender() {
+      clearTimeout(mermaidTimeout);
+      mermaidTimeout = setTimeout(renderMermaidDiagram, 500);
+    }
+
+    async function renderMermaidDiagram() {
+      const code = document.getElementById('mermaid-code-input').value;
+      const output = document.getElementById('mermaid-render-output');
+      if (!window.mermaid) return;
+
+      try {
+        output.innerHTML = '';
+        const id = `mermaid-svg-${Date.now()}`;
+        const { svg } = await mermaid.render(id, code);
+        output.innerHTML = svg;
+      } catch (err) {
+        output.innerHTML = `<div style="color:var(--accent-danger); font-size:0.85rem;"><i class="fa-solid fa-triangle-exclamation"></i> Sintaxă Mermaid invalidă:<br><pre style="margin-top:6px; color:var(--text-muted);">${err.message || err}</pre></div>`;
+      }
+    }
+
+    function setMermaidTemplate(type) {
+      const el = document.getElementById('mermaid-code-input');
+      if (type === 'ros2_flow') {
+        el.value = `flowchart LR
+    PublisherNode[ROS 2 Teleop Node] -->|JointTrajectory| ZenohBridgeTX(rmw_zenoh Router)
+    ZenohBridgeTX -.->|UDP QoS BestEffort| ZenohBridgeRX(rmw_zenoh Edge)
+    ZenohBridgeRX -->|Hardware Interface| RobotActuators[Robot Joint Actuators]`;
+      } else if (type === 'state_machine') {
+        el.value = `stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> CONNECTING : Send Handshake
+    CONNECTING --> TELEOP_ACTIVE : Zenoh Session OK
+    TELEOP_ACTIVE --> DEGRADED_MODE : Packet Loss > 5%
+    DEGRADED_MODE --> TELEOP_ACTIVE : Loss Restored
+    TELEOP_ACTIVE --> EMERGENCY_STOP : Heartbeat Timeout (>500ms)
+    DEGRADED_MODE --> EMERGENCY_STOP : ESTOP Triggered
+    EMERGENCY_STOP --> [*]`;
+      } else if (type === 'sequence') {
+        el.value = `sequenceDiagram
+    autonumber
+    actor User as Teleoperator
+    participant Node as ROS 2 Pub Node
+    participant Zenoh as rmw_zenoh Middleware
+    participant Robot as Edge Controller
+
+    User->>Node: Joystick Input (Twist Cmd)
+    Node->>Zenoh: Publish /cmd_vel (t_tx)
+    Zenoh->>Robot: Routed over IP Network
+    Robot->>Zenoh: Echo Feedback /joint_states (t_rx)
+    Zenoh->>Node: Calculate RTT = t_rx - t_tx`;
+      }
+      renderMermaidDiagram();
+    }
+
+    function exportMermaidSVG() {
+      const output = document.getElementById('mermaid-render-output');
+      const svg = output.querySelector('svg');
+      if (!svg) return alert('Nicio diagramă randată pentru descărcare.');
+      const svgData = new XMLSerializer().serializeToString(svg);
+      downloadFile(`phd_diagram_${Date.now()}.svg`, svgData, 'image/svg+xml');
+    }
+
+    // --- 5. BRIEF COORDONATOR (CULORI, LIVE PDF) ---
+    function updateBriefLivePreview() {
+      const g = document.getElementById('brief-green').value;
+      const y = document.getElementById('brief-yellow').value;
+      const b = document.getElementById('brief-blue').value;
+
+      document.getElementById('preview-green').textContent = g.trim() || 'Fără date completate.';
+      document.getElementById('preview-yellow').textContent = y.trim() || 'Fără date completate.';
+      document.getElementById('preview-blue').textContent = b.trim() || 'Fără date completate.';
+
+      const dateStr = new Date().toLocaleDateString('ro-RO', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('pdf-date').textContent = `Data: ${dateStr}`;
+      document.getElementById('brief-date-tag').textContent = dateStr;
+
+      DB.set('brief_data', { g, y, b, date: dateStr });
+    }
+
+    ['brief-green', 'brief-yellow', 'brief-blue'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateBriefLivePreview);
+    });
+
+    function generateBriefPDF() {
+      const element = document.getElementById('brief-printable-sheet');
+      const opt = {
+        margin: 10,
+        filename: `PhD_Brief_Coordonator_${Date.now()}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function copyBriefText() {
+      const g = document.getElementById('brief-green').value.trim();
+      const y = document.getElementById('brief-yellow').value.trim();
+      const b = document.getElementById('brief-blue').value.trim();
+      const dateStr = new Date().toLocaleDateString('ro-RO');
+
+      const fullText = `=== SINTEZĂ ACTIVITATE DOCTORAT [${dateStr}] ===\n\n` +
+                       `🟢 1. PROGRES REALIZAT:\n${g || '- N/A'}\n\n` +
+                       `🟡 2. BLOCAJE / ÎNTREBĂRI COORDONATOR:\n${y || '- N/A'}\n\n` +
+                       `🔵 3. OBIECTIVE PERIOADA URMĂTOARE:\n${b || '- N/A'}\n\n` +
+                       `==============================================`;
+
+      navigator.clipboard.writeText(fullText).then(() => alert('Sinteza a fost copiată în clipboard!'));
+    }
+
+    // --- 6. MATH & LATEX GEN ---
+    function renderLatexPreview() {
+      const input = document.getElementById('latex-input').value;
+      const box = document.getElementById('katex-render-box');
+      if (window.katex && box) {
+        try {
+          katex.render(input, box, { displayMode: true, throwOnError: false });
+        } catch(e) {
+          box.textContent = e.message;
+        }
+      }
+    }
+
+    function insertLatexSnippet(snippet) {
+      const textarea = document.getElementById('latex-input');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+
+      textarea.value = text.substring(0, start) + snippet + text.substring(end);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+      renderLatexPreview();
+    }
+
+    function copyLatex() {
+      const code = document.getElementById('latex-input').value;
+      navigator.clipboard.writeText(code).then(() => alert('Codul LaTeX a fost copiat!'));
+    }
+
+    function setLatexTemplate(type) {
+      const el = document.getElementById('latex-input');
+      if (type === 'rtt') {
+        el.value = `L_{RTT} = \\frac{1}{N} \\sum_{i=1}^{N} \\left( t_{rx, i} - t_{tx, i} \\right)`;
+      } else if (type === 'jitter') {
+        el.value = `J(i) = J(i-1) + \\frac{|D(i-1, i)| - J(i-1)}{16}`;
+      } else if (type === 'state_space') {
+        el.value = `\\begin{cases} \\dot{\\mathbf{x}}(t) = \\mathbf{A}\\mathbf{x}(t) + \\mathbf{B}\\mathbf{u}(t - \\tau(t)) \\\\ \\mathbf{y}(t) = \\mathbf{C}\\mathbf{x}(t) \\end{cases}`;
+      } else if (type === 'matrix_rot') {
+        el.value = `\\mathbf{R}_z(\\theta) = \\begin{bmatrix} \\cos\\theta & -\\sin\\theta & 0 \\\\ \\sin\\theta & \\cos\\theta & 0 \\\\ 0 & 0 & 1 \\end{bmatrix}`;
+      }
+      renderLatexPreview();
+    }
+
+    // --- 7. POMODORO TIMER ---
+    let timerDuration = 25 * 60;
+    let timerRemaining = timerDuration;
+    let timerInterval = null;
+    const totalCircumference = 2 * Math.PI * 110;
+    let audioCtx = null, noiseNode = null;
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerRemaining / 60).toString().padStart(2, '0');
+      const s = (timerRemaining % 60).toString().padStart(2, '0');
+      document.getElementById('pomodoro-timer').textContent = `${m}:${s}`;
+
+      const fraction = timerRemaining / timerDuration;
+      const offset = totalCircumference * (1 - fraction);
+      document.getElementById('pomodoro-circle-bar').style.strokeDashoffset = offset;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById('timer-toggle-btn');
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.innerHTML = '<i class="fa-solid fa-play"></i> Continuă';
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pauză';
+        timerInterval = setInterval(() => {
+          if (timerRemaining > 0) {
+            timerRemaining--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            btn.innerHTML = '<i class="fa-solid fa-play"></i> Start';
+            let streak = DB.get('pomo_streak', 0) + 1;
+            DB.set('pomo_streak', streak);
+            document.getElementById('pomo-streak-count').textContent = streak;
+            alert('Sesiune Pomodoro încheiată!');
+          }
+        }, 1000);
+      }
+    }
+
+    function setPomodoroMode(mins, label, color) {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('timer-toggle-btn').innerHTML = '<i class="fa-solid fa-play"></i> Start';
+      timerDuration = mins * 60;
+      timerRemaining = timerDuration;
+      document.getElementById('pomodoro-phase-label').textContent = label;
+      document.getElementById('pomodoro-circle-bar').style.stroke = color;
+      updateTimerDisplay();
+    }
+
+    function saveFocusTask() {
+      const task = document.getElementById('focus-task').value;
+      DB.set('current_focus_task', task);
+      alert('Obiectivul sesiunii a fost salvat.');
+    }
+
+    function toggleWhiteNoise() {
+      const btn = document.getElementById('ambient-audio-btn');
+      if (noiseNode) {
+        noiseNode.stop();
+        noiseNode.disconnect();
+        noiseNode = null;
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Off';
+      } else {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 500;
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0.08;
+
+        whiteNoise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        whiteNoise.start(0);
+        noiseNode = whiteNoise;
+        btn.innerHTML = '<i class="fa-solid fa-volume-high" style="color:var(--primary);"></i> On';
+      }
+    }
+
+    // --- 8. CALCULATOR QOS ---
+    function calculateQoS() {
+      const freq = parseFloat(document.getElementById('calc-freq').value) || 0;
+      const payload = parseFloat(document.getElementById('calc-payload').value) || 0;
+      const overhead = parseFloat(document.getElementById('calc-overhead').value) || 0;
+
+      const totalMsgSize = payload + overhead;
+      const bytesPerSec = totalMsgSize * freq;
+      const kbPerSec = (bytesPerSec / 1024).toFixed(2);
+      const mbps = ((bytesPerSec * 8) / 1000000).toFixed(3);
+
+      const periodMs = freq > 0 ? (1000 / freq).toFixed(2) : 0;
+      const ppm = freq * 60;
+      const overheadPct = totalMsgSize > 0 ? ((overhead / totalMsgSize) * 100).toFixed(1) : 0;
+
+      document.getElementById('res-bandwidth').textContent = `${kbPerSec} KB/s (${mbps} Mbps)`;
+      document.getElementById('res-period').textContent = `${periodMs} ms`;
+      document.getElementById('res-ppm').textContent = `${ppm} pkts/min`;
+      document.getElementById('res-overhead-pct').textContent = `${overheadPct} %`;
+    }
+
+    // --- 9. CALENDAR ENGINE ---
+    let deadlines = DB.get('deadlines', []);
+
+    function addDeadline() {
+      const name = document.getElementById('deadline-name').value.trim();
+      const date = document.getElementById('deadline-date').value;
+      const type = document.getElementById('deadline-type').value;
+
+      if (!name || !date) return alert('Introdu numele și data limită.');
+
+      deadlines.push({ id: Date.now(), name, date, type });
+      deadlines.sort((a,b) => new Date(a.date) - new Date(b.date));
+      DB.set('deadlines', deadlines);
+
+      document.getElementById('deadline-name').value = '';
+      document.getElementById('deadline-date').value = '';
+
+      renderDeadlines();
+      renderCalendarGrid();
+    }
+
+    function deleteDeadline(id) {
+      deadlines = deadlines.filter(d => d.id !== id);
+      DB.set('deadlines', deadlines);
+      renderDeadlines();
+      renderCalendarGrid();
+    }
+
+    function renderDeadlines() {
+      const tbody = document.getElementById('deadlines-table-body');
+      tbody.innerHTML = '';
+      const now = new Date();
+
+      deadlines.forEach(d => {
+        const target = new Date(d.date + 'T23:59:59');
+        const diffDays = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+        
+        let badge = `<span style="color:var(--accent-green)">${diffDays} zile rămase</span>`;
+        if (diffDays < 0) badge = `<span style="color:var(--text-muted)">Expirat</span>`;
+        else if (diffDays <= 14) badge = `<span style="color:var(--accent-danger); font-weight:bold;">URGENT: ${diffDays}z</span>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${d.name}</strong><br><small style="color:var(--text-muted)">${d.type}</small></td>
+          <td>${d.date}</td>
+          <td>${badge}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteDeadline(${d.id})"><i class="fa-solid fa-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCalendarGrid() {
+      const grid = document.getElementById('calendar-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+
+      const monthNames = ["Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"];
+      document.getElementById('current-month-display').textContent = `${monthNames[month]} ${year}`;
+
+      const days = ['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'];
+      days.forEach(d => {
+        const header = document.createElement('div');
+        header.className = 'calendar-header-day';
+        header.textContent = d;
+        grid.appendChild(header);
+      });
+
+      const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'calendar-cell';
+        emptyCell.style.opacity = '0.2';
+        grid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell';
+        if (day === now.getDate()) cell.classList.add('today');
+
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        cell.innerHTML = `<div style="font-weight:700; color:var(--text-muted);">${day}</div>`;
+
+        const matches = deadlines.filter(d => d.date === dateStr);
+        matches.forEach(m => {
+          let pillClass = 'conf';
+          if (m.type.includes('Raport')) pillClass = 'deadline';
+          cell.innerHTML += `<div class="cal-event-pill ${pillClass}" title="${m.name}">${m.name}</div>`;
+        });
+
+        grid.appendChild(cell);
+      }
+    }
+
+    // --- 10. MATRICE LITERATURA ---
+    let papers = DB.get('papers', []);
+    function toggleBibtexImport() {
+      const el = document.getElementById('bibtex-import-box');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addPaper() {
+      const title = document.getElementById('paper-title').value.trim();
+      const authors = document.getElementById('paper-authors').value.trim();
+      const method = document.getElementById('paper-method').value.trim();
+      const tags = document.getElementById('paper-tags').value.trim();
+      const notes = document.getElementById('paper-notes').value.trim();
+
+      if (!title) return alert('Introdu titlul articolului.');
+
+      papers.unshift({ id: Date.now(), title, authors, method, tags, notes });
+      DB.set('papers', papers);
+      
+      document.getElementById('paper-title').value = '';
+      document.getElementById('paper-authors').value = '';
+      document.getElementById('paper-method').value = '';
+      document.getElementById('paper-tags').value = '';
+      document.getElementById('paper-notes').value = '';
+
+      renderPapers();
+    }
+
+    function deletePaper(id) {
+      papers = papers.filter(p => p.id !== id);
+      DB.set('papers', papers);
+      renderPapers();
+    }
+
+    function renderPapers() {
+      const tbody = document.getElementById('papers-table-body');
+      if (!tbody) return;
+      const search = (document.getElementById('search-papers').value || '').toLowerCase();
+      tbody.innerHTML = '';
+
+      const filtered = papers.filter(p => 
+        p.title.toLowerCase().includes(search) ||
+        p.authors.toLowerCase().includes(search) ||
+        p.method.toLowerCase().includes(search) ||
+        p.tags.toLowerCase().includes(search)
+      );
+
+      document.getElementById('paper-count').textContent = filtered.length;
+
+      filtered.forEach(p => {
+        const tagSpans = p.tags.split(' ').filter(t => t.trim()).map(t => `<span class="tag">${t}</span>`).join('');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${p.title}</strong><br><small style="color:var(--text-muted);">${p.authors}</small></td>
+          <td>${p.method}</td>
+          <td>${p.notes}</td>
+          <td>${tagSpans}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deletePaper(${p.id})"><i class="fa-solid fa-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function parseBulkBibtex() {
+      const raw = document.getElementById('bibtex-bulk-input').value;
+      if (!raw.trim()) return;
+
+      const entries = raw.split(/@\w+\s*\{/g).filter(e => e.trim());
+      let added = 0;
+
+      entries.forEach(entry => {
+        const titleMatch = entry.match(/title\s*=\s*[\{"]([^"\}]+)[\}"]/i);
+        const authorMatch = entry.match(/author\s*=\s*[\{"]([^"\}]+)[\}"]/i);
+        const yearMatch = entry.match(/year\s*=\s*[\{"]?(\d{4})[\}"]?/i);
+
+        if (titleMatch) {
+          const title = titleMatch[1];
+          const authors = (authorMatch ? authorMatch[1] : 'Unknown') + (yearMatch ? `, ${yearMatch[1]}` : '');
+          papers.unshift({
+            id: Date.now() + Math.random(),
+            title,
+            authors,
+            method: 'Importat BibTeX',
+            tags: '#bibtex',
+            notes: ''
+          });
+          added++;
+        }
+      });
+
+      DB.set('papers', papers);
+      renderPapers();
+      document.getElementById('bibtex-bulk-input').value = '';
+      toggleBibtexImport();
+      alert(`S-au importat ${added} articole.`);
+    }
+
+    function exportBibtex() {
+      let out = '';
+      papers.forEach((p, idx) => {
+        out += `@article{ref_${idx+1},\n  title={${p.title}},\n  author={${p.authors}},\n  note={${p.notes}}\n}\n\n`;
+      });
+      downloadFile('phd_papers.bib', out, 'text/plain');
+    }
+
+    function exportCSV() {
+      let csv = 'Titlu,Autori,Metoda,Taguri,Note\n';
+      papers.forEach(p => {
+        csv += `"${p.title.replace(/"/g, '""')}","${p.authors.replace(/"/g, '""')}","${p.method.replace(/"/g, '""')}","${p.tags}","${p.notes.replace(/"/g, '""')}"\n`;
+      });
+      downloadFile('phd_papers.csv', csv, 'text/csv');
+    }
+
+    // --- 11. STYLUS CANVAS ENGINE ---
+    const canvas = document.getElementById('sketch-canvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false, currentTool = 'pen', penColor = '#58a6ff', penSize = 4;
+    let startX = 0, startY = 0;
+    let undoStack = [], redoStack = [];
+
+    function initCanvasDimensions() {
+      const container = document.getElementById('canvas-container');
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      if (canvas.width !== rect.width || canvas.height !== rect.height) {
+        const tempImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (tempImage.width > 0) ctx.putImageData(tempImage, 0, 0);
+      }
+    }
+
+    function setTool(t) {
+      currentTool = t;
+      document.querySelectorAll('.canvas-toolbar button[id^="tool-"]').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('tool-' + t);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function updateColor(c) { penColor = c; }
+    function updateSize(s) { penSize = parseInt(s, 10); }
+
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function pushCanvasState() {
+      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      redoStack = [];
+      if (undoStack.length > 25) undoStack.shift();
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      isDrawing = true;
+      pushCanvasState();
+      const p = getCanvasCoords(e);
+      startX = p.x; startY = p.y;
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDrawing) return;
+      const p = getCanvasCoords(e);
+      ctx.lineWidth = penSize;
+      ctx.strokeStyle = (currentTool === 'eraser') ? '#0f141c' : penColor;
+
+      if (currentTool === 'pen' || currentTool === 'eraser') {
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      }
+    });
+
+    window.addEventListener('pointerup', (e) => {
+      if (!isDrawing) return;
+      isDrawing = false;
+      const p = getCanvasCoords(e);
+      ctx.lineWidth = penSize;
+      ctx.strokeStyle = penColor;
+
+      if (currentTool === 'line') {
+        ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(p.x, p.y); ctx.stroke();
+      } else if (currentTool === 'rect') {
+        ctx.strokeRect(startX, startY, p.x - startX, p.y - startY);
+      } else if (currentTool === 'arrow') {
+        const headlen = 12;
+        const angle = Math.atan2(p.y - startY, p.x - startX);
+        ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(p.x, p.y); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - headlen * Math.cos(angle - Math.PI / 6), p.y - headlen * Math.sin(angle - Math.PI / 6));
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - headlen * Math.cos(angle + Math.PI / 6), p.y - headlen * Math.sin(angle + Math.PI / 6));
+        ctx.stroke();
+      }
+    });
+
+    function undoCanvas() {
+      if (undoStack.length === 0) return;
+      redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      ctx.putImageData(undoStack.pop(), 0, 0);
+    }
+
+    function redoCanvas() {
+      if (redoStack.length === 0) return;
+      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      ctx.putImageData(redoStack.pop(), 0, 0);
+    }
+
+    function clearCanvas() {
+      if (confirm('Sigur resetezi desenul?')) {
+        pushCanvasState();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    function exportCanvasPNG(whiteBackground) {
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = canvas.width;
+      exportCanvas.height = canvas.height;
+      const expCtx = exportCanvas.getContext('2d');
+
+      expCtx.fillStyle = whiteBackground ? '#ffffff' : '#0f141c';
+      expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+      expCtx.drawImage(canvas, 0, 0);
+
+      const link = document.createElement('a');
+      link.download = `phd_diagram_${Date.now()}.png`;
+      link.href = exportCanvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // --- 12. EXPERIMENTE & BENCHMARK ---
+    let experiments = DB.get('experiments', []);
+
+    function addExperiment() {
+      const name = document.getElementById('exp-name').value.trim();
+      const config = document.getElementById('exp-config').value.trim();
+      const p50 = document.getElementById('exp-p50').value.trim();
+      const p99 = document.getElementById('exp-p99').value.trim();
+      const loss = document.getElementById('exp-loss').value.trim();
+      const notes = document.getElementById('exp-notes').value.trim();
+
+      if (!name) return alert('Introdu ID-ul rulării.');
+
+      experiments.unshift({ id: Date.now(), name, config, p50, p99, loss, notes });
+      DB.set('experiments', experiments);
+
+      document.getElementById('exp-name').value = '';
+      document.getElementById('exp-config').value = '';
+      document.getElementById('exp-p50').value = '';
+      document.getElementById('exp-p99').value = '';
+      document.getElementById('exp-loss').value = '';
+      document.getElementById('exp-notes').value = '';
+
+      renderExperiments();
+    }
+
+    function deleteExperiment(id) {
+      experiments = experiments.filter(e => e.id !== id);
+      DB.set('experiments', experiments);
+      renderExperiments();
+    }
+
+    function renderExperiments() {
+      const tbody = document.getElementById('exp-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      document.getElementById('exp-count').textContent = experiments.length;
+
+      experiments.forEach(e => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${e.name}</strong></td>
+          <td><span class="tag">${e.config}</span></td>
+          <td>${e.p50} ms</td>
+          <td>${e.p99} ms</td>
+          <td>${e.loss}</td>
+          <td><small>${e.notes}</small></td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteExperiment(${e.id})"><i class="fa-solid fa-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function exportExperimentsToLatex() {
+      let latex = `\\begin{table}[htbp]\n\\centering\n\\caption{Rezultate Experimentale Latență și Fiabilitate Middleware}\n\\label{tab:benchmark_results}\n\\begin{tabular}{lcccc}\n\\hline\n\\textbf{Scenariu} & \\textbf{Middleware} & \\textbf{RTT P50 (ms)} & \\textbf{RTT P99 (ms)} & \\textbf{Loss / Jitter} \\\\\n\\hline\n`;
+      experiments.forEach(e => {
+        latex += `${e.name} & ${e.config} & ${e.p50} & ${e.p99} & ${e.loss} \\\\\n`;
+      });
+      latex += `\\hline\n\\end{tabular}\n\\end{table}`;
+      
+      navigator.clipboard.writeText(latex).then(() => alert('Tabelul LaTeX a fost copiat!'));
+    }
+
+    // --- 13. WHERE I LEFT OFF ---
+    let stateLogs = DB.get('statelogs', []);
+
+    function saveStateLog() {
+      const git = document.getElementById('state-git').value.trim();
+      const file = document.getElementById('state-file').value.trim();
+      const next = document.getElementById('state-next-action').value.trim();
+      const time = new Date().toLocaleString('ro-RO');
+
+      if (!next && !git) return alert('Introdu detaliile stării.');
+
+      stateLogs.unshift({ id: Date.now(), time, git, file, next });
+      DB.set('statelogs', stateLogs);
+
+      document.getElementById('state-git').value = '';
+      document.getElementById('state-file').value = '';
+      document.getElementById('state-next-action').value = '';
+
+      renderStateLogs();
+    }
+
+    function renderStateLogs() {
+      const tbody = document.getElementById('state-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      stateLogs.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><small style="color:var(--text-muted);">${s.time}</small></td>
+          <td><code>${s.git}</code></td>
+          <td><code>${s.file}</code></td>
+          <td><strong>${s.next}</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- 14. SYNC & BACKUP ---
+    function exportFullBackup() {
+      const fullData = {
+        papers: DB.get('papers', []),
+        experiments: DB.get('experiments', []),
+        deadlines: DB.get('deadlines', []),
+        statelogs: DB.get('statelogs', []),
+        focusTask: DB.get('current_focus_task', ''),
+        brief: DB.get('brief_data', {}),
+        streak: DB.get('pomo_streak', 0),
+        drafts: DB.get('paper_drafts', {})
+      };
+      downloadFile(`phd_workspace_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
+    }
+
+    function importFullBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.papers) DB.set('papers', data.papers);
+          if (data.experiments) DB.set('experiments', data.experiments);
+          if (data.deadlines) DB.set('deadlines', data.deadlines);
+          if (data.statelogs) DB.set('statelogs', data.statelogs);
+          if (data.focusTask) DB.set('current_focus_task', data.focusTask);
+          if (data.brief) DB.set('brief_data', data.brief);
+          if (data.streak) DB.set('pomo_streak', data.streak);
+          if (data.drafts) DB.set('paper_drafts', data.drafts);
+          
+          alert('Sincronizarea s-a realizat cu succes!');
+          location.reload();
+        } catch(err) {
+          alert('Eroare la parsarea fișierului JSON.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function downloadFile(filename, content, mime) {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // --- INITIALIZARE LA INCARCARE ---
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPapers();
+      renderExperiments();
+      renderDeadlines();
+      renderStateLogs();
+      updateTimerDisplay();
+      calculateQoS();
+      renderCalendarGrid();
+      
+      const savedTask = DB.get('current_focus_task', '');
+      if (savedTask) document.getElementById('focus-task').value = savedTask;
+
+      const savedBrief = DB.get('brief_data', null);
+      if (savedBrief) {
+        if (savedBrief.g) document.getElementById('brief-green').value = savedBrief.g;
+        if (savedBrief.y) document.getElementById('brief-yellow').value = savedBrief.y;
+        if (savedBrief.b) document.getElementById('brief-blue').value = savedBrief.b;
+      }
+      updateBriefLivePreview();
+
+      const drafts = DB.get('paper_drafts', null);
+      if (drafts) {
+        for (let i = 1; i <= 5; i++) {
+          if (drafts[`sec${i}`]) document.getElementById(`section-text-${i}`).value = drafts[`sec${i}`];
+        }
+      }
+      updatePaperStats();
+
+      const streak = DB.get('pomo_streak', 0);
+      document.getElementById('pomo-streak-count').textContent = streak;
+
+      setTimeout(renderMermaidDiagram, 100);
+    });
+
+    window.addEventListener('resize', () => {
+      if (document.getElementById('stylus-canvas').classList.contains('active')) {
+        initCanvasDimensions();
+      }
+    });
+  </script>
+</body>
+</html>
