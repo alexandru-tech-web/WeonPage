@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PhD Research Command Center Ultimate v6.0</title>
+  <title>PhD Research Command Center Ultimate v6.1</title>
   
-  <!-- Favicon SVG Data-URI Inline (Fără fișier extern) -->
+  <!-- Favicon SVG Data-URI Inline -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 
   <!-- CDN-uri: FontAwesome, KaTeX, html2pdf, Mermaid.js & Chart.js -->
@@ -51,7 +51,6 @@
 
     body { display: flex; position: relative; }
 
-    /* BACKDROP SEMI-TRANSPARENT PENTRU MOBIL */
     #sidebar-backdrop {
       display: none;
       position: fixed;
@@ -63,7 +62,6 @@
     }
     #sidebar-backdrop.active { display: block; }
 
-    /* BARA LATERALĂ RESPONSIVĂ */
     aside {
       width: 275px;
       background: var(--surface);
@@ -133,7 +131,6 @@
       line-height: 1.3;
     }
 
-    /* ZONA PRINCIPALĂ */
     main {
       flex: 1;
       display: flex;
@@ -170,7 +167,6 @@
     .view-section.active { display: block; animation: fadeIn 0.12s cubic-bezier(0.16, 1, 0.3, 1); }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* BUTOANE & FORME */
     button, input, select, textarea { font-family: inherit; color: inherit; }
     .btn {
       background: var(--surface);
@@ -241,7 +237,6 @@
     }
     .progress-bar-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
 
-    /* STILURI ETAPA & PLAN GENERALIZAT */
     .p30-def { border-left: 3px solid var(--accent-green); padding: 10px 14px; font-size: .86rem; line-height: 1.5; background: rgba(255,255,255,0.03); border-radius: 6px; margin-bottom: 14px; }
     .p30-week { margin-bottom: 14px; border: 1px solid var(--surface-border); border-radius: 8px; overflow: hidden; }
     .p30-week-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-weight: 600; font-size: .82rem; background: rgba(255,255,255,0.04); }
@@ -257,7 +252,6 @@
     .p30-owner.EU { background: rgba(251,191,36,.15); color: #fbbf24; }
     .p30-close { font-size: .65rem; color: #fbbf24; margin-left: 6px; font-weight: 600; }
 
-    /* TAB AZI & LANȚUL */
     .azi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.15rem; }
     .chain-dots-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
     .chain-dot {
@@ -269,7 +263,6 @@
     .chain-dot.done { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
     .chain-dot.today { box-shadow: 0 0 0 2px var(--primary); }
 
-    /* POMODORO */
     .pomodoro-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; }
     .timer-ring-container { position: relative; width: 230px; height: 230px; display: flex; align-items: center; justify-content: center; margin: 0.8rem 0; }
     .timer-ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -358,6 +351,20 @@
     table.data-table tr:hover td { background: rgba(255,255,255,0.02); }
     .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; background: rgba(88, 166, 255, 0.15); color: var(--primary); margin: 2px; }
     .math-preview { background: #0b0f14; border: 1px solid var(--surface-border); border-radius: 6px; padding: 1.25rem; min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; overflow-x: auto; }
+    
+    /* JSON TREE VIEWER */
+    .json-code-box {
+      background: #090d12;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #79c0ff;
+      max-height: 350px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
@@ -372,7 +379,7 @@
         <i class="fa-solid fa-graduation-cap" style="color: var(--primary); font-size: 1.3rem;"></i>
         <div>
           <h1>PhD Workspace</h1>
-          <span>v6.0 Ultimate</span>
+          <span>v6.1 Ultimate</span>
         </div>
       </div>
       <button class="btn btn-sm" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
@@ -382,6 +389,9 @@
       <div class="nav-category">Tabloul de Comandă</div>
       <button class="nav-btn active" onclick="switchTab('tab-azi')">
         <i class="fa-solid fa-sun"></i> Azi
+      </button>
+      <button class="nav-btn" onclick="switchTab('data-hub')">
+        <i class="fa-solid fa-chart-pie"></i> Monitorizare Date & Hub
       </button>
       <button class="nav-btn" onclick="switchTab('etapa-view')">
         <i class="fa-solid fa-bullseye"></i> Etape & Plan Curent
@@ -488,7 +498,6 @@
               <span class="tag" id="azi-week-badge">Săptămâna Activă</span>
             </div>
             <div id="azi-step-box" style="min-height: 85px; display: flex; flex-direction: column; justify-content: center;">
-              <!-- Generat dinamic -->
             </div>
             <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
               <button class="btn btn-sm" onclick="switchTab('etapa-view')"><i class="fa-solid fa-arrow-right"></i> Vezi toată etapa</button>
@@ -541,10 +550,119 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- TAB GENERALIZAT V6.0: ETAPE & PLAN CURENT  -->
+      <!-- TAB NOU: MONITORIZARE DATE & HUB GRAFICE   -->
       <!-- ========================================== -->
+      <section id="data-hub" class="view-section">
+        
+        <!-- Sumar metrici stocare -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 1.15rem;">
+          <div class="card" style="margin-bottom:0; text-align:center;">
+            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform:uppercase;">Spațiu LocalStorage</span>
+            <h3 id="hub-storage-size" style="color:var(--primary); font-size:1.6rem; font-family:var(--font-mono); margin-top:4px;">0 KB</h3>
+          </div>
+          <div class="card" style="margin-bottom:0; text-align:center;">
+            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform:uppercase;">Articole & Referințe</span>
+            <h3 id="hub-papers-count" style="color:#7ee787; font-size:1.6rem; font-family:var(--font-mono); margin-top:4px;">0</h3>
+          </div>
+          <div class="card" style="margin-bottom:0; text-align:center;">
+            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform:uppercase;">Rulări Benchmark</span>
+            <h3 id="hub-experiments-count" style="color:#f85149; font-size:1.6rem; font-family:var(--font-mono); margin-top:4px;">0</h3>
+          </div>
+          <div class="card" style="margin-bottom:0; text-align:center;">
+            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform:uppercase;">Cuvinte Redactate</span>
+            <h3 id="hub-words-count" style="color:#e3b341; font-size:1.6rem; font-family:var(--font-mono); margin-top:4px;">0</h3>
+          </div>
+        </div>
+
+        <!-- Secțiune Grafice Dashboard -->
+        <div class="split-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-chart-pie" style="color:var(--primary);"></i> 1. Distribuția Datelor de Cercetare</div>
+            </div>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="hubOverviewChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-chart-column" style="color:#7ee787;"></i> 2. Volum Text per Secțiune IEEE</div>
+            </div>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="hubSectionsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-circle-nodes" style="color:#bc8cff;"></i> 3. Distribuție Middleware în Benchmark-uri</div>
+            </div>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="hubMiddlewareChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-chart-line" style="color:#e3b341;"></i> 4. Istoric Activitate (Ultimele 14 Zile)</div>
+            </div>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="hubChainHistoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Harta Stocării & Inspector Date Brute -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-hard-drive"></i> Harta Stocării Locale (Unde sunt salvate datele)</div>
+            <button class="btn btn-sm btn-primary" onclick="renderDataHub()"><i class="fa-solid fa-rotate"></i> Reîmprospătează</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Cheie Stocare (`phd_*`)</th>
+                  <th>Descriere Modul</th>
+                  <th>Număr Înregistrări</th>
+                  <th>Mărime Estimată</th>
+                  <th>Acțiune</th>
+                </tr>
+              </thead>
+              <tbody id="hub-storage-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Inspector JSON Live -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Inspector Detaliat Date Brute (JSON Viewer)</div>
+            <div style="display:flex; gap:8px;">
+              <select id="hub-json-selector" class="form-control" style="width:220px;" onchange="inspectStorageKey(this.value)">
+                <option value="papers">Matrice Literatură (papers)</option>
+                <option value="experiments">Jurnal Benchmark (experiments)</option>
+                <option value="paper_drafts">Draft Manuscris IEEE (paper_drafts)</option>
+                <option value="statelogs">Istoric Where I Left Off (statelogs)</option>
+                <option value="etape">Etape & Planuri (etape)</option>
+                <option value="chain">Zile Lanț Streak (chain)</option>
+                <option value="deadlines">Calendar Termene (deadlines)</option>
+                <option value="datasets">Index Dataset-uri (datasets)</option>
+                <option value="brief_data">Brief Coordonator (brief_data)</option>
+              </select>
+              <button class="btn btn-sm" onclick="copyInspectedJson()"><i class="fa-solid fa-copy"></i> Copiază</button>
+            </div>
+          </div>
+          <div class="json-code-box" id="hub-json-viewer">Selectează o cheie pentru a inspecta conținutul brut.</div>
+        </div>
+
+      </section>
+
+      <!-- TAB: ETAPE & PLAN CURENT -->
       <section id="etapa-view" class="view-section">
-        <!-- Card Etapa Activă -->
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-flag-checkered"></i> <span id="etapa-active-title">Etapa Activă</span></div>
@@ -553,9 +671,7 @@
               <button class="btn btn-sm btn-danger" onclick="archiveActiveEtapa()"><i class="fa-solid fa-box-archive"></i> Arhivează</button>
             </div>
           </div>
-          <div class="p30-def" id="etapa-active-def">
-            <!-- Definiția lui GATA -->
-          </div>
+          <div class="p30-def" id="etapa-active-def"></div>
           <div style="display:flex; justify-content:space-between; font-size:.78rem; color:var(--text-muted);">
             <span id="etapa-progress-label">0 / 0 microtask-uri</span>
             <span id="etapa-days-left"></span>
@@ -565,10 +681,8 @@
           </div>
         </div>
 
-        <!-- Săptămânile Etapei Active -->
         <div id="etapa-weeks-container"></div>
 
-        <!-- Istoric Etape Arhivate -->
         <div class="card" style="margin-top: 1.5rem;">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Istoric Etape Doctorat (Arhivă)</div>
@@ -1287,7 +1401,15 @@ flowchart TD
           <div class="table-responsive">
             <table class="data-table">
               <thead>
-                <tr><th>Scenariu</th><th>Middleware</th><th>RTT P50</th><th>RTT P99</th><th>Loss / Jitter</th><th>Observații</th><th>Acțiuni</th></tr>
+                <tr>
+                  <th>Scenariu</th>
+                  <th>Middleware</th>
+                  <th>RTT P50</th>
+                  <th>RTT P99</th>
+                  <th>Loss / Jitter</th>
+                  <th>Observații</th>
+                  <th>Acțiuni</th>
+                </tr>
               </thead>
               <tbody id="exp-table-body"></tbody>
             </table>
@@ -1357,9 +1479,10 @@ flowchart TD
       }
     }
 
-    // --- 3. TAB NAVIGATION (v6.0) ---
+    // --- 3. TAB NAVIGATION ---
     const tabTitles = {
       'tab-azi': 'Azi — Tabloul de Comandă Zilnic',
+      'data-hub': 'Monitorizare Date, Storage & Analytics Hub',
       'etapa-view': 'Etape & Planificare Cercetare Doctorat',
       'daily-sprint': 'Daily PhD Standup & Checklist',
       'lit-matrix': 'Matrice Analiză Literatură',
@@ -1400,6 +1523,7 @@ flowchart TD
         }
 
         if (tabId === 'tab-azi') renderAziTab();
+        if (tabId === 'data-hub') renderDataHub();
         if (tabId === 'etapa-view') renderActiveEtapa();
         if (tabId === 'stylus-canvas') setTimeout(initCanvasDimensions, 50);
         if (tabId === 'math-tools') renderLatexPreview();
@@ -1414,7 +1538,7 @@ flowchart TD
       }
     }
 
-    // --- 4. STORAGE ENGINE (Schema v6.0) ---
+    // --- 4. STORAGE ENGINE (v6.1) ---
     const DB = {
       get: (key, fallback) => {
         try {
@@ -1427,7 +1551,227 @@ flowchart TD
       }
     };
 
-    // --- 5. MODELUL ETAPA & MIGRARE AUTOMATĂ (VALUL 1) ---
+    // --- 5. DATA STORAGE MONITOR & ANALYTICS HUB ---
+    let hubChart1 = null, hubChart2 = null, hubChart3 = null, hubChart4 = null;
+
+    function renderDataHub() {
+      // 1. Calcul Mărime și Număr Date
+      const papers = DB.get('papers', []);
+      const experiments = DB.get('experiments', []);
+      const deadlines = DB.get('deadlines', []);
+      const statelogs = DB.get('statelogs', []);
+      const datasets = DB.get('datasets', []);
+      const drafts = DB.get('paper_drafts', {});
+      const etape = DB.get('etape', []);
+      const chain = DB.get('chain', []);
+
+      let totalStorageBytes = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('phd_')) {
+          totalStorageBytes += (localStorage.getItem(k) || '').length * 2; // UTF-16 approx
+        }
+      }
+      const totalKb = (totalStorageBytes / 1024).toFixed(2);
+
+      let totalDraftWords = 0;
+      for (let i = 0; i <= 7; i++) {
+        if (drafts[`sec${i}`]) totalDraftWords += countWords(drafts[`sec${i}`]);
+      }
+
+      document.getElementById('hub-storage-size').textContent = `${totalKb} KB`;
+      document.getElementById('hub-papers-count').textContent = papers.length;
+      document.getElementById('hub-experiments-count').textContent = experiments.length;
+      document.getElementById('hub-words-count').textContent = totalDraftWords;
+
+      // 2. Populează Harta Cheilor
+      const keysMap = [
+        { key: 'phd_papers', desc: 'Baza de date articole & literatură', count: `${papers.length} articole`, rawKey: 'papers' },
+        { key: 'phd_experiments', desc: 'Jurnal benchmark & măsurători latență', count: `${experiments.length} rulări`, rawKey: 'experiments' },
+        { key: 'phd_paper_drafts', desc: 'Draft manuscris IEEE (secțiunile 0-7)', count: `${totalDraftWords} cuvinte`, rawKey: 'paper_drafts' },
+        { key: 'phd_statelogs', desc: 'Istoric Where I Left Off (context switch)', count: `${statelogs.length} stări`, rawKey: 'statelogs' },
+        { key: 'phd_etape', desc: 'Arhitectură etape & microtask-uri doctorat', count: `${etape.length} etape`, rawKey: 'etape' },
+        { key: 'phd_chain', desc: 'Zile active lanț streak (calendar)', count: `${chain.length} zile marcate`, rawKey: 'chain' },
+        { key: 'phd_deadlines', desc: 'Termene conferințe & rapoarte SCOSAAR', count: `${deadlines.length} termene`, rawKey: 'deadlines' },
+        { key: 'phd_datasets', desc: 'Index artefacte, PCAP & ROS 2 bag-uri', count: `${datasets.length} dataset-uri`, rawKey: 'datasets' },
+        { key: 'phd_brief_data', desc: 'Sinteză curentă brief coordonator (3 culori)', count: '1 raport activ', rawKey: 'brief_data' }
+      ];
+
+      const tbody = document.getElementById('hub-storage-table-body');
+      if (tbody) {
+        tbody.innerHTML = '';
+        keysMap.forEach(item => {
+          const rawVal = localStorage.getItem(item.key) || '';
+          const sz = (rawVal.length * 2 / 1024).toFixed(2) + ' KB';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><code>${item.key}</code></td>
+            <td><strong>${item.desc}</strong></td>
+            <td><span class="tag">${item.count}</span></td>
+            <td><small style="color:var(--text-muted); font-family:var(--font-mono);">${sz}</small></td>
+            <td><button class="btn btn-sm" onclick="inspectStorageKey('${item.rawKey}')"><i class="fa-solid fa-eye"></i> Inspectează</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // 3. Randare Grafice
+      renderHubCharts(papers, experiments, deadlines, statelogs, datasets, drafts, chain);
+
+      // 4. Deschide inspectorul pe cheia selectată
+      const currentSel = document.getElementById('hub-json-selector').value;
+      inspectStorageKey(currentSel);
+    }
+
+    function renderHubCharts(papers, experiments, deadlines, statelogs, datasets, drafts, chain) {
+      // Grafic 1: Doughnut - Distribuție Date
+      const ctx1 = document.getElementById('hubOverviewChart');
+      if (ctx1) {
+        if (hubChart1) hubChart1.destroy();
+        hubChart1 = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['Articole Matrice', 'Experimente Logate', 'Termene Limită', 'Stări Salvate', 'Dataset-uri'],
+            datasets: [{
+              data: [papers.length, experiments.length, deadlines.length, statelogs.length, datasets.length],
+              backgroundColor: ['#58a6ff', '#f85149', '#e3b341', '#388bfd', '#bc8cff'],
+              borderWidth: 1,
+              borderColor: '#121820'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'right', labels: { color: '#c9d1d9', font: { family: 'SF Mono, monospace', size: 10 } } }
+            }
+          }
+        });
+      }
+
+      // Grafic 2: Bar Chart - Volum Cuvinte per Secțiune IEEE
+      const ctx2 = document.getElementById('hubSectionsChart');
+      if (ctx2) {
+        if (hubChart2) hubChart2.destroy();
+        const secLabels = ['Title/Abstract', 'I. Intro', 'II. SotA', 'III. Arch', 'IV. Setup', 'V. Eval', 'VI. Disc', 'VII. Concl'];
+        const secWords = [0, 1, 2, 3, 4, 5, 6, 7].map(i => drafts[`sec${i}`] ? countWords(drafts[`sec${i}`]) : 0);
+
+        hubChart2 = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: secLabels,
+            datasets: [{
+              label: 'Număr Cuvinte',
+              data: secWords,
+              backgroundColor: 'rgba(46, 160, 67, 0.4)',
+              borderColor: '#2ea043',
+              borderWidth: 1.5,
+              borderRadius: 4
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#8b949e', font: { size: 10 } } },
+              y: { grid: { display: false }, ticks: { color: '#c9d1d9', font: { size: 10 } } }
+            }
+          }
+        });
+      }
+
+      // Grafic 3: Polar Area - Distribuție Middleware în Experimente
+      const ctx3 = document.getElementById('hubMiddlewareChart');
+      if (ctx3) {
+        if (hubChart3) hubChart3.destroy();
+        const mwCounts = {};
+        experiments.forEach(e => {
+          const cfg = (e.config || 'Nespecificat').trim();
+          mwCounts[cfg] = (mwCounts[cfg] || 0) + 1;
+        });
+
+        const mwLabels = Object.keys(mwCounts).length > 0 ? Object.keys(mwCounts) : ['rmw_zenoh', 'CycloneDDS', 'Altele'];
+        const mwData = Object.keys(mwCounts).length > 0 ? Object.values(mwCounts) : [0, 0, 0];
+
+        hubChart3 = new Chart(ctx3, {
+          type: 'polarArea',
+          data: {
+            labels: mwLabels,
+            datasets: [{
+              data: mwData,
+              backgroundColor: ['rgba(88, 166, 255, 0.4)', 'rgba(248, 81, 73, 0.4)', 'rgba(188, 140, 255, 0.4)', 'rgba(210, 153, 34, 0.4)'],
+              borderColor: '#121820'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'right', labels: { color: '#c9d1d9', font: { family: 'SF Mono, monospace', size: 10 } } }
+            },
+            scales: { r: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { display: false } } }
+          }
+        });
+      }
+
+      // Grafic 4: Line Chart - Istoric Lanț (14 Zile)
+      const ctx4 = document.getElementById('hubChainHistoryChart');
+      if (ctx4) {
+        if (hubChart4) hubChart4.destroy();
+        const dayLabels = [];
+        const dayStatus = [];
+        const todayObj = new Date();
+
+        for (let i = 13; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(todayObj.getDate() - i);
+          const dStr = d.toISOString().slice(0, 10);
+          dayLabels.push(d.getDate() + '/' + (d.getMonth() + 1));
+          dayStatus.push(chain.includes(dStr) ? 1 : 0);
+        }
+
+        hubChart4 = new Chart(ctx4, {
+          type: 'line',
+          data: {
+            labels: dayLabels,
+            datasets: [{
+              label: 'Sesiune Lucrată (1 = Da, 0 = Nu)',
+              data: dayStatus,
+              stepped: true,
+              borderColor: '#d29922',
+              backgroundColor: 'rgba(210, 153, 34, 0.15)',
+              borderWidth: 2,
+              pointRadius: 4,
+              pointBackgroundColor: '#d29922'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#8b949e', font: { size: 10 } } },
+              y: { min: 0, max: 1.2, grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { stepSize: 1, color: '#c9d1d9', font: { size: 10 } } }
+            }
+          }
+        });
+      }
+    }
+
+    function inspectStorageKey(rawKey) {
+      document.getElementById('hub-json-selector').value = rawKey;
+      const data = DB.get(rawKey, {});
+      document.getElementById('hub-json-viewer').textContent = JSON.stringify(data, null, 2);
+    }
+
+    function copyInspectedJson() {
+      const code = document.getElementById('hub-json-viewer').textContent;
+      navigator.clipboard.writeText(code).then(() => alert('JSON-ul brut a fost copiat în clipboard!'));
+    }
+
+    // --- 6. MODELUL ETAPA & MIGRARE AUTOMATĂ (VALUL 1) ---
     const SEED_P30_WEEKS = [
       { id:'s0', name:'S0 · 29-30 aug — C1, scrisul', start:'2026-08-28', end:'2026-08-31', items:[
         { id:'mt1', o:'TU', t:'MT1 SotA extins in vocea ta (comparatie explicita cu fiecare lucrare + fraza in afara ROS 2)' },
@@ -1482,7 +1826,7 @@ flowchart TD
       let done = getEtapaDoneItems();
       done = done.includes(itemId) ? done.filter(x => x !== itemId) : done.concat([itemId]);
       DB.set('plan30_done', done);
-      markChainDay(); // marchează automat în lanț la bifare
+      markChainDay();
       renderActiveEtapa();
       renderAziTab();
     }
@@ -1605,7 +1949,7 @@ flowchart TD
       renderAziTab();
     }
 
-    // --- 6. LANȚUL (DON'T BREAK THE CHAIN) ---
+    // --- 7. LANȚUL (DON'T BREAK THE CHAIN) ---
     function getChain() {
       return DB.get('chain', []);
     }
@@ -1661,9 +2005,8 @@ flowchart TD
       return { current, max };
     }
 
-    // --- 7. RANDARE TAB AZI (VALUL 1) ---
+    // --- 8. RANDARE TAB AZI ---
     function renderAziTab() {
-      // 1. Pasul Săptămânii
       const etapa = getActiveEtapa();
       const done = getEtapaDoneItems();
       const today = new Date().toISOString().slice(0,10);
@@ -1704,7 +2047,6 @@ flowchart TD
         document.getElementById('azi-etapa-progress').textContent = `Etapă: ${pct}% (${ok}/${total})`;
       }
 
-      // 2. Lanțul (Dots)
       const { current, max } = calculateStreak();
       document.getElementById('azi-streak-badge').textContent = `🔥 ${current} ${current === 1 ? 'zi' : 'zile'} streak`;
       document.getElementById('azi-chain-record').textContent = `Record: ${max} zile`;
@@ -1746,7 +2088,6 @@ flowchart TD
         }
       }
 
-      // 3. Unde Am Rămas
       const stateLogs = DB.get('statelogs', []);
       const whereBox = document.getElementById('azi-where-left');
       if (whereBox) {
@@ -1761,7 +2102,6 @@ flowchart TD
         }
       }
 
-      // 4. Următorul Termen
       const deadlines = DB.get('deadlines', []);
       const dlBox = document.getElementById('azi-next-deadline-box');
       const dlTag = document.getElementById('azi-next-deadline-tag');
@@ -1788,7 +2128,7 @@ flowchart TD
       if (!timerInterval) toggleTimer();
     }
 
-    // --- 8. DAILY SPRINT ENGINE ---
+    // --- 9. DAILY SPRINT ENGINE ---
     function loadDailySprint() {
       const todayStr = new Date().toLocaleDateString('ro-RO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       document.getElementById('sprint-date-display').textContent = todayStr;
@@ -1833,7 +2173,7 @@ flowchart TD
       document.getElementById('sprint-progressbar').style.width = `${pct}%`;
     }
 
-    // --- 9. IEEE PAPER TRACKER ---
+    // --- 10. IEEE PAPER TRACKER ---
     function countWords(str) {
       if (!str) return 0;
       return str.trim().split(/\s+/).filter(w => w.length > 0).length;
@@ -1883,7 +2223,7 @@ flowchart TD
       downloadFile(`phd_manuscript_${Date.now()}.md`, draft, 'text/markdown');
     }
 
-    // --- 10. SCIENTIFIC PLOT STUDIO ---
+    // --- 11. SCIENTIFIC PLOT STUDIO ---
     let scientificChart = null;
 
     function initScientificChart() {
@@ -1957,7 +2297,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 11. MERMAID STUDIO ---
+    // --- 12. MERMAID STUDIO ---
     let mermaidTimeout = null;
     function scheduleMermaidRender() {
       clearTimeout(mermaidTimeout);
@@ -2013,7 +2353,7 @@ flowchart TD
       downloadFile(`phd_diagram_${Date.now()}.svg`, svgData, 'image/svg+xml');
     }
 
-    // --- 12. DATASETS INDEXER ---
+    // --- 13. DATASETS INDEXER ---
     let datasets = DB.get('datasets', []);
 
     function addDataset() {
@@ -2059,7 +2399,7 @@ flowchart TD
       });
     }
 
-    // --- 13. BRIEF COORDONATOR ---
+    // --- 14. BRIEF COORDONATOR ---
     function updateBriefLivePreview() {
       const g = document.getElementById('brief-green').value;
       const y = document.getElementById('brief-yellow').value;
@@ -2108,7 +2448,7 @@ flowchart TD
       navigator.clipboard.writeText(fullText).then(() => alert('Sinteza a fost copiată în clipboard!'));
     }
 
-    // --- 14. MATH & LATEX TOOLS ---
+    // --- 15. MATH & LATEX TOOLS ---
     function renderLatexPreview() {
       const input = document.getElementById('latex-input').value;
       const box = document.getElementById('katex-render-box');
@@ -2142,7 +2482,7 @@ flowchart TD
       renderLatexPreview();
     }
 
-    // --- 15. POMODORO TIMER ---
+    // --- 16. POMODORO TIMER ---
     let timerDuration = 25 * 60;
     let timerRemaining = timerDuration;
     let timerInterval = null;
@@ -2235,7 +2575,7 @@ flowchart TD
       }
     }
 
-    // --- 16. CALCULATOR QOS ---
+    // --- 17. CALCULATOR QOS ---
     function calculateQoS() {
       const freq = parseFloat(document.getElementById('calc-freq').value) || 0;
       const payload = parseFloat(document.getElementById('calc-payload').value) || 0;
@@ -2255,7 +2595,7 @@ flowchart TD
       document.getElementById('res-overhead-pct').textContent = `${overheadPct} %`;
     }
 
-    // --- 17. CALENDAR ENGINE ---
+    // --- 18. CALENDAR ENGINE ---
     let deadlines = DB.get('deadlines', []);
 
     function addDeadline() {
@@ -2353,7 +2693,7 @@ flowchart TD
       }
     }
 
-    // --- 18. MATRICE LITERATURA ---
+    // --- 19. MATRICE LITERATURA ---
     let papers = DB.get('papers', []);
     function toggleBibtexImport() {
       const el = document.getElementById('bibtex-import-box');
@@ -2457,7 +2797,7 @@ flowchart TD
       downloadFile('phd_papers.csv', csv, 'text/csv');
     }
 
-    // --- 19. STYLUS CANVAS ENGINE ---
+    // --- 20. STYLUS CANVAS ENGINE ---
     const canvas = document.getElementById('sketch-canvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false, currentTool = 'pen', penColor = '#58a6ff', penSize = 4;
@@ -2585,7 +2925,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 20. EXPERIMENTE & BENCHMARK ---
+    // --- 21. EXPERIMENTE & BENCHMARK ---
     let experiments = DB.get('experiments', []);
 
     function addExperiment() {
@@ -2645,7 +2985,7 @@ flowchart TD
       navigator.clipboard.writeText(latex).then(() => alert('Tabelul LaTeX a fost copiat!'));
     }
 
-    // --- 21. WHERE I LEFT OFF ---
+    // --- 22. WHERE I LEFT OFF ---
     let stateLogs = DB.get('statelogs', []);
 
     function saveStateLog() {
@@ -2682,10 +3022,10 @@ flowchart TD
       });
     }
 
-    // --- 22. SYNC & BACKUP CU SCHEMA_VERSION 6.0 ---
+    // --- 23. SYNC & BACKUP CU SCHEMA_VERSION 6.1 ---
     function exportFullBackup() {
       const fullData = {
-        schema_version: "6.0",
+        schema_version: "6.1",
         etape: DB.get('etape', []),
         chain: DB.get('chain', []),
         chainMaxStreak: DB.get('chain_max_streak', 0),
