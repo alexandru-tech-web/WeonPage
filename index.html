@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PhD Research Command Center Ultimate v7.0 (Real-Time Robotic Teleoperation)</title>
+  <title>PhD Research Command Center Ultimate v8.0</title>
   
   <!-- Favicon SVG Data-URI Inline -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
@@ -18,16 +18,18 @@
 
   <style>
     :root {
-      --bg: #090d12;
-      --surface: #121820;
-      --surface-hover: #1b232e;
-      --surface-border: #263140;
+      --bg: #070a0e;
+      --surface: #101622;
+      --surface-hover: #182232;
+      --surface-border: #233148;
       --primary: #58a6ff;
       --primary-hover: #1f6feb;
       --accent-green: #2ea043;
       --accent-yellow: #d29922;
       --accent-blue: #388bfd;
       --accent-purple: #bc8cff;
+      --accent-pink: #f778ba;
+      --accent-cyan: #39c5bb;
       --accent-danger: #f85149;
       --text: #c9d1d9;
       --text-muted: #8b949e;
@@ -55,15 +57,15 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(3px);
       z-index: 90;
       transition: opacity 0.2s ease;
     }
     #sidebar-backdrop.active { display: block; }
 
     aside {
-      width: 280px;
+      width: 285px;
       background: var(--surface);
       border-right: 1px solid var(--surface-border);
       display: flex;
@@ -71,6 +73,7 @@
       flex-shrink: 0;
       z-index: 100;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s ease;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.4);
     }
 
     aside.collapsed {
@@ -85,13 +88,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: linear-gradient(180deg, rgba(88,166,255,0.08) 0%, rgba(0,0,0,0) 100%);
     }
     .brand-title { display: flex; align-items: center; gap: 10px; }
     .brand h1 { font-size: 1.05rem; color: var(--text-bright); font-weight: 700; letter-spacing: -0.3px; }
-    .brand span { font-size: 0.68rem; background: var(--primary-hover); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .brand span { font-size: 0.68rem; background: var(--primary-hover); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 600; box-shadow: 0 0 8px rgba(31,111,235,0.5); }
 
     nav { flex: 1; overflow-y: auto; padding: 0.6rem; display: flex; flex-direction: column; gap: 3px; }
-    .nav-category { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin: 8px 6px 3px 6px; letter-spacing: 0.6px; }
+    .nav-category { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin: 10px 6px 4px 6px; letter-spacing: 0.8px; }
     .nav-btn {
       display: flex;
       align-items: center;
@@ -110,8 +114,8 @@
       min-height: 38px;
     }
     .nav-btn i { width: 18px; color: var(--text-muted); text-align: center; font-size: 0.9rem; }
-    .nav-btn:hover { background: var(--surface-hover); color: var(--text-bright); }
-    .nav-btn.active { background: rgba(88, 166, 255, 0.12); color: var(--primary); border-color: rgba(88, 166, 255, 0.35); font-weight: 600; }
+    .nav-btn:hover { background: var(--surface-hover); color: var(--text-bright); border-color: rgba(255,255,255,0.05); }
+    .nav-btn.active { background: rgba(88, 166, 255, 0.15); color: var(--primary); border-color: rgba(88, 166, 255, 0.4); font-weight: 600; box-shadow: 0 0 10px rgba(88,166,255,0.15); }
     .nav-btn.active i { color: var(--primary); }
 
     .sidebar-footer {
@@ -183,12 +187,12 @@
       transition: all 0.15s;
       min-height: 34px;
     }
-    .btn:hover { background: var(--surface-hover); border-color: var(--primary); }
+    .btn:hover { background: var(--surface-hover); border-color: var(--primary); transform: translateY(-1px); }
     .btn-sm { padding: 5px 8px; font-size: 0.78rem; min-height: 28px; }
     .btn-lg { padding: 10px 16px; font-size: 0.92rem; min-height: 44px; font-weight: 600; }
-    .btn-primary { background: var(--primary); color: #0b0f14; border-color: var(--primary); font-weight: 600; }
+    .btn-primary { background: var(--primary); color: #0b0f14; border-color: var(--primary); font-weight: 600; box-shadow: 0 0 10px rgba(88,166,255,0.25); }
     .btn-primary:hover { background: var(--primary-hover); color: #fff; }
-    .btn-success { background: var(--accent-green); color: #fff; border-color: var(--accent-green); }
+    .btn-success { background: var(--accent-green); color: #fff; border-color: var(--accent-green); box-shadow: 0 0 10px rgba(46,160,67,0.25); }
     .btn-purple { background: rgba(188, 140, 255, 0.18); color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.4); }
     .btn-danger { background: rgba(248, 81, 73, 0.15); color: var(--accent-danger); border-color: rgba(248, 81, 73, 0.4); }
 
@@ -198,6 +202,7 @@
       border-radius: 8px;
       padding: 1.15rem;
       margin-bottom: 1.15rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
     .card-header {
       display: flex;
@@ -222,7 +227,7 @@
       color: var(--text-bright);
       font-size: 0.88rem;
     }
-    .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2); }
+    .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.25); }
 
     .brief-card-green { border-left: 4px solid var(--accent-green); }
     .brief-card-yellow { border-left: 4px solid var(--accent-yellow); }
@@ -261,7 +266,7 @@
       display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-family: var(--font-mono);
       cursor: pointer; transition: all 0.15s;
     }
-    .chain-dot.done { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+    .chain-dot.done { background: var(--accent-green); border-color: var(--accent-green); color: #fff; box-shadow: 0 0 8px rgba(46,160,67,0.5); }
     .chain-dot.today { box-shadow: 0 0 0 2px var(--primary); }
 
     .pomodoro-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; }
@@ -365,6 +370,11 @@
       overflow: auto;
       white-space: pre-wrap;
     }
+
+    /* BADGE-URI CROMATICE NOI V8.0 */
+    .badge-ai-human { background: rgba(46,160,67,0.2); color: #7ee787; border: 1px solid rgba(46,160,67,0.4); padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
+    .badge-ai-mixed { background: rgba(210,153,34,0.2); color: #f2cc60; border: 1px solid rgba(210,153,34,0.4); padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
+    .badge-ai-suspect { background: rgba(248,81,73,0.2); color: #ff7b72; border: 1px solid rgba(248,81,73,0.4); padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
   </style>
 </head>
 <body>
@@ -379,7 +389,7 @@
         <i class="fa-solid fa-graduation-cap" style="color: var(--primary); font-size: 1.3rem;"></i>
         <div>
           <h1>PhD Workspace</h1>
-          <span>v7.0 Teleop</span>
+          <span>v8.0 Ultimate</span>
         </div>
       </div>
       <button class="btn btn-sm" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
@@ -408,6 +418,20 @@
         <i class="fa-solid fa-chart-line"></i> Scientific Plot & PGFPlots
       </button>
 
+      <div class="nav-category">Scriere, AI & Documentare</div>
+      <button class="nav-btn" onclick="switchTab('paper-tracker')">
+        <i class="fa-solid fa-file-waveform"></i> IEEE Paper Tracker & AI Detector
+      </button>
+      <button class="nav-btn" onclick="switchTab('lit-matrix')">
+        <i class="fa-solid fa-book-bookmark"></i> Matrice Literatură
+      </button>
+      <button class="nav-btn" onclick="switchTab('meeting-brief')">
+        <i class="fa-solid fa-user-tie"></i> Brief Coordonator
+      </button>
+      <button class="nav-btn" onclick="switchTab('math-tools')">
+        <i class="fa-solid fa-square-root-variable"></i> Math & LaTeX Gen
+      </button>
+
       <div class="nav-category">Focus & Organizare</div>
       <button class="nav-btn" onclick="switchTab('daily-sprint')">
         <i class="fa-solid fa-list-check"></i> Daily Standup
@@ -420,20 +444,6 @@
       </button>
       <button class="nav-btn" onclick="switchTab('state-log')">
         <i class="fa-solid fa-location-arrow"></i> Where I Left Off
-      </button>
-
-      <div class="nav-category">Scriere & Documentare</div>
-      <button class="nav-btn" onclick="switchTab('lit-matrix')">
-        <i class="fa-solid fa-book-bookmark"></i> Matrice Literatură
-      </button>
-      <button class="nav-btn" onclick="switchTab('paper-tracker')">
-        <i class="fa-solid fa-file-waveform"></i> IEEE Paper Tracker
-      </button>
-      <button class="nav-btn" onclick="switchTab('meeting-brief')">
-        <i class="fa-solid fa-user-tie"></i> Brief Coordonator
-      </button>
-      <button class="nav-btn" onclick="switchTab('math-tools')">
-        <i class="fa-solid fa-square-root-variable"></i> Math & LaTeX Gen
       </button>
 
       <div class="nav-category">Diagrame & Date</div>
@@ -546,8 +556,104 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- TAB NOU V7.0: PASSIVITY & CONTROL WORKBENCH-->
+      <!-- TAB V8.0: IEEE PAPER TRACKER & AI DETECTOR -->
       <!-- ========================================== -->
+      <section id="paper-tracker" class="view-section">
+        <!-- Selector Proiect & AI Detector Header -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-file-lines" style="color:var(--accent-purple);"></i> Multi-Paper Manager & IEEE Format Tracker</div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <select id="paper-project-selector" class="form-control" style="width: 220px;" onchange="switchPaperProject(this.value)">
+                <!-- Proiecte din LocalStorage -->
+              </select>
+
+              <button class="btn btn-sm btn-primary" onclick="saveCurrentPaperAsNew()"><i class="fa-solid fa-floppy-disk"></i> Salvează ca Proiect Nou</button>
+
+              <select id="paper-target-format" class="form-control" style="width: 170px;" onchange="updatePaperStats()">
+                <option value="6">IEEE Conference (6 Pagini ~ 3.900 cuv)</option>
+                <option value="8">IEEE Conference (8 Pagini ~ 5.200 cuv)</option>
+                <option value="12">IEEE Transactions (12 Pagini ~ 8.000 cuv)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Metrici Generale & Detector AI Live -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 0.8rem;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.72rem; color: var(--text-muted);">TOTAL CUVINTE</span>
+              <h3 id="stat-total-words" style="color: var(--primary); font-size: 1.5rem; font-family: var(--font-mono);">0</h3>
+            </div>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.72rem; color: var(--text-muted);">PAGINI IEEE (2-COL)</span>
+              <h3 id="stat-est-pages" style="color: #7ee787; font-size: 1.5rem; font-family: var(--font-mono);">0.0 / 6</h3>
+            </div>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.72rem; color: var(--text-muted);">PROGRES MANUSCRIS</span>
+              <h3 id="stat-global-pct" style="color: #e3b341; font-size: 1.5rem; font-family: var(--font-mono);">0%</h3>
+            </div>
+            <!-- Live AI Detector Metric -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 10px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 0.72rem; color: var(--text-muted);">SCOR PROBABILITATE AI</span>
+              <h3 id="stat-ai-score" style="color: var(--accent-purple); font-size: 1.5rem; font-family: var(--font-mono);">0%</h3>
+              <div id="stat-ai-badge" style="margin-top: 2px;"><span class="badge-ai-human">🟢 Scris de Om</span></div>
+            </div>
+          </div>
+
+          <div class="progress-bar-container" style="height: 8px;">
+            <div id="global-paper-progressbar" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+
+          <!-- Export Buttons: Word (.docx) & PDF -->
+          <div style="display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;">
+            <button class="btn btn-success btn-sm" onclick="exportPaperToWord()"><i class="fa-solid fa-file-word"></i> Export Word (.docx IEEE Layout)</button>
+            <button class="btn btn-primary btn-sm" onclick="exportPaperToMarkdown()"><i class="fa-solid fa-file-code"></i> Export Markdown (.md)</button>
+          </div>
+        </div>
+
+        <!-- Structura Capitole IEEE (0-7) -->
+        <div class="split-grid">
+          <div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Title, Abstract & Keywords</div><span class="tag" id="tag-words-sec0">0 cuv</span></div>
+              <textarea id="section-text-0" class="form-control" rows="4" placeholder="Abstract (max. 200-250 cuvinte), Index Terms / Keywords..." oninput="updatePaperStats()"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">I. Introduction & Problem Formulation</div><span class="tag" id="tag-words-sec1">0 cuv</span></div>
+              <textarea id="section-text-1" class="form-control" rows="4" placeholder="Context teleoperare, provocări rețea nedeterministă..." oninput="updatePaperStats()"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">II. Related Work & State of the Art</div><span class="tag" id="tag-words-sec2">0 cuv</span></div>
+              <textarea id="section-text-2" class="form-control" rows="4" placeholder="Comparație middleware (Zenoh, DDS), teleoperare..." oninput="updatePaperStats()"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">III. Proposed System Architecture & Model</div><span class="tag" id="tag-words-sec3">0 cuv</span></div>
+              <textarea id="section-text-3" class="form-control" rows="5" placeholder="Topologie ROS 2 - Zenoh router, profil QoS..." oninput="updatePaperStats()"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">IV. Experimental Setup & Testbed</div><span class="tag" id="tag-words-sec4">0 cuv</span></div>
+              <textarea id="section-text-4" class="form-control" rows="4" placeholder="Hardware, emulator de rețea (NetEm), parametri..." oninput="updatePaperStats()"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">V. Performance Evaluation & Results</div><span class="tag" id="tag-words-sec5">0 cuv</span></div>
+              <textarea id="section-text-5" class="form-control" rows="5" placeholder="Latență RTT P50/P99, CDF, jitter, utilizare bandwidth..." oninput="updatePaperStats()"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">VI. Discussion & Safety</div><span class="tag" id="tag-words-sec6">0 cuv</span></div>
+              <textarea id="section-text-6" class="form-control" rows="3" placeholder="Fail-Safe, mecanisme ESTOP..." oninput="updatePaperStats()"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">VII. Conclusion & Future Work</div><span class="tag" id="tag-words-sec7">0 cuv</span></div>
+              <textarea id="section-text-7" class="form-control" rows="3" placeholder="Concluzii finale..." oninput="updatePaperStats()"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: PASSIVITY & CONTROL WORKBENCH -->
       <section id="passivity-workbench" class="view-section">
         <div class="split-grid">
           <div class="card">
@@ -556,28 +662,28 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div class="form-group">
-                <label class="form-label">Forță Master $f_m$ ($N$)</label>
-                <input type="number" step="0.1" id="po-fm" class="form-control" value="12.5" oninput="calculatePassivity()">
+                <label class="form-label">Forță Master F_m (N)</label>
+                <input type="text" id="po-fm" class="form-control" value="12,5" oninput="calculatePassivity()">
               </div>
               <div class="form-group">
-                <label class="form-label">Viteză Master $v_m$ ($m/s$)</label>
-                <input type="number" step="0.01" id="po-vm" class="form-control" value="0.25" oninput="calculatePassivity()">
+                <label class="form-label">Viteză Master v_m (m/s)</label>
+                <input type="text" id="po-vm" class="form-control" value="0,25" oninput="calculatePassivity()">
               </div>
               <div class="form-group">
-                <label class="form-label">Forță Slave $f_s$ ($N$)</label>
-                <input type="number" step="0.1" id="po-fs" class="form-control" value="11.8" oninput="calculatePassivity()">
+                <label class="form-label">Forță Slave F_s (N)</label>
+                <input type="text" id="po-fs" class="form-control" value="11,8" oninput="calculatePassivity()">
               </div>
               <div class="form-group">
-                <label class="form-label">Viteză Slave $v_s$ ($m/s$)</label>
-                <input type="number" step="0.01" id="po-vs" class="form-control" value="0.22" oninput="calculatePassivity()">
+                <label class="form-label">Viteză Slave v_s (m/s)</label>
+                <input type="text" id="po-vs" class="form-control" value="0,22" oninput="calculatePassivity()">
               </div>
               <div class="form-group">
-                <label class="form-label">Perioadă Eșantionare $T_s$ ($s$)</label>
-                <input type="number" step="0.001" id="po-ts" class="form-control" value="0.001" oninput="calculatePassivity()">
+                <label class="form-label">Perioadă Eșantionare T_s (s)</label>
+                <input type="text" id="po-ts" class="form-control" value="0,001" oninput="calculatePassivity()">
               </div>
               <div class="form-group">
-                <label class="form-label">Latență Unidirecțională $\tau$ ($ms$)</label>
-                <input type="number" id="po-tau" class="form-control" value="25" oninput="calculatePassivity()">
+                <label class="form-label">Latență Unidirecțională τ (ms)</label>
+                <input type="text" id="po-tau" class="form-control" value="25" oninput="calculatePassivity()">
               </div>
             </div>
             <button class="btn btn-primary btn-sm" onclick="calculatePassivity()"><i class="fa-solid fa-calculator"></i> Calculează Energie & Stabilitate</button>
@@ -589,7 +695,7 @@
             </div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
-                <span style="color:var(--text-muted);">Energie Acumulată $E_{obs}$:</span>
+                <span style="color:var(--text-muted);">Energie Acumulată E_obs:</span>
                 <strong id="res-po-energy" style="color:#7ee787;">+0.531 mJ</strong>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
@@ -597,15 +703,15 @@
                 <strong id="res-po-status" style="color:#7ee787;">PASIV (Sistem Stabil)</strong>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
-                <span style="color:var(--text-muted);">Eroare Urmărire Poziție $e(t)$:</span>
+                <span style="color:var(--text-muted);">Eroare Urmărire Poziție e(t):</span>
                 <strong id="res-po-error" style="color:var(--primary);">0.0075 m (7.5 mm)</strong>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
-                <span style="color:var(--text-muted);">Wave Variable Forward $u(t)$:</span>
+                <span style="color:var(--text-muted);">Wave Variable Forward u(t):</span>
                 <strong id="res-po-wave-u" style="color:var(--text-bright);">2.76</strong>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
-                <span style="color:var(--text-muted);">Wave Variable Backward $v(t)$:</span>
+                <span style="color:var(--text-muted);">Wave Variable Backward v(t):</span>
                 <strong id="res-po-wave-v" style="color:var(--text-bright);">-1.85</strong>
               </div>
             </div>
@@ -679,6 +785,7 @@
                 <option value="papers">Matrice Literatură (papers)</option>
                 <option value="experiments">Jurnal Benchmark (experiments)</option>
                 <option value="paper_drafts">Draft Manuscris IEEE (paper_drafts)</option>
+                <option value="paper_library">Bibliotecă Proiecte Articole (paper_library)</option>
                 <option value="statelogs">Istoric Where I Left Off (statelogs)</option>
                 <option value="etape">Etape & Planuri (etape)</option>
                 <option value="chain">Zile Lanț Streak (chain)</option>
@@ -732,7 +839,7 @@
             <div class="card-header"><div class="card-title"><i class="fa-solid fa-network-wired"></i> Parametri Transmisie & NetEm Generator</div></div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div class="form-group">
-                <label class="form-label">Frecvență ($Hz$)</label>
+                <label class="form-label">Frecvență (Hz)</label>
                 <input type="number" id="calc-freq" class="form-control" value="100" oninput="calculateQoS()">
               </div>
               <div class="form-group">
@@ -740,11 +847,11 @@
                 <input type="number" id="calc-payload" class="form-control" value="256" oninput="calculateQoS()">
               </div>
               <div class="form-group">
-                <label class="form-label">Latență Injectată NetEm ($ms$)</label>
+                <label class="form-label">Latență Injectată NetEm (ms)</label>
                 <input type="number" id="calc-netem-delay" class="form-control" value="15" oninput="calculateQoS()">
               </div>
               <div class="form-group">
-                <label class="form-label">Jitter Injectat ($ms$)</label>
+                <label class="form-label">Jitter Injectat (ms)</label>
                 <input type="number" id="calc-netem-jitter" class="form-control" value="3" oninput="calculateQoS()">
               </div>
               <div class="form-group">
@@ -771,7 +878,7 @@
                 <strong id="res-bandwidth" style="color:var(--primary);">0.00 KB/s</strong>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
-                <span style="color:var(--text-muted);">Timp între Pachete ($\Delta t$):</span>
+                <span style="color:var(--text-muted);">Timp între Pachete:</span>
                 <strong id="res-period" style="color:#7ee787;">10.00 ms</strong>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--surface-border); padding-bottom: 6px;">
@@ -828,7 +935,6 @@
               </div>
             </div>
 
-            <!-- EXPORTER PGFPLOTS TIKZ -->
             <div class="card">
               <div class="card-header">
                 <div class="card-title"><i class="fa-solid fa-code"></i> Cod Vectorial PGFPlots / TikZ (LaTeX)</div>
@@ -887,9 +993,7 @@
 
           <div>
             <div class="card">
-              <div class="card-header">
-                <div class="card-title"><i class="fa-solid fa-gauge"></i> Progres Sprint Zilnic</div>
-              </div>
+              <div class="card-header"><div class="card-title"><i class="fa-solid fa-gauge"></i> Progres Sprint Zilnic</div></div>
               <div style="text-align: center; padding: 1rem;">
                 <h2 id="sprint-score-pct" style="color:var(--primary); font-size: 3rem; font-family:var(--font-mono);">0%</h2>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Activități bifate cu succes</p>
@@ -973,83 +1077,6 @@
               </thead>
               <tbody id="papers-table-body"></tbody>
             </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 2. IEEE MANUSCRIPT TRACKER -->
-      <section id="paper-tracker" class="view-section">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i class="fa-solid fa-file-lines"></i> Monitorizare Structură Manuscris IEEE (2-Coloane)</div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <select id="paper-target-format" class="form-control" style="width: 190px;" onchange="updatePaperStats()">
-                <option value="6">IEEE Conference (6 Pagini ~ 3.900 cuvinte)</option>
-                <option value="8">IEEE Conference (8 Pagini ~ 5.200 cuvinte)</option>
-                <option value="12">IEEE Transactions (12 Pagini ~ 8.000 cuvinte)</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1rem;">
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">TOTAL CUVINTE</span>
-              <h3 id="stat-total-words" style="color: var(--primary); font-size: 1.6rem; font-family: var(--font-mono);">0</h3>
-            </div>
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">ESTIMARE PAGINI IEEE</span>
-              <h3 id="stat-est-pages" style="color: #7ee787; font-size: 1.6rem; font-family: var(--font-mono);">0.0 / 6</h3>
-            </div>
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); padding: 12px; border-radius: 6px; text-align: center;">
-              <span style="font-size: 0.75rem; color: var(--text-muted);">PROGRES GLOBAL</span>
-              <h3 id="stat-global-pct" style="color: #e3b341; font-size: 1.6rem; font-family: var(--font-mono);">0%</h3>
-            </div>
-          </div>
-          <div class="progress-bar-container" style="height: 10px;">
-            <div id="global-paper-progressbar" class="progress-bar-fill" style="width: 0%;"></div>
-          </div>
-        </div>
-
-        <div class="split-grid">
-          <div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">Title, Abstract & Keywords</div><span class="tag" id="tag-words-sec0">0 cuv</span></div>
-              <textarea id="section-text-0" class="form-control" rows="4" placeholder="Abstract (max. 200-250 cuvinte), Index Terms / Keywords..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">I. Introduction & Problem Formulation</div><span class="tag" id="tag-words-sec1">0 cuv</span></div>
-              <textarea id="section-text-1" class="form-control" rows="4" placeholder="Context teleoperare, provocări rețea nedeterministă..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">II. Related Work & State of the Art</div><span class="tag" id="tag-words-sec2">0 cuv</span></div>
-              <textarea id="section-text-2" class="form-control" rows="4" placeholder="Comparație middleware (Zenoh, DDS), teleoperare..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">III. Proposed System Architecture & Model</div><span class="tag" id="tag-words-sec3">0 cuv</span></div>
-              <textarea id="section-text-3" class="form-control" rows="5" placeholder="Topologie ROS 2 - Zenoh router, profil QoS..." oninput="updatePaperStats()"></textarea>
-            </div>
-          </div>
-
-          <div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">IV. Experimental Setup & Testbed</div><span class="tag" id="tag-words-sec4">0 cuv</span></div>
-              <textarea id="section-text-4" class="form-control" rows="4" placeholder="Hardware, emulator de rețea (NetEm), parametri..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">V. Performance Evaluation & Results</div><span class="tag" id="tag-words-sec5">0 cuv</span></div>
-              <textarea id="section-text-5" class="form-control" rows="5" placeholder="Latență RTT P50/P99, CDF, jitter, utilizare bandwidth..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">VI. Discussion & Safety</div><span class="tag" id="tag-words-sec6">0 cuv</span></div>
-              <textarea id="section-text-6" class="form-control" rows="3" placeholder="Fail-Safe, mecanisme ESTOP..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">VII. Conclusion & Future Work</div><span class="tag" id="tag-words-sec7">0 cuv</span></div>
-              <textarea id="section-text-7" class="form-control" rows="3" placeholder="Concluzii finale..." oninput="updatePaperStats()"></textarea>
-            </div>
-            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="exportFullPaperDraft()">
-              <i class="fa-solid fa-file-arrow-down"></i> Descarcă Manuscris Complet (.MD)
-            </button>
           </div>
         </div>
       </section>
@@ -1498,7 +1525,7 @@ flowchart TD
   </main>
 
   <script>
-    // --- 1. CONFIGURARE MERMAID ---
+    // --- 1. CONFIGURARE MERMAID ROBUSTĂ ---
     if (window.mermaid) {
       mermaid.initialize({
         startOnLoad: false,
@@ -1522,7 +1549,7 @@ flowchart TD
       }
     }
 
-    // --- 3. TAB NAVIGATION (v7.0) ---
+    // --- 3. ROBUST TAB NAVIGATION (v8.0) ---
     const tabTitles = {
       'tab-azi': 'Azi — Tabloul de Comandă Zilnic',
       'passivity-workbench': 'Passivity & Control Workbench (Bilateral Teleop)',
@@ -1530,7 +1557,7 @@ flowchart TD
       'etapa-view': 'Etape & Planificare Cercetare Doctorat',
       'daily-sprint': 'Daily PhD Standup & Checklist',
       'lit-matrix': 'Matrice Analiză Literatură',
-      'paper-tracker': 'Monitorizare Structură Manuscris IEEE (2-Coloane)',
+      'paper-tracker': 'IEEE Paper Tracker & Client-Side AI Detector',
       'plot-studio': 'Scientific Plot & PGFPlots TikZ Studio',
       'mermaid-studio': 'Mermaid.js Live Studio & Ghid Sintaxă',
       'dataset-indexer': 'Indexare Dataset-uri, PCAP-uri & ROS 2 Bags',
@@ -1574,7 +1601,7 @@ flowchart TD
         if (tabId === 'math-tools') renderLatexPreview();
         if (tabId === 'calendar-view') renderCalendarGrid();
         if (tabId === 'meeting-brief') updateBriefLivePreview();
-        if (tabId === 'paper-tracker') updatePaperStats();
+        if (tabId === 'paper-tracker') { initPaperProjects(); updatePaperStats(); }
         if (tabId === 'mermaid-studio') renderMermaidDiagram();
         if (tabId === 'plot-studio') setTimeout(initScientificChart, 50);
         if (tabId === 'daily-sprint') loadDailySprint();
@@ -1583,7 +1610,7 @@ flowchart TD
       }
     }
 
-    // --- 4. STORAGE ENGINE (v7.0) ---
+    // --- 4. STORAGE ENGINE (v8.0) ---
     const DB = {
       get: (key, fallback) => {
         try {
@@ -1596,19 +1623,26 @@ flowchart TD
       }
     };
 
-    // --- 5. PASSIVITY WORKBENCH ENGINE (NOU V7.0) ---
-    function calculatePassivity() {
-      const fm = parseFloat(document.getElementById('po-fm').value) || 0;
-      const vm = parseFloat(document.getElementById('po-vm').value) || 0;
-      const fs = parseFloat(document.getElementById('po-fs').value) || 0;
-      const vs = parseFloat(document.getElementById('po-vs').value) || 0;
-      const ts = parseFloat(document.getElementById('po-ts').value) || 0.001;
-      const tau = parseFloat(document.getElementById('po-tau').value) || 0;
+    // --- 5. PARSER MATEMATIC CU SUPORT PENTRU VIRGULĂ (ROMANIAN LOCALE FIX) ---
+    function parseRoFloat(valStr, fallback = 0) {
+      if (!valStr) return fallback;
+      const cleanStr = valStr.toString().replace(',', '.').trim();
+      const num = parseFloat(cleanStr);
+      return isNaN(num) ? fallback : num;
+    }
 
-      // Calcul Bilanț Energetic (2-Port Power Network)
+    // --- 6. PASSIVITY WORKBENCH ENGINE ---
+    function calculatePassivity() {
+      const fm = parseRoFloat(document.getElementById('po-fm').value, 12.5);
+      const vm = parseRoFloat(document.getElementById('po-vm').value, 0.25);
+      const fs = parseRoFloat(document.getElementById('po-fs').value, 11.8);
+      const vs = parseRoFloat(document.getElementById('po-vs').value, 0.22);
+      const ts = parseRoFloat(document.getElementById('po-ts').value, 0.001);
+      const tau = parseRoFloat(document.getElementById('po-tau').value, 25);
+
       const p_in = fm * vm;
       const p_out = fs * vs;
-      const delta_e = (p_in - p_out) * ts; // Energie eșantionată mJ / J
+      const delta_e = (p_in - p_out) * ts;
       
       const resEnergy = document.getElementById('res-po-energy');
       const resStatus = document.getElementById('res-po-status');
@@ -1624,11 +1658,9 @@ flowchart TD
         resStatus.style.color = '#f85149';
       }
 
-      // Eroare de urmărire poziție sub latență tau (estimare simplificată v_m * tau)
       const error_m = Math.abs(vm - vs) * (tau / 1000.0);
       document.getElementById('res-po-error').textContent = `${error_m.toFixed(4)} m (${(error_m * 1000).toFixed(1)} mm)`;
 
-      // Variabile de undă (b = 10 de bază)
       const b = 10.0;
       const wave_u = (fm + b * vm) / Math.sqrt(2 * b);
       const wave_v = (fs - b * vs) / Math.sqrt(2 * b);
@@ -1637,16 +1669,16 @@ flowchart TD
       document.getElementById('res-po-wave-v').textContent = wave_v.toFixed(2);
     }
 
-    // --- 6. TELEOP QOS & NETEM ENGINE ---
+    // --- 7. TELEOP QOS & NETEM ENGINE ---
     function calculateQoS() {
-      const freq = parseFloat(document.getElementById('calc-freq').value) || 0;
-      const payload = parseFloat(document.getElementById('calc-payload').value) || 0;
-      const delay = parseFloat(document.getElementById('calc-netem-delay').value) || 0;
-      const jitter = parseFloat(document.getElementById('calc-netem-jitter').value) || 0;
-      const loss = parseFloat(document.getElementById('calc-netem-loss').value) || 0;
+      const freq = parseRoFloat(document.getElementById('calc-freq').value, 100);
+      const payload = parseRoFloat(document.getElementById('calc-payload').value, 256);
+      const delay = parseRoFloat(document.getElementById('calc-netem-delay').value, 15);
+      const jitter = parseRoFloat(document.getElementById('calc-netem-jitter').value, 3);
+      const loss = parseRoFloat(document.getElementById('calc-netem-loss').value, 2.0);
       const iface = document.getElementById('calc-netem-iface').value.trim() || 'wlan0';
 
-      const totalMsgSize = payload + 28; // UDP overhead
+      const totalMsgSize = payload + 28;
       const bytesPerSec = totalMsgSize * freq;
       const kbPerSec = (bytesPerSec / 1024).toFixed(2);
       const mbps = ((bytesPerSec * 8) / 1000000).toFixed(3);
@@ -1655,11 +1687,9 @@ flowchart TD
       document.getElementById('res-bandwidth').textContent = `${kbPerSec} KB/s (${mbps} Mbps)`;
       document.getElementById('res-period').textContent = `${periodMs} ms`;
 
-      // Generator Comandă NetEm
       const netemCmd = `sudo tc qdisc add dev ${iface} root netem delay ${delay}ms ${jitter}ms distribution normal loss ${loss}%`;
       document.getElementById('res-netem-cmd').value = netemCmd;
 
-      // Evaluator Regim Latență Operator
       const rtt = delay * 2;
       const regEl = document.getElementById('res-teleop-regime');
       const recEl = document.getElementById('res-teleop-rec');
@@ -1688,7 +1718,210 @@ flowchart TD
       navigator.clipboard.writeText(cmd).then(() => alert('Comanda Linux NetEm a fost copiată!'));
     }
 
-    // --- 7. SCIENTIFIC PLOT & PGFPLOTS TIKZ EXPORTER ---
+    // --- 8. CLIENT-SIDE AI TEXT DETECTOR ENGINE ---
+    function analyzeAiTextProbability(text) {
+      if (!text || text.trim().length < 80) {
+        return { score: 0, label: "🟢 Text Prea Scurt" };
+      }
+
+      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+      const sentenceLengths = sentences.map(s => s.trim().split(/\s+/).length);
+      
+      if (sentenceLengths.length < 2) return { score: 10, label: "🟢 Eșantion Mic" };
+
+      const mean = sentenceLengths.reduce((a, b) => a + b, 0) / sentenceLengths.length;
+      const variance = sentenceLengths.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / sentenceLengths.length;
+      const stdDev = Math.sqrt(variance);
+      const cv = mean > 0 ? (stdDev / mean) : 0; // Coeficient Variație (Burstiness)
+
+      const aiBuzzwords = [
+        "delve", "pivotal", "testament", "underscores", "crucial", "paramount", 
+        "realm", "furthermore", "holistic", "beacon", "it is worth noting", 
+        "plays a crucial role", "in conclusion", "sheds light on", "fostering"
+      ];
+      
+      const lowerText = text.toLowerCase();
+      let buzzwordMatches = 0;
+      aiBuzzwords.forEach(word => {
+        const matches = lowerText.split(word).length - 1;
+        buzzwordMatches += matches;
+      });
+
+      let aiScore = 0;
+      if (cv < 0.20) aiScore += 50;
+      else if (cv < 0.35) aiScore += 30;
+      else if (cv < 0.45) aiScore += 10;
+
+      const totalWords = text.split(/\s+/).length;
+      const buzzwordDensity = (buzzwordMatches / totalWords) * 100;
+      if (buzzwordDensity > 1.2) aiScore += 40;
+      else if (buzzwordDensity > 0.6) aiScore += 25;
+      else if (buzzwordDensity > 0.2) aiScore += 10;
+
+      aiScore = Math.min(99, Math.max(5, aiScore));
+
+      let badgeHtml = '<span class="badge-ai-human">🟢 Scris de Om</span>';
+      if (aiScore > 50) badgeHtml = '<span class="badge-ai-suspect">🔴 Suspect AI (Structură Uniformă)</span>';
+      else if (aiScore > 25) badgeHtml = '<span class="badge-ai-mixed">🟡 Text Mixt / Editat</span>';
+
+      return { score: aiScore, badge: badgeHtml };
+    }
+
+    // --- 9. MULTI-PAPER LIBRARY & IEEE TRACKER ---
+    function initPaperProjects() {
+      let library = DB.get('paper_library', null);
+      if (!library || library.length === 0) {
+        library = [{ id: 'proj_default', name: 'Manuscris Principal IEEE (2026)', target: 6 }];
+        DB.set('paper_library', library);
+      }
+
+      const selector = document.getElementById('paper-project-selector');
+      if (selector) {
+        selector.innerHTML = '';
+        library.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name;
+          selector.appendChild(opt);
+        });
+        const activeProjId = DB.get('active_paper_project', 'proj_default');
+        selector.value = activeProjId;
+      }
+    }
+
+    function switchPaperProject(projId) {
+      DB.set('active_paper_project', projId);
+      const draftsMap = DB.get('paper_drafts_map', {});
+      const projDraft = draftsMap[projId] || {};
+
+      for (let i = 0; i <= 7; i++) {
+        const el = document.getElementById(`section-text-${i}`);
+        if (el) el.value = projDraft[`sec${i}`] || '';
+      }
+      updatePaperStats();
+    }
+
+    function saveCurrentPaperAsNew() {
+      const name = prompt('Numele noului proiect de articol / manuscris:');
+      if (!name) return;
+
+      const projId = 'proj_' + Date.now();
+      const library = DB.get('paper_library', []);
+      library.push({ id: projId, name, target: 6 });
+      DB.set('paper_library', library);
+
+      // Salvează conținutul curent în noul proiect
+      const draftsMap = DB.get('paper_drafts_map', {});
+      const currentDrafts = {};
+      for (let i = 0; i <= 7; i++) {
+        currentDrafts[`sec${i}`] = document.getElementById(`section-text-${i}`).value;
+      }
+      draftsMap[projId] = currentDrafts;
+      DB.set('paper_drafts_map', draftsMap);
+
+      initPaperProjects();
+      switchPaperProject(projId);
+      alert('Proiectul nou a fost creat și salvat în LocalStorage!');
+    }
+
+    function updatePaperStats() {
+      const targetFormatPages = parseInt(document.getElementById('paper-target-format').value, 10) || 6;
+      const targetWords = (targetFormatPages === 6) ? 3900 : (targetFormatPages === 8 ? 5200 : 8000);
+
+      let totalWords = 0;
+      let fullText = '';
+      const sectionWeights = [0.05, 0.15, 0.15, 0.20, 0.15, 0.20, 0.05, 0.05];
+      const drafts = {};
+
+      for (let i = 0; i <= 7; i++) {
+        const text = document.getElementById(`section-text-${i}`).value;
+        drafts[`sec${i}`] = text;
+        fullText += ' ' + text;
+        const wCount = countWords(text);
+        totalWords += wCount;
+
+        const targetSecWords = Math.round(targetWords * sectionWeights[i]);
+        const tagEl = document.getElementById(`tag-words-sec${i}`);
+        if (tagEl) tagEl.textContent = `${wCount} / ~${targetSecWords} cuv`;
+      }
+
+      // Per-project persistence
+      const activeProjId = DB.get('active_paper_project', 'proj_default');
+      const draftsMap = DB.get('paper_drafts_map', {});
+      draftsMap[activeProjId] = drafts;
+      DB.set('paper_drafts_map', draftsMap);
+      DB.set('paper_drafts', drafts);
+
+      const estPages = (totalWords / (targetWords / targetFormatPages)).toFixed(1);
+      const globalPct = Math.min(100, Math.round((totalWords / targetWords) * 100));
+
+      document.getElementById('stat-total-words').textContent = totalWords;
+      document.getElementById('stat-est-pages').textContent = `${estPages} / ${targetFormatPages}`;
+      document.getElementById('stat-global-pct').textContent = `${globalPct}%`;
+      document.getElementById('global-paper-progressbar').style.width = `${globalPct}%`;
+
+      // Live AI Detector
+      const aiAnalysis = analyzeAiTextProbability(fullText);
+      document.getElementById('stat-ai-score').textContent = `${aiAnalysis.score}%`;
+      document.getElementById('stat-ai-badge').innerHTML = aiAnalysis.badge;
+    }
+
+    function exportPaperToWord() {
+      const title = document.getElementById('section-text-0').value.split('\n')[0] || "IEEE_Manuscript_Draft";
+      let htmlContent = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>IEEE Manuscript</title>
+        <style>
+          @page Section1 { size: 8.5in 11.0in; margin: 0.75in; }
+          div.Section1 { page: Section1; }
+          body { font-family: 'Times New Roman', serif; font-size: 10pt; line-height: 1.15; text-align: justify; }
+          h1 { font-size: 18pt; text-align: center; margin-bottom: 12pt; }
+          h2 { font-size: 10pt; text-transform: uppercase; font-weight: bold; margin-top: 10pt; border-bottom: 1px solid #000; }
+          p { margin-bottom: 6pt; }
+          .two-col { column-count: 2; column-gap: 0.3in; }
+        </style>
+        </head>
+        <body>
+        <div class="Section1">
+          <h1>${title}</h1>
+          <p style="text-align:center; font-style:italic;">Gheorghita Alexandru — SCOSAAR PhD Research (CC BY-NC-ND 4.0)</p>
+          <hr>
+          <div class="two-col">
+      `;
+
+      for (let i = 0; i <= 7; i++) {
+        const secText = document.getElementById(`section-text-${i}`).value;
+        if (secText.trim()) {
+          htmlContent += `<h2>Secțiunea ${i === 0 ? 'ABSTRACT' : i}</h2><p>${secText.replace(/\n/g, '<br>')}</p>`;
+        }
+      }
+
+      htmlContent += `</div></div></body></html>`;
+
+      const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `IEEE_Manuscript_${Date.now()}.doc`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportPaperToMarkdown() {
+      let draft = `# IEEE RESEARCH MANUSCRIPT DRAFT\n© 2026 Gh. Alexandru (CC BY-NC-ND 4.0)\nData: ${new Date().toLocaleDateString('ro-RO')}\n\n`;
+      draft += `## TITLE & ABSTRACT\n${document.getElementById('section-text-0').value}\n\n`;
+      draft += `## I. INTRODUCTION\n${document.getElementById('section-text-1').value}\n\n`;
+      draft += `## II. RELATED WORK\n${document.getElementById('section-text-2').value}\n\n`;
+      draft += `## III. SYSTEM ARCHITECTURE\n${document.getElementById('section-text-3').value}\n\n`;
+      draft += `## IV. EXPERIMENTAL SETUP\n${document.getElementById('section-text-4').value}\n\n`;
+      draft += `## V. PERFORMANCE EVALUATION\n${document.getElementById('section-text-5').value}\n\n`;
+      draft += `## VI. DISCUSSION\n${document.getElementById('section-text-6').value}\n\n`;
+      draft += `## VII. CONCLUSION\n${document.getElementById('section-text-7').value}\n\n`;
+
+      downloadFile(`phd_manuscript_${Date.now()}.md`, draft, 'text/markdown');
+    }
+
+    // --- 10. SCIENTIFIC PLOT & PGFPLOTS EXPORTER ---
     let scientificChart = null;
 
     function initScientificChart() {
@@ -1721,8 +1954,8 @@ flowchart TD
     function updateScientificChart() {
       if (!scientificChart) return;
       const xLabels = document.getElementById('plot-x-labels').value.split(',').map(s => s.trim());
-      const data1 = document.getElementById('plot-data-1').value.split(',').map(s => parseFloat(s) || 0);
-      const data2 = document.getElementById('plot-data-2').value.split(',').map(s => parseFloat(s) || 0);
+      const data1 = document.getElementById('plot-data-1').value.split(',').map(s => parseRoFloat(s));
+      const data2 = document.getElementById('plot-data-2').value.split(',').map(s => parseRoFloat(s));
 
       scientificChart.data.labels = xLabels;
       scientificChart.data.datasets[0].data = data1;
@@ -1731,10 +1964,8 @@ flowchart TD
       scientificChart.options.scales.y.title.text = document.getElementById('plot-y-title').value;
       scientificChart.update();
 
-      // Generat Cod TikZ PGFPlots
       const xTitle = document.getElementById('plot-x-title').value;
       const yTitle = document.getElementById('plot-y-title').value;
-      
       let coords1 = xLabels.map((x, i) => `(${x},${data1[i] || 0})`).join('');
       let coords2 = xLabels.map((x, i) => `(${x},${data2[i] || 0})`).join('');
 
@@ -1745,7 +1976,7 @@ flowchart TD
 
     function copyPgfplotsCode() {
       const code = document.getElementById('plot-pgfplots-output').textContent;
-      navigator.clipboard.writeText(code).then(() => alert('Codul TikZ PGFPlots a fost copiat în clipboard!'));
+      navigator.clipboard.writeText(code).then(() => alert('Codul TikZ PGFPlots a fost copiat!'));
     }
 
     function loadPlotPreset(preset) {
@@ -1778,7 +2009,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 8. DATA STORAGE MONITOR & HUB ---
+    // --- 11. DATA STORAGE MONITOR & HUB ---
     let hubChart1 = null, hubChart2 = null, hubChart3 = null, hubChart4 = null;
 
     function renderDataHub() {
@@ -1812,12 +2043,12 @@ flowchart TD
         { key: 'phd_papers', desc: 'Baza de date articole & literatură', count: `${papers.length} articole`, rawKey: 'papers' },
         { key: 'phd_experiments', desc: 'Jurnal benchmark & măsurători latență', count: `${experiments.length} rulări`, rawKey: 'experiments' },
         { key: 'phd_paper_drafts', desc: 'Draft manuscris IEEE (secțiunile 0-7)', count: `${totalDraftWords} cuvinte`, rawKey: 'paper_drafts' },
+        { key: 'phd_paper_library', desc: 'Bibliotecă proiecte articole', count: 'Proiecte salvate', rawKey: 'paper_library' },
         { key: 'phd_statelogs', desc: 'Istoric Where I Left Off (context switch)', count: `${statelogs.length} stări`, rawKey: 'statelogs' },
         { key: 'phd_etape', desc: 'Arhitectură etape & microtask-uri doctorat', count: `${etape.length} etape`, rawKey: 'etape' },
         { key: 'phd_chain', desc: 'Zile active lanț streak (calendar)', count: `${chain.length} zile marcate`, rawKey: 'chain' },
         { key: 'phd_deadlines', desc: 'Termene conferințe & rapoarte SCOSAAR', count: `${deadlines.length} termene`, rawKey: 'deadlines' },
-        { key: 'phd_datasets', desc: 'Index artefacte, PCAP & ROS 2 bag-uri', count: `${datasets.length} dataset-uri`, rawKey: 'datasets' },
-        { key: 'phd_brief_data', desc: 'Sinteză curentă brief coordonator (3 culori)', count: '1 raport activ', rawKey: 'brief_data' }
+        { key: 'phd_datasets', desc: 'Index artefacte, PCAP & ROS 2 bag-uri', count: `${datasets.length} dataset-uri`, rawKey: 'datasets' }
       ];
 
       const tbody = document.getElementById('hub-storage-table-body');
@@ -1914,7 +2145,7 @@ flowchart TD
       navigator.clipboard.writeText(code).then(() => alert('JSON-ul brut a fost copiat!'));
     }
 
-    // --- 9. MODELUL ETAPA & MIGRARE AUTOMATĂ ---
+    // --- 12. MODELUL ETAPA & MIGRARE AUTOMATĂ ---
     const SEED_P30_WEEKS = [
       { id:'s0', name:'S0 · 29-30 aug — C1, scrisul', start:'2026-08-28', end:'2026-08-31', items:[
         { id:'mt1', o:'TU', t:'MT1 SotA extins in vocea ta (comparatie explicita cu fiecare lucrare + fraza in afara ROS 2)' },
@@ -2089,7 +2320,7 @@ flowchart TD
       renderAziTab();
     }
 
-    // --- 10. LANȚUL (DON'T BREAK THE CHAIN) ---
+    // --- 13. LANȚUL (DON'T BREAK THE CHAIN) ---
     function getChain() { return DB.get('chain', []); }
 
     function markChainDay(dateStr) {
@@ -2129,7 +2360,7 @@ flowchart TD
       return { current, max };
     }
 
-    // --- 11. RANDARE TAB AZI ---
+    // --- 14. RANDARE TAB AZI ---
     function renderAziTab() {
       const etapa = getActiveEtapa();
       const done = getEtapaDoneItems();
@@ -2251,7 +2482,7 @@ flowchart TD
       if (!timerInterval) toggleTimer();
     }
 
-    // --- 12. DAILY SPRINT ENGINE ---
+    // --- 15. DAILY SPRINT ENGINE ---
     function loadDailySprint() {
       const todayStr = new Date().toLocaleDateString('ro-RO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       document.getElementById('sprint-date-display').textContent = todayStr;
@@ -2296,57 +2527,7 @@ flowchart TD
       document.getElementById('sprint-progressbar').style.width = `${pct}%`;
     }
 
-    // --- 13. IEEE PAPER TRACKER ---
-    function countWords(str) {
-      if (!str) return 0;
-      return str.trim().split(/\s+/).filter(w => w.length > 0).length;
-    }
-
-    function updatePaperStats() {
-      const targetFormatPages = parseInt(document.getElementById('paper-target-format').value, 10) || 6;
-      const targetWords = (targetFormatPages === 6) ? 3900 : (targetFormatPages === 8 ? 5200 : 8000);
-
-      let totalWords = 0;
-      const sectionWeights = [0.05, 0.15, 0.15, 0.20, 0.15, 0.20, 0.05, 0.05];
-      const drafts = {};
-
-      for (let i = 0; i <= 7; i++) {
-        const text = document.getElementById(`section-text-${i}`).value;
-        drafts[`sec${i}`] = text;
-        const wCount = countWords(text);
-        totalWords += wCount;
-
-        const targetSecWords = Math.round(targetWords * sectionWeights[i]);
-        const tagEl = document.getElementById(`tag-words-sec${i}`);
-        if (tagEl) tagEl.textContent = `${wCount} / ~${targetSecWords} cuv`;
-      }
-
-      DB.set('paper_drafts', drafts);
-
-      const estPages = (totalWords / (targetWords / targetFormatPages)).toFixed(1);
-      const globalPct = Math.min(100, Math.round((totalWords / targetWords) * 100));
-
-      document.getElementById('stat-total-words').textContent = totalWords;
-      document.getElementById('stat-est-pages').textContent = `${estPages} / ${targetFormatPages}`;
-      document.getElementById('stat-global-pct').textContent = `${globalPct}%`;
-      document.getElementById('global-paper-progressbar').style.width = `${globalPct}%`;
-    }
-
-    function exportFullPaperDraft() {
-      let draft = `# IEEE RESEARCH MANUSCRIPT DRAFT\n© 2026 Gh. Alexandru (CC BY-NC-ND 4.0)\nData: ${new Date().toLocaleDateString('ro-RO')}\n\n`;
-      draft += `## TITLE & ABSTRACT\n${document.getElementById('section-text-0').value}\n\n`;
-      draft += `## I. INTRODUCTION\n${document.getElementById('section-text-1').value}\n\n`;
-      draft += `## II. RELATED WORK\n${document.getElementById('section-text-2').value}\n\n`;
-      draft += `## III. SYSTEM ARCHITECTURE\n${document.getElementById('section-text-3').value}\n\n`;
-      draft += `## IV. EXPERIMENTAL SETUP\n${document.getElementById('section-text-4').value}\n\n`;
-      draft += `## V. PERFORMANCE EVALUATION\n${document.getElementById('section-text-5').value}\n\n`;
-      draft += `## VI. DISCUSSION\n${document.getElementById('section-text-6').value}\n\n`;
-      draft += `## VII. CONCLUSION\n${document.getElementById('section-text-7').value}\n\n`;
-
-      downloadFile(`phd_manuscript_${Date.now()}.md`, draft, 'text/markdown');
-    }
-
-    // --- 14. MERMAID STUDIO ---
+    // --- 16. MERMAID STUDIO ---
     let mermaidTimeout = null;
     function scheduleMermaidRender() {
       clearTimeout(mermaidTimeout);
@@ -2402,7 +2583,7 @@ flowchart TD
       downloadFile(`phd_diagram_${Date.now()}.svg`, svgData, 'image/svg+xml');
     }
 
-    // --- 15. DATASETS INDEXER ---
+    // --- 17. DATASETS INDEXER ---
     let datasets = DB.get('datasets', []);
 
     function addDataset() {
@@ -2448,7 +2629,7 @@ flowchart TD
       });
     }
 
-    // --- 16. BRIEF COORDONATOR ---
+    // --- 18. BRIEF COORDONATOR ---
     function updateBriefLivePreview() {
       const g = document.getElementById('brief-green').value;
       const y = document.getElementById('brief-yellow').value;
@@ -2497,7 +2678,7 @@ flowchart TD
       navigator.clipboard.writeText(fullText).then(() => alert('Sinteza a fost copiată în clipboard!'));
     }
 
-    // --- 17. MATH & LATEX TOOLS ---
+    // --- 19. MATH & LATEX TOOLS ---
     function renderLatexPreview() {
       const input = document.getElementById('latex-input').value;
       const box = document.getElementById('katex-render-box');
@@ -2531,7 +2712,7 @@ flowchart TD
       renderLatexPreview();
     }
 
-    // --- 18. POMODORO TIMER ---
+    // --- 20. POMODORO TIMER ---
     let timerDuration = 25 * 60;
     let timerRemaining = timerDuration;
     let timerInterval = null;
@@ -2624,7 +2805,7 @@ flowchart TD
       }
     }
 
-    // --- 19. CALENDAR ENGINE ---
+    // --- 21. CALENDAR ENGINE ---
     let deadlines = DB.get('deadlines', []);
 
     function addDeadline() {
@@ -2722,7 +2903,7 @@ flowchart TD
       }
     }
 
-    // --- 20. MATRICE LITERATURA ---
+    // --- 22. MATRICE LITERATURA ---
     let papers = DB.get('papers', []);
     function toggleBibtexImport() {
       const el = document.getElementById('bibtex-import-box');
@@ -2826,7 +3007,7 @@ flowchart TD
       downloadFile('phd_papers.csv', csv, 'text/csv');
     }
 
-    // --- 21. STYLUS CANVAS ENGINE ---
+    // --- 23. STYLUS CANVAS ENGINE ---
     const canvas = document.getElementById('sketch-canvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false, currentTool = 'pen', penColor = '#58a6ff', penSize = 4;
@@ -2954,7 +3135,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 22. EXPERIMENTE & BENCHMARK ---
+    // --- 24. EXPERIMENTE & BENCHMARK ---
     let experiments = DB.get('experiments', []);
 
     function addExperiment() {
@@ -3014,7 +3195,7 @@ flowchart TD
       navigator.clipboard.writeText(latex).then(() => alert('Tabelul LaTeX a fost copiat!'));
     }
 
-    // --- 23. WHERE I LEFT OFF ---
+    // --- 25. WHERE I LEFT OFF ---
     let stateLogs = DB.get('statelogs', []);
 
     function saveStateLog() {
@@ -3051,10 +3232,10 @@ flowchart TD
       });
     }
 
-    // --- 24. SYNC & BACKUP CU SCHEMA_VERSION 7.0 ---
+    // --- 26. SYNC & BACKUP CU SCHEMA_VERSION 8.0 ---
     function exportFullBackup() {
       const fullData = {
-        schema_version: "7.0",
+        schema_version: "8.0",
         etape: DB.get('etape', []),
         chain: DB.get('chain', []),
         chainMaxStreak: DB.get('chain_max_streak', 0),
@@ -3067,11 +3248,13 @@ flowchart TD
         brief: DB.get('brief_data', {}),
         streak: DB.get('pomo_streak', 0),
         drafts: DB.get('paper_drafts', {}),
+        paperLibrary: DB.get('paper_library', []),
+        paperDraftsMap: DB.get('paper_drafts_map', {}),
         datasets: DB.get('datasets', []),
         sprintGoal: DB.get('sprint_goal', ''),
         sprintChecks: DB.get('sprint_checks', {})
       };
-      downloadFile(`phd_workspace_v7_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
+      downloadFile(`phd_workspace_v8_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
     }
 
     function importFullBackup(event) {
@@ -3094,11 +3277,13 @@ flowchart TD
           if (data.brief) DB.set('brief_data', data.brief);
           if (data.streak) DB.set('pomo_streak', data.streak);
           if (data.drafts) DB.set('paper_drafts', data.drafts);
+          if (data.paperLibrary) DB.set('paper_library', data.paperLibrary);
+          if (data.paperDraftsMap) DB.set('paper_drafts_map', data.paperDraftsMap);
           if (data.datasets) DB.set('datasets', data.datasets);
           if (data.sprintGoal) DB.set('sprint_goal', data.sprintGoal);
           if (data.sprintChecks) DB.set('sprint_checks', data.sprintChecks);
           
-          alert('Sincronizarea s-a realizat cu succes!');
+          alert('Sincronizarea v8.0 s-a realizat cu succes!');
           location.reload();
         } catch(err) {
           alert('Eroare la parsarea fișierului JSON.');
@@ -3132,6 +3317,7 @@ flowchart TD
       calculatePassivity();
       renderCalendarGrid();
       loadDailySprint();
+      initPaperProjects();
       
       const savedTask = DB.get('current_focus_task', '');
       if (savedTask) document.getElementById('focus-task').value = savedTask;
