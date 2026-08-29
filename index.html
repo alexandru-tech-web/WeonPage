@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PhD Research Command Center Ultimate v5.0</title>
+  <title>PhD Research Command Center Ultimate v6.0</title>
   
+  <!-- Favicon SVG Data-URI Inline (Fără fișier extern) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+
   <!-- CDN-uri: FontAwesome, KaTeX, html2pdf, Mermaid.js & Chart.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -46,11 +49,23 @@
       touch-action: manipulation;
     }
 
-    body { display: flex; }
+    body { display: flex; position: relative; }
+
+    /* BACKDROP SEMI-TRANSPARENT PENTRU MOBIL */
+    #sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(2px);
+      z-index: 90;
+      transition: opacity 0.2s ease;
+    }
+    #sidebar-backdrop.active { display: block; }
 
     /* BARA LATERALĂ RESPONSIVĂ */
     aside {
-      width: 270px;
+      width: 275px;
       background: var(--surface);
       border-right: 1px solid var(--surface-border);
       display: flex;
@@ -94,6 +109,7 @@
       text-align: left;
       transition: all 0.15s ease;
       width: 100%;
+      min-height: 38px;
     }
     .nav-btn i { width: 18px; color: var(--text-muted); text-align: center; font-size: 0.9rem; }
     .nav-btn:hover { background: var(--surface-hover); color: var(--text-bright); }
@@ -169,9 +185,11 @@
       align-items: center;
       gap: 6px;
       transition: all 0.15s;
+      min-height: 34px;
     }
     .btn:hover { background: var(--surface-hover); border-color: var(--primary); }
-    .btn-sm { padding: 5px 8px; font-size: 0.78rem; }
+    .btn-sm { padding: 5px 8px; font-size: 0.78rem; min-height: 28px; }
+    .btn-lg { padding: 10px 16px; font-size: 0.92rem; min-height: 44px; font-weight: 600; }
     .btn-primary { background: var(--primary); color: #0b0f14; border-color: var(--primary); font-weight: 600; }
     .btn-primary:hover { background: var(--primary-hover); color: #fff; }
     .btn-success { background: var(--accent-green); color: #fff; border-color: var(--accent-green); }
@@ -223,6 +241,34 @@
     }
     .progress-bar-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
 
+    /* STILURI ETAPA & PLAN GENERALIZAT */
+    .p30-def { border-left: 3px solid var(--accent-green); padding: 10px 14px; font-size: .86rem; line-height: 1.5; background: rgba(255,255,255,0.03); border-radius: 6px; margin-bottom: 14px; }
+    .p30-week { margin-bottom: 14px; border: 1px solid var(--surface-border); border-radius: 8px; overflow: hidden; }
+    .p30-week-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-weight: 600; font-size: .82rem; background: rgba(255,255,255,0.04); }
+    .p30-week.current { border-color: var(--accent-green); box-shadow: 0 0 0 1px rgba(46,160,67,.35); }
+    .p30-week.current .p30-week-head { background: rgba(46,160,67,.12); color: #7ee787; }
+    .p30-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; border-top: 1px solid rgba(255,255,255,.05); font-size: .84rem; cursor: pointer; min-height: 40px; }
+    .p30-item:hover { background: rgba(255,255,255,.03); }
+    .p30-item input { margin-top: 3px; accent-color: var(--accent-green); width: 16px; height: 16px; flex-shrink: 0; }
+    .p30-item.done span.p30-text { text-decoration: line-through; opacity: .5; }
+    .p30-owner { font-size: .66rem; padding: 2px 7px; border-radius: 10px; white-space: nowrap; align-self: center; font-weight: 700; margin-left: auto; }
+    .p30-owner.TU { background: rgba(110,231,183,.15); color: #6ee7b7; }
+    .p30-owner.CC { background: rgba(96,165,250,.15); color: #60a5fa; }
+    .p30-owner.EU { background: rgba(251,191,36,.15); color: #fbbf24; }
+    .p30-close { font-size: .65rem; color: #fbbf24; margin-left: 6px; font-weight: 600; }
+
+    /* TAB AZI & LANȚUL */
+    .azi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.15rem; }
+    .chain-dots-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+    .chain-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--surface-border);
+      display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-family: var(--font-mono);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .chain-dot.done { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+    .chain-dot.today { box-shadow: 0 0 0 2px var(--primary); }
+
     /* POMODORO */
     .pomodoro-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; }
     .timer-ring-container { position: relative; width: 230px; height: 230px; display: flex; align-items: center; justify-content: center; margin: 0.8rem 0; }
@@ -261,7 +307,6 @@
       padding: 1rem;
     }
 
-    /* CURĂȚARE AUTOMATĂ ERORI MERMAID PE CORPUL PAGINII */
     body > #dmermaid,
     body > svg[id^="mermaid-"] {
       display: none !important;
@@ -296,8 +341,14 @@
 
     .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.15rem; }
     @media (max-width: 950px) {
-      .split-grid { grid-template-columns: 1fr; }
+      .split-grid, .azi-grid { grid-template-columns: 1fr; }
       aside { position: absolute; height: 100%; box-shadow: 4px 0 20px rgba(0,0,0,0.5); }
+      div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+      main table { display: block; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+      input, select, textarea { font-size: 16px; }
+      #scientificChartCanvas { max-width: 100%; height: auto; }
+      .content-area, main { width: 100%; min-width: 0; }
+      #sketch-canvas { max-width: 100%; touch-action: none; }
     }
     
     .table-responsive { overflow-x: auto; border: 1px solid var(--surface-border); border-radius: 6px; }
@@ -311,6 +362,9 @@
 </head>
 <body>
 
+  <!-- BACKDROP MOBIL -->
+  <div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
   <!-- BARA LATERALĂ -->
   <aside id="app-sidebar">
     <div class="brand">
@@ -318,22 +372,33 @@
         <i class="fa-solid fa-graduation-cap" style="color: var(--primary); font-size: 1.3rem;"></i>
         <div>
           <h1>PhD Workspace</h1>
-          <span>v5.0 Ultimate</span>
+          <span>v6.0 Ultimate</span>
         </div>
       </div>
       <button class="btn btn-sm" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <nav>
-      <div class="nav-category">Productivitate & Focus</div>
-      <button class="nav-btn active" onclick="switchTab('daily-sprint')">
-        <i class="fa-solid fa-list-check"></i> Daily PhD Sprint
+      <div class="nav-category">Tabloul de Comandă</div>
+      <button class="nav-btn active" onclick="switchTab('tab-azi')">
+        <i class="fa-solid fa-sun"></i> Azi
       </button>
+      <button class="nav-btn" onclick="switchTab('etapa-view')">
+        <i class="fa-solid fa-bullseye"></i> Etape & Plan Curent
+      </button>
+      <button class="nav-btn" onclick="switchTab('daily-sprint')">
+        <i class="fa-solid fa-list-check"></i> Daily Standup
+      </button>
+
+      <div class="nav-category">Focus & Organizare</div>
       <button class="nav-btn" onclick="switchTab('deep-work')">
         <i class="fa-solid fa-stopwatch"></i> Focus & Pomodoro
       </button>
       <button class="nav-btn" onclick="switchTab('calendar-view')">
         <i class="fa-solid fa-calendar-days"></i> Calendar & Termene
+      </button>
+      <button class="nav-btn" onclick="switchTab('state-log')">
+        <i class="fa-solid fa-location-arrow"></i> Where I Left Off
       </button>
 
       <div class="nav-category">Scriere & Documentare</div>
@@ -364,15 +429,12 @@
         <i class="fa-solid fa-calculator"></i> QoS & Network Calc
       </button>
 
-      <div class="nav-category">Experimente & Stare</div>
+      <div class="nav-category">Laborator & Experimente</div>
       <button class="nav-btn" onclick="switchTab('exp-bench')">
         <i class="fa-solid fa-flask-vial"></i> Benchmark & Log
       </button>
       <button class="nav-btn" onclick="switchTab('stylus-canvas')">
         <i class="fa-solid fa-pen-ruler"></i> Stylus / Diagrame
-      </button>
-      <button class="nav-btn" onclick="switchTab('state-log')">
-        <i class="fa-solid fa-location-arrow"></i> Where I Left Off
       </button>
     </nav>
 
@@ -402,7 +464,7 @@
     <header>
       <div class="header-left">
         <button class="btn btn-sm" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
-        <div class="header-title" id="page-title">Daily PhD Standup & Sprint Tracker</div>
+        <div class="header-title" id="page-title">Azi — Tabloul de Comandă Zilnic</div>
       </div>
       <div class="header-actions">
         <button class="btn btn-danger btn-sm" onclick="switchTab('state-log')">
@@ -413,8 +475,112 @@
 
     <div class="content-area">
 
-      <!-- 0. DAILY PHD SPRINT (NOU V5.0) -->
-      <section id="daily-sprint" class="view-section active">
+      <!-- ========================================== -->
+      <!-- TAB NOU V6.0: AZI (ECRANUL PRINCIPAL)      -->
+      <!-- ========================================== -->
+      <section id="tab-azi" class="view-section active">
+        <div class="azi-grid">
+          
+          <!-- Card 1: Pasul Săptămânii -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-shoe-prints" style="color: var(--accent-green);"></i> Pasul Săptămânii Curente</div>
+              <span class="tag" id="azi-week-badge">Săptămâna Activă</span>
+            </div>
+            <div id="azi-step-box" style="min-height: 85px; display: flex; flex-direction: column; justify-content: center;">
+              <!-- Generat dinamic -->
+            </div>
+            <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+              <button class="btn btn-sm" onclick="switchTab('etapa-view')"><i class="fa-solid fa-arrow-right"></i> Vezi toată etapa</button>
+              <small id="azi-etapa-progress" style="color: var(--text-muted); font-family: var(--font-mono);"></small>
+            </div>
+          </div>
+
+          <!-- Card 2: Lanțul (Don't Break the Chain) -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-link" style="color: #fbbf24;"></i> Lanțul (Don't Break The Chain)</div>
+              <span class="tag" id="azi-streak-badge" style="background: rgba(251,191,36,0.15); color: #fbbf24; font-weight: 700;">0 zile streak</span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Ultimele 14 zile de lucru continuu:</div>
+            <div class="chain-dots-row" id="azi-chain-dots"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+              <button class="btn btn-sm btn-success" id="azi-chain-btn" onclick="toggleTodayChain()"><i class="fa-solid fa-check"></i> Bifează Ziua de Azi</button>
+              <small id="azi-chain-record" style="color: var(--text-muted); font-family: var(--font-mono);">Record: 0 zile</small>
+            </div>
+          </div>
+
+          <!-- Card 3: Unde Am Rămas -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-location-arrow" style="color: var(--primary);"></i> Unde Am Rămas</div>
+              <button class="btn btn-sm" onclick="switchTab('state-log')"><i class="fa-solid fa-pen-to-square"></i> Jurnal</button>
+            </div>
+            <div id="azi-where-left" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-bright);">
+              <span style="color: var(--text-muted);">Nicio stare salvată recent.</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Următorul Termen & CTA Focus -->
+          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-hourglass-half" style="color: var(--accent-danger);"></i> Următorul Termen</div>
+                <span class="tag" id="azi-next-deadline-tag">Calendar</span>
+              </div>
+              <div id="azi-next-deadline-box" style="font-size: 0.88rem; font-weight: 600; color: var(--text-bright); margin-bottom: 12px;">
+                Fără termene imediate.
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; margin-top: 8px;" onclick="startFocusFromAzi()">
+              <i class="fa-solid fa-play"></i> Pornesc Sesiunea de Focus
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB GENERALIZAT V6.0: ETAPE & PLAN CURENT  -->
+      <!-- ========================================== -->
+      <section id="etapa-view" class="view-section">
+        <!-- Card Etapa Activă -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-flag-checkered"></i> <span id="etapa-active-title">Etapa Activă</span></div>
+            <div style="display:flex; gap: 6px;">
+              <button class="btn btn-sm" onclick="openNewEtapaModal()"><i class="fa-solid fa-plus"></i> Etapă Nouă</button>
+              <button class="btn btn-sm btn-danger" onclick="archiveActiveEtapa()"><i class="fa-solid fa-box-archive"></i> Arhivează</button>
+            </div>
+          </div>
+          <div class="p30-def" id="etapa-active-def">
+            <!-- Definiția lui GATA -->
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:.78rem; color:var(--text-muted);">
+            <span id="etapa-progress-label">0 / 0 microtask-uri</span>
+            <span id="etapa-days-left"></span>
+          </div>
+          <div class="progress-bar-container" style="height: 10px; margin-top: 6px;">
+            <div id="etapa-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Săptămânile Etapei Active -->
+        <div id="etapa-weeks-container"></div>
+
+        <!-- Istoric Etape Arhivate -->
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Istoric Etape Doctorat (Arhivă)</div>
+          </div>
+          <div id="etapa-archive-list" style="font-size: 0.82rem; color: var(--text-muted);">
+            Fără etape arhivate încă.
+          </div>
+        </div>
+      </section>
+
+      <!-- 0. DAILY PHD SPRINT -->
+      <section id="daily-sprint" class="view-section">
         <div class="split-grid">
           <div>
             <div class="card">
@@ -1167,7 +1333,7 @@ flowchart TD
   </main>
 
   <script>
-    // --- 1. CONFIGURARE MERMAID ROBUSTĂ (FĂRĂ ERORI PE ECRAN) ---
+    // --- 1. CONFIGURARE MERMAID ROBUSTĂ ---
     if (window.mermaid) {
       mermaid.initialize({
         startOnLoad: false,
@@ -1177,20 +1343,25 @@ flowchart TD
       });
     }
 
-    // Curăță automat orice div creat de Mermaid direct pe body
     function cleanupMermaidBodyErrors() {
       document.querySelectorAll('body > #dmermaid, body > svg[id^="mermaid-"]').forEach(el => el.remove());
     }
 
-    // --- 2. SIDEBAR TOGGLE PENTRU TABLETĂ ---
+    // --- 2. SIDEBAR TOGGLE & BACKDROP ---
     function toggleSidebar() {
       const sidebar = document.getElementById('app-sidebar');
-      sidebar.classList.toggle('collapsed');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const isCollapsed = sidebar.classList.toggle('collapsed');
+      if (window.innerWidth <= 950) {
+        backdrop.classList.toggle('active', !isCollapsed);
+      }
     }
 
-    // --- 3. ROBUST TAB NAVIGATION ---
+    // --- 3. TAB NAVIGATION (v6.0) ---
     const tabTitles = {
-      'daily-sprint': 'Daily PhD Standup & Sprint Tracker',
+      'tab-azi': 'Azi — Tabloul de Comandă Zilnic',
+      'etapa-view': 'Etape & Planificare Cercetare Doctorat',
+      'daily-sprint': 'Daily PhD Standup & Checklist',
       'lit-matrix': 'Matrice Analiză Literatură',
       'paper-tracker': 'Monitorizare Structură Manuscris IEEE (2-Coloane)',
       'plot-studio': 'Scientific Plot Studio (Chart.js)',
@@ -1225,8 +1396,11 @@ flowchart TD
 
         if (window.innerWidth <= 950) {
           document.getElementById('app-sidebar').classList.add('collapsed');
+          document.getElementById('sidebar-backdrop').classList.remove('active');
         }
 
+        if (tabId === 'tab-azi') renderAziTab();
+        if (tabId === 'etapa-view') renderActiveEtapa();
         if (tabId === 'stylus-canvas') setTimeout(initCanvasDimensions, 50);
         if (tabId === 'math-tools') renderLatexPreview();
         if (tabId === 'calendar-view') renderCalendarGrid();
@@ -1240,7 +1414,7 @@ flowchart TD
       }
     }
 
-    // --- 4. STORAGE ENGINE ---
+    // --- 4. STORAGE ENGINE (Schema v6.0) ---
     const DB = {
       get: (key, fallback) => {
         try {
@@ -1253,7 +1427,368 @@ flowchart TD
       }
     };
 
-    // --- 5. DAILY SPRINT ENGINE ---
+    // --- 5. MODELUL ETAPA & MIGRARE AUTOMATĂ (VALUL 1) ---
+    const SEED_P30_WEEKS = [
+      { id:'s0', name:'S0 · 29-30 aug — C1, scrisul', start:'2026-08-28', end:'2026-08-31', items:[
+        { id:'mt1', o:'TU', t:'MT1 SotA extins in vocea ta (comparatie explicita cu fiecare lucrare + fraza in afara ROS 2)' },
+        { id:'mt2', o:'TU', t:'MT2 Abstract rescris (fraza de la huh?) + Concluzia cu importance of work' },
+        { id:'mt3', o:'TU', t:'MT3 Future Work: gateway-ul dual + raspunsul la comentariul lui Victor' },
+        { id:'mt4', o:'TU', t:'MT4 Trimis lui Victor', close:'INCHIDEREA #1' } ]},
+      { id:'s1', name:'S1 · 1-7 sep — C2 pleaca + gateway', start:'2026-09-01', end:'2026-09-08', items:[
+        { id:'mt5', o:'TU', t:'MT5 C2: vocea ta pe Abstract + Concluzie -> trimis coordonatorului', close:'INCHIDEREA #2' },
+        { id:'mt6', o:'EU', t:'MT6 Promptul Claude Code: gateway smoke pe loopback (il ceri lui Claude)' },
+        { id:'mt7', o:'CC', t:'MT7 Rularea gateway smoke; criteriu: comuta demonstrat pe degradare (citire 30 min)' } ]},
+      { id:'s2', name:'S2 · 8-14 sep — campania SIL', start:'2026-09-08', end:'2026-09-15', items:[
+        { id:'mt8', o:'EU', t:'MT8 Promptul campaniei comparative (matricea x {cdds, zenoh, dual} x N=10)' },
+        { id:'mt9', o:'CC', t:'MT9 Campania pe loopback + tabelele (citire 45 min)' },
+        { id:'mt10', o:'TU', t:'MT10 Citirea tabelelor + decizia: matricea merge pe HIL? (in registru)' } ]},
+      { id:'s3', name:'S3 · 15-21 sep — demonstratia pe legatura reala', start:'2026-09-15', end:'2026-09-22', items:[
+        { id:'mt11', o:'TU', t:'MT11 Aceeasi matrice pe Wi-Fi HIL (laptop + Pi) — demonstratia ceruta de comentariu', close:'INCHIDEREA #3' },
+        { id:'mt12', o:'CC', t:'MT12 (optional) Ziua bancului cablat — DOAR daca a venit cablul; bonus, nu blocant' } ]},
+      { id:'s4', name:'S4 · 22-28 sep — sinteza', start:'2026-09-22', end:'2026-09-29', items:[
+        { id:'mt13', o:'TU', t:'MT13 O pagina + 3-4 figuri pt Victor: sistemul dual, demonstrat (cu date)', close:'INCHIDEREA #4' },
+        { id:'mt14', o:'TU', t:'MT14 Actualizarea DIRECTIA_PHD (status C3, venue/termene daca au venit)' } ]},
+      { id:'buf', name:'29-30 sep — BUFFER (nimic planificat)', start:'2026-09-29', end:'2026-10-01', items:[] }
+    ];
+
+    function initEtapeStorage() {
+      let etape = DB.get('etape', null);
+      if (!etape || etape.length === 0) {
+        const initialEtapa = {
+          id: 'etapa_30sep',
+          nume: 'Plan 30 Sep — GATA directia',
+          definitia_gata: '<b>(1)</b> C1 cu comentariile lui Victor inchise · <b>(2)</b> C2 trimis coordonatorului · <b>(3)</b> sistemul dual DEMONSTRAT cu date (dual vs cyclonedds vs zenoh, SIL + HIL Wi-Fi).<br><span style="color:var(--text-muted); font-size:.78rem;">Reguli: o saptamana cazuta = bufferul o absoarbe; se taie din optionale, niciodata din inchideri. Sesiunea A se muta, nu se anuleaza. Somnul bate sesiunea.</span>',
+          start: '2026-08-28',
+          end: '2026-09-30',
+          status: 'activa',
+          saptamani: SEED_P30_WEEKS
+        };
+        etape = [initialEtapa];
+        DB.set('etape', etape);
+      }
+      return etape;
+    }
+
+    function getActiveEtapa() {
+      const etape = initEtapeStorage();
+      return etape.find(e => e.status === 'activa') || etape[0];
+    }
+
+    function getEtapaDoneItems() {
+      return DB.get('plan30_done', []);
+    }
+
+    function toggleEtapaItem(itemId) {
+      let done = getEtapaDoneItems();
+      done = done.includes(itemId) ? done.filter(x => x !== itemId) : done.concat([itemId]);
+      DB.set('plan30_done', done);
+      markChainDay(); // marchează automat în lanț la bifare
+      renderActiveEtapa();
+      renderAziTab();
+    }
+
+    function renderActiveEtapa() {
+      const etapa = getActiveEtapa();
+      if (!etapa) return;
+
+      document.getElementById('etapa-active-title').textContent = etapa.nume;
+      document.getElementById('etapa-active-def').innerHTML = etapa.definitia_gata;
+
+      const host = document.getElementById('etapa-weeks-container');
+      if (!host) return;
+
+      const done = getEtapaDoneItems();
+      const now = new Date();
+      const today = now.toISOString().slice(0,10);
+      let total = 0, ok = 0, html = '';
+
+      (etapa.saptamani || []).forEach(w => {
+        const isCurrent = today >= w.start && today < w.end;
+        const wDone = w.items.filter(i => done.includes(i.id)).length;
+        total += w.items.length;
+        ok += wDone;
+
+        html += `<div class="p30-week ${isCurrent ? 'current' : ''}">`;
+        html += `<div class="p30-week-head"><span>${isCurrent ? '▶ ' : ''}${w.name}</span><span>${wDone}/${w.items.length}</span></div>`;
+        w.items.forEach(i => {
+          const d = done.includes(i.id);
+          html += `<label class="p30-item ${d ? 'done' : ''}">
+            <input type="checkbox" ${d ? 'checked' : ''} onchange="toggleEtapaItem('${i.id}')">
+            <span class="p30-text">${i.t}${i.close ? `<span class="p30-close">★ ${i.close}</span>` : ''}</span>
+            <span class="p30-owner ${i.o}">${i.o}</span>
+          </label>`;
+        });
+        html += `</div>`;
+      });
+
+      host.innerHTML = html;
+      const pct = total ? Math.round(100 * ok / total) : 0;
+      const bar = document.getElementById('etapa-bar-fill');
+      if (bar) bar.style.width = pct + '%';
+      
+      const lbl = document.getElementById('etapa-progress-label');
+      if (lbl) lbl.textContent = `${ok} / ${total} microtask-uri (${pct}%)`;
+
+      const dl = document.getElementById('etapa-days-left');
+      if (dl && etapa.end) {
+        const diff = Math.ceil((new Date(etapa.end) - now) / 86400000);
+        dl.textContent = diff >= 0 ? `${diff} zile rămase` : 'Etapă încheiată';
+      }
+
+      renderEtapaArchive();
+    }
+
+    function renderEtapaArchive() {
+      const etape = initEtapeStorage();
+      const archived = etape.filter(e => e.status === 'arhivata');
+      const box = document.getElementById('etapa-archive-list');
+      if (!box) return;
+
+      if (archived.length === 0) {
+        box.innerHTML = '<span style="color:var(--text-muted);">Fără etape arhivate în istoric.</span>';
+        return;
+      }
+
+      let html = '';
+      archived.forEach(a => {
+        html += `<div style="padding:8px; border-bottom:1px solid var(--surface-border); display:flex; justify-content:space-between;">
+          <span><strong>${a.nume}</strong> (${a.start} → ${a.end})</span>
+          <span class="tag" style="background:rgba(46,160,67,0.15); color:#7ee787;">Finalizat: ${a.final_pct || '100%'}</span>
+        </div>`;
+      });
+      box.innerHTML = html;
+    }
+
+    function archiveActiveEtapa() {
+      if (!confirm('Sigur dorești să arhivezi etapa curentă? Aceasta va fi salvată în istoric ca read-only.')) return;
+      const etape = initEtapeStorage();
+      const active = etape.find(e => e.status === 'activa');
+      if (active) {
+        const done = getEtapaDoneItems();
+        let total = 0, ok = 0;
+        (active.saptamani || []).forEach(w => {
+          total += w.items.length;
+          ok += w.items.filter(i => done.includes(i.id)).length;
+        });
+        active.status = 'arhivata';
+        active.final_pct = total ? Math.round(100 * ok / total) + '%' : '0%';
+        active.archived_at = new Date().toISOString().slice(0,10);
+        DB.set('etape', etape);
+        renderActiveEtapa();
+        renderAziTab();
+        alert('Etapa a fost arhivată cu succes.');
+      }
+    }
+
+    function openNewEtapaModal() {
+      const name = prompt('Numele noii etape de cercetare:');
+      if (!name) return;
+      const def = prompt('Definiția lui GATA (ce livrezi concret):');
+      const start = prompt('Data de început (YYYY-MM-DD):', new Date().toISOString().slice(0,10));
+      const end = prompt('Data limită / deadline (YYYY-MM-DD):');
+
+      const newEtapa = {
+        id: 'etapa_' + Date.now(),
+        nume: name,
+        definitia_gata: def || 'Livrabile conform planificării.',
+        start: start || new Date().toISOString().slice(0,10),
+        end: end || '',
+        status: 'activa',
+        saptamani: []
+      };
+
+      const etape = initEtapeStorage();
+      etape.forEach(e => { if (e.status === 'activa') e.status = 'arhivata'; });
+      etape.push(newEtapa);
+      DB.set('etape', etape);
+      renderActiveEtapa();
+      renderAziTab();
+    }
+
+    // --- 6. LANȚUL (DON'T BREAK THE CHAIN) ---
+    function getChain() {
+      return DB.get('chain', []);
+    }
+
+    function markChainDay(dateStr) {
+      const day = dateStr || new Date().toISOString().slice(0,10);
+      let chain = getChain();
+      if (!chain.includes(day)) {
+        chain.push(day);
+        chain.sort();
+        DB.set('chain', chain);
+      }
+      renderAziTab();
+    }
+
+    function toggleTodayChain() {
+      const today = new Date().toISOString().slice(0,10);
+      let chain = getChain();
+      if (chain.includes(today)) {
+        chain = chain.filter(d => d !== today);
+      } else {
+        chain.push(today);
+        chain.sort();
+      }
+      DB.set('chain', chain);
+      renderAziTab();
+    }
+
+    function calculateStreak() {
+      const chain = getChain();
+      if (!chain.length) return { current: 0, max: 0 };
+
+      const set = new Set(chain);
+      let current = 0;
+      let checkDate = new Date();
+      let todayStr = checkDate.toISOString().slice(0,10);
+
+      if (!set.has(todayStr)) {
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+
+      while (set.has(checkDate.toISOString().slice(0,10))) {
+        current++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+
+      let max = DB.get('chain_max_streak', 0);
+      if (current > max) {
+        max = current;
+        DB.set('chain_max_streak', max);
+      }
+
+      return { current, max };
+    }
+
+    // --- 7. RANDARE TAB AZI (VALUL 1) ---
+    function renderAziTab() {
+      // 1. Pasul Săptămânii
+      const etapa = getActiveEtapa();
+      const done = getEtapaDoneItems();
+      const today = new Date().toISOString().slice(0,10);
+      const stepBox = document.getElementById('azi-step-box');
+      const weekBadge = document.getElementById('azi-week-badge');
+
+      if (etapa && stepBox) {
+        let currentWeek = (etapa.saptamani || []).find(w => today >= w.start && today < w.end);
+        if (!currentWeek && (etapa.saptamani || []).length > 0) currentWeek = etapa.saptamani[0];
+
+        if (currentWeek) {
+          weekBadge.textContent = currentWeek.name.split('—')[0].trim();
+          const firstPending = currentWeek.items.find(i => !done.includes(i.id));
+
+          if (firstPending) {
+            stepBox.innerHTML = `
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <input type="checkbox" onchange="toggleEtapaItem('${firstPending.id}')" style="width:18px; height:18px; margin-top:3px; accent-color:var(--accent-green);">
+                <div>
+                  <div style="font-size:0.92rem; font-weight:600; color:var(--text-bright);">${firstPending.t}</div>
+                  ${firstPending.close ? `<div style="font-size:0.75rem; color:#fbbf24; margin-top:3px;"><i class="fa-solid fa-star"></i> ${firstPending.close}</div>` : ''}
+                </div>
+                <span class="p30-owner ${firstPending.o}">${firstPending.o}</span>
+              </div>`;
+          } else {
+            stepBox.innerHTML = `<div style="color:#7ee787; font-weight:600;"><i class="fa-solid fa-circle-check"></i> Toate microtask-urile din săptămâna curentă sunt gata!</div>`;
+          }
+        } else {
+          stepBox.innerHTML = `<span style="color:var(--text-muted);">Nicio săptămână planificată activă.</span>`;
+        }
+
+        let total = 0, ok = 0;
+        (etapa.saptamani || []).forEach(w => {
+          total += w.items.length;
+          ok += w.items.filter(i => done.includes(i.id)).length;
+        });
+        const pct = total ? Math.round(100 * ok / total) : 0;
+        document.getElementById('azi-etapa-progress').textContent = `Etapă: ${pct}% (${ok}/${total})`;
+      }
+
+      // 2. Lanțul (Dots)
+      const { current, max } = calculateStreak();
+      document.getElementById('azi-streak-badge').textContent = `🔥 ${current} ${current === 1 ? 'zi' : 'zile'} streak`;
+      document.getElementById('azi-chain-record').textContent = `Record: ${max} zile`;
+
+      const chain = getChain();
+      const dotsContainer = document.getElementById('azi-chain-dots');
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        const todayObj = new Date();
+        const chainBtn = document.getElementById('azi-chain-btn');
+        const todayStr = todayObj.toISOString().slice(0,10);
+
+        if (chain.includes(todayStr)) {
+          chainBtn.className = 'btn btn-sm btn-success';
+          chainBtn.innerHTML = '<i class="fa-solid fa-check-double"></i> Zi Marcată ✓';
+        } else {
+          chainBtn.className = 'btn btn-sm btn-primary';
+          chainBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Bifează Ziua de Azi';
+        }
+
+        for (let i = 13; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(todayObj.getDate() - i);
+          const dStr = d.toISOString().slice(0,10);
+          const isDone = chain.includes(dStr);
+          const isToday = (i === 0);
+
+          const dot = document.createElement('div');
+          dot.className = `chain-dot ${isDone ? 'done' : ''} ${isToday ? 'today' : ''}`;
+          dot.textContent = d.getDate();
+          dot.title = dStr;
+          dot.onclick = () => {
+            let ch = getChain();
+            ch = ch.includes(dStr) ? ch.filter(x => x !== dStr) : ch.concat([dStr]);
+            DB.set('chain', ch);
+            renderAziTab();
+          };
+          dotsContainer.appendChild(dot);
+        }
+      }
+
+      // 3. Unde Am Rămas
+      const stateLogs = DB.get('statelogs', []);
+      const whereBox = document.getElementById('azi-where-left');
+      if (whereBox) {
+        if (stateLogs.length > 0) {
+          const last = stateLogs[0];
+          whereBox.innerHTML = `
+            <div style="color:var(--text-muted); font-size:0.75rem; margin-bottom:4px;">${last.time} · <code>${last.git || 'master'}</code></div>
+            <div><strong>Următorul gest:</strong> ${last.next || last.file || 'Reia fluxul de lucru'}</div>
+          `;
+        } else {
+          whereBox.innerHTML = `<span style="color:var(--text-muted);">Nicio stare salvată încă.</span>`;
+        }
+      }
+
+      // 4. Următorul Termen
+      const deadlines = DB.get('deadlines', []);
+      const dlBox = document.getElementById('azi-next-deadline-box');
+      const dlTag = document.getElementById('azi-next-deadline-tag');
+      if (dlBox) {
+        const now = new Date();
+        const activeDl = deadlines.filter(d => new Date(d.date + 'T23:59:59') >= now);
+        if (activeDl.length > 0) {
+          const next = activeDl[0];
+          const diffDays = Math.ceil((new Date(next.date + 'T23:59:59') - now) / 86400000);
+          dlTag.textContent = `${diffDays} zile rămase`;
+          dlTag.style.background = diffDays <= 7 ? 'rgba(248,81,73,0.2)' : 'rgba(88,166,255,0.15)';
+          dlTag.style.color = diffDays <= 7 ? '#ff7b72' : 'var(--primary)';
+          dlBox.innerHTML = `${next.name} <span style="color:var(--text-muted); font-size:0.8rem;">(${next.date})</span>`;
+        } else {
+          dlTag.textContent = 'Fără termene';
+          dlBox.textContent = 'Toate termenele sunt la zi.';
+        }
+      }
+    }
+
+    function startFocusFromAzi() {
+      markChainDay();
+      switchTab('deep-work');
+      if (!timerInterval) toggleTimer();
+    }
+
+    // --- 8. DAILY SPRINT ENGINE ---
     function loadDailySprint() {
       const todayStr = new Date().toLocaleDateString('ro-RO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       document.getElementById('sprint-date-display').textContent = todayStr;
@@ -1291,12 +1826,14 @@ flowchart TD
       if (checks.latex) count++;
       if (checks.git) count++;
 
+      if (count > 0) markChainDay();
+
       const pct = count * 25;
       document.getElementById('sprint-score-pct').textContent = `${pct}%`;
       document.getElementById('sprint-progressbar').style.width = `${pct}%`;
     }
 
-    // --- 6. IEEE PAPER TRACKER ---
+    // --- 9. IEEE PAPER TRACKER ---
     function countWords(str) {
       if (!str) return 0;
       return str.trim().split(/\s+/).filter(w => w.length > 0).length;
@@ -1346,7 +1883,7 @@ flowchart TD
       downloadFile(`phd_manuscript_${Date.now()}.md`, draft, 'text/markdown');
     }
 
-    // --- 7. SCIENTIFIC PLOT STUDIO ---
+    // --- 10. SCIENTIFIC PLOT STUDIO ---
     let scientificChart = null;
 
     function initScientificChart() {
@@ -1420,7 +1957,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 8. MERMAID STUDIO ---
+    // --- 11. MERMAID STUDIO ---
     let mermaidTimeout = null;
     function scheduleMermaidRender() {
       clearTimeout(mermaidTimeout);
@@ -1476,7 +2013,7 @@ flowchart TD
       downloadFile(`phd_diagram_${Date.now()}.svg`, svgData, 'image/svg+xml');
     }
 
-    // --- 9. DATASETS INDEXER ---
+    // --- 12. DATASETS INDEXER ---
     let datasets = DB.get('datasets', []);
 
     function addDataset() {
@@ -1522,7 +2059,7 @@ flowchart TD
       });
     }
 
-    // --- 10. BRIEF COORDONATOR ---
+    // --- 13. BRIEF COORDONATOR ---
     function updateBriefLivePreview() {
       const g = document.getElementById('brief-green').value;
       const y = document.getElementById('brief-yellow').value;
@@ -1571,7 +2108,7 @@ flowchart TD
       navigator.clipboard.writeText(fullText).then(() => alert('Sinteza a fost copiată în clipboard!'));
     }
 
-    // --- 11. MATH & LATEX TOOLS ---
+    // --- 14. MATH & LATEX TOOLS ---
     function renderLatexPreview() {
       const input = document.getElementById('latex-input').value;
       const box = document.getElementById('katex-render-box');
@@ -1605,7 +2142,7 @@ flowchart TD
       renderLatexPreview();
     }
 
-    // --- 12. POMODORO TIMER ---
+    // --- 15. POMODORO TIMER ---
     let timerDuration = 25 * 60;
     let timerRemaining = timerDuration;
     let timerInterval = null;
@@ -1629,6 +2166,7 @@ flowchart TD
         btn.innerHTML = '<i class="fa-solid fa-play"></i> Continuă';
       } else {
         btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pauză';
+        markChainDay();
         timerInterval = setInterval(() => {
           if (timerRemaining > 0) {
             timerRemaining--;
@@ -1697,7 +2235,7 @@ flowchart TD
       }
     }
 
-    // --- 13. CALCULATOR QOS ---
+    // --- 16. CALCULATOR QOS ---
     function calculateQoS() {
       const freq = parseFloat(document.getElementById('calc-freq').value) || 0;
       const payload = parseFloat(document.getElementById('calc-payload').value) || 0;
@@ -1717,7 +2255,7 @@ flowchart TD
       document.getElementById('res-overhead-pct').textContent = `${overheadPct} %`;
     }
 
-    // --- 14. CALENDAR ENGINE ---
+    // --- 17. CALENDAR ENGINE ---
     let deadlines = DB.get('deadlines', []);
 
     function addDeadline() {
@@ -1734,6 +2272,7 @@ flowchart TD
       document.getElementById('deadline-date').value = '';
       renderDeadlines();
       renderCalendarGrid();
+      renderAziTab();
     }
 
     function deleteDeadline(id) {
@@ -1741,6 +2280,7 @@ flowchart TD
       DB.set('deadlines', deadlines);
       renderDeadlines();
       renderCalendarGrid();
+      renderAziTab();
     }
 
     function renderDeadlines() {
@@ -1813,7 +2353,7 @@ flowchart TD
       }
     }
 
-    // --- 15. MATRICE LITERATURA ---
+    // --- 18. MATRICE LITERATURA ---
     let papers = DB.get('papers', []);
     function toggleBibtexImport() {
       const el = document.getElementById('bibtex-import-box');
@@ -1917,7 +2457,7 @@ flowchart TD
       downloadFile('phd_papers.csv', csv, 'text/csv');
     }
 
-    // --- 16. STYLUS CANVAS ENGINE ---
+    // --- 19. STYLUS CANVAS ENGINE ---
     const canvas = document.getElementById('sketch-canvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false, currentTool = 'pen', penColor = '#58a6ff', penSize = 4;
@@ -2035,7 +2575,6 @@ flowchart TD
       expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
       expCtx.drawImage(canvas, 0, 0);
 
-      // Semnătură de autor
       expCtx.font = "12px sans-serif";
       expCtx.fillStyle = whiteBackground ? "#57606a" : "#8b949e";
       expCtx.fillText("© 2026 Gh. Alexandru — PhD Research Artifact (CC BY-NC-ND 4.0)", 15, exportCanvas.height - 15);
@@ -2046,7 +2585,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 17. EXPERIMENTE & BENCHMARK ---
+    // --- 20. EXPERIMENTE & BENCHMARK ---
     let experiments = DB.get('experiments', []);
 
     function addExperiment() {
@@ -2106,7 +2645,7 @@ flowchart TD
       navigator.clipboard.writeText(latex).then(() => alert('Tabelul LaTeX a fost copiat!'));
     }
 
-    // --- 18. WHERE I LEFT OFF ---
+    // --- 21. WHERE I LEFT OFF ---
     let stateLogs = DB.get('statelogs', []);
 
     function saveStateLog() {
@@ -2123,6 +2662,7 @@ flowchart TD
       document.getElementById('state-file').value = '';
       document.getElementById('state-next-action').value = '';
       renderStateLogs();
+      renderAziTab();
     }
 
     function renderStateLogs() {
@@ -2142,9 +2682,14 @@ flowchart TD
       });
     }
 
-    // --- 19. SYNC & BACKUP ---
+    // --- 22. SYNC & BACKUP CU SCHEMA_VERSION 6.0 ---
     function exportFullBackup() {
       const fullData = {
+        schema_version: "6.0",
+        etape: DB.get('etape', []),
+        chain: DB.get('chain', []),
+        chainMaxStreak: DB.get('chain_max_streak', 0),
+        plan30Done: DB.get('plan30_done', []),
         papers: DB.get('papers', []),
         experiments: DB.get('experiments', []),
         deadlines: DB.get('deadlines', []),
@@ -2157,7 +2702,7 @@ flowchart TD
         sprintGoal: DB.get('sprint_goal', ''),
         sprintChecks: DB.get('sprint_checks', {})
       };
-      downloadFile(`phd_workspace_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
+      downloadFile(`phd_workspace_v6_backup_${Date.now()}.json`, JSON.stringify(fullData, null, 2), 'application/json');
     }
 
     function importFullBackup(event) {
@@ -2168,6 +2713,10 @@ flowchart TD
       reader.onload = (e) => {
         try {
           const data = JSON.parse(e.target.result);
+          if (data.etape) DB.set('etape', data.etape);
+          if (data.chain) DB.set('chain', data.chain);
+          if (data.chainMaxStreak) DB.set('chain_max_streak', data.chainMaxStreak);
+          if (data.plan30Done) DB.set('plan30_done', data.plan30Done);
           if (data.papers) DB.set('papers', data.papers);
           if (data.experiments) DB.set('experiments', data.experiments);
           if (data.deadlines) DB.set('deadlines', data.deadlines);
@@ -2201,6 +2750,9 @@ flowchart TD
 
     // --- INITIALIZARE LA ÎNCĂRCARE ---
     window.addEventListener('DOMContentLoaded', () => {
+      initEtapeStorage();
+      renderAziTab();
+      renderActiveEtapa();
       renderPapers();
       renderExperiments();
       renderDeadlines();
