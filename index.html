@@ -407,6 +407,11 @@
         <i class="fa-solid fa-bullseye"></i> Etape & Plan Curent
       </button>
 
+      <div class="nav-category">Sănătate & Recuperare</div>
+      <button class="nav-btn" onclick="switchTab('nutrition-hub')">
+        <i class="fa-solid fa-utensils"></i> Nutriție & AI Arbiter
+      </button>
+
       <div class="nav-category">Robotică & Control Real-Time</div>
       <button class="nav-btn" onclick="switchTab('passivity-workbench')">
         <i class="fa-solid fa-wave-square"></i> Passivity & Control Workbench
@@ -551,6 +556,98 @@
             <button class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; margin-top: 8px;" onclick="startFocusFromAzi()">
               <i class="fa-solid fa-play"></i> Pornesc Sesiunea de Focus
             </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB NOU: NUTRIȚIE & AI DIET ARBITER        -->
+      <!-- ========================================== -->
+      <section id="nutrition-hub" class="view-section">
+        <!-- Banner Strategic & Configurare Cheie API -->
+        <div class="card" style="border-left: 4px solid var(--accent-green);">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-shield-heart" style="color: var(--accent-green);"></i> 
+              Protocol Recuperare & Slăbit: 135 kg &rarr; 110 kg
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="tag" style="background: rgba(46,160,67,0.15); color: #7ee787;">Rotulă Protejată • Fără Alergare</span>
+              <button class="btn btn-sm" onclick="WeonNutrition.promptApiKey()"><i class="fa-solid fa-key"></i> Config Cheie Gemini</button>
+            </div>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+            Regulă absolută: <strong>Toleranță zero la grăsimi ascunse</strong> (ulei turnat cu sticla, piele grasă, grăsimea topită scursă din carnea tocată). Fără impact articular: mers pe plan drept sau bicicletă cu șa înaltă. Farfuria trebuie să aibă 50% legume și carbohidrați max. cât un pumn.
+          </p>
+        </div>
+
+        <div class="split-grid">
+          <!-- Formular Upload & Input Masă -->
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-camera"></i> Foto Farfurie & Detalii Pregătire</div>
+                <span class="tag" id="nutri-status-tag" style="background: rgba(88,166,255,0.15); color: var(--primary);">Filtru Activ</span>
+              </div>
+
+              <!-- Drag & Drop / Mobile Camera Capture Zone -->
+              <input type="file" id="weon-nutri-img" accept="image/*" capture="environment" style="display: none;" onchange="WeonNutrition.handleImageUpload(event)">
+              
+              <div id="weon-nutri-dropzone" onclick="document.getElementById('weon-nutri-img').click()" 
+                   style="border: 2px dashed var(--surface-border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; background: var(--bg); transition: all 0.2s; margin-bottom: 12px;">
+                <div id="weon-nutri-placeholder" style="color: var(--text-muted); font-size: 0.88rem;">
+                  <i class="fa-solid fa-camera" style="font-size: 1.8rem; margin-bottom: 8px; color: var(--primary); display: block;"></i>
+                  <span>Fă o poză sau alege fișierul înainte de a mânca</span>
+                </div>
+                <img id="weon-nutri-preview" style="display: none; max-width: 100%; max-height: 240px; border-radius: 6px; object-fit: contain; margin: 0 auto;">
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label">Tip Masă</label>
+                  <select id="weon-nutri-type" class="form-control">
+                    <option value="Prânz">Prânz (Masa 1)</option>
+                    <option value="Cină">Cină (Masa 2)</option>
+                    <option value="Gustare">Gustare neprevăzută</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label">Activitate Azi (Mers/Brațe)</label>
+                  <input type="text" id="weon-nutri-activity" class="form-control" placeholder="ex. 4000 pași plat, 20 min brațe">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Detalii gătire & gramaje aproximative:</label>
+                <textarea id="weon-nutri-desc" class="form-control" rows="3" placeholder="ex. Carne vită cuptor (~250g), fără ulei turnat, varză murată, 2 cartofi mici fierți (~150g)."></textarea>
+              </div>
+
+              <button class="btn btn-primary btn-lg" id="weon-nutri-btn" style="width: 100%; justify-content: center;" onclick="WeonNutrition.evaluateCurrentMeal()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Analizează Farfuria & Decide
+              </button>
+            </div>
+
+            <!-- Card Decizie Live AI -->
+            <div class="card" id="weon-nutri-decision-card" style="display: none; background: #020617; border-left: 5px solid var(--primary);">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-gavel"></i> Verdict Arbitru Nutriție</div>
+                <span id="nutri-verdict-badge" class="tag">AI Decision</span>
+              </div>
+              <div id="weon-nutri-decision-content" style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; color: var(--text-bright);"></div>
+            </div>
+          </div>
+
+          <!-- Jurnal Istoric Mese -->
+          <div>
+            <div class="card" style="height: 100%;">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Jurnal Mese Recente (<span id="nutri-log-count">0</span>)</div>
+                <button class="btn btn-sm btn-danger" onclick="WeonNutrition.clearLog()"><i class="fa-solid fa-trash"></i> Șterge Jurnal</button>
+              </div>
+              <div id="weon-nutri-history-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 550px; overflow-y: auto;">
+                <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 20px;">Nicio masă analizată încă.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -783,6 +880,7 @@
             <div style="display:flex; gap:8px;">
               <select id="hub-json-selector" class="form-control" style="width:220px;" onchange="inspectStorageKey(this.value)">
                 <option value="papers">Matrice Literatură (papers)</option>
+                <option value="nutrition_log">Jurnal Nutriție & AI (nutrition_log)</option>
                 <option value="experiments">Jurnal Benchmark (experiments)</option>
                 <option value="paper_drafts">Draft Manuscris IEEE (paper_drafts)</option>
                 <option value="paper_library">Bibliotecă Proiecte Articole (paper_library)</option>
@@ -1009,7 +1107,7 @@
                 <button class="btn btn-sm" onclick="switchTab('deep-work')"><i class="fa-solid fa-play"></i> Pomodoro Focus</button>
                 <button class="btn btn-sm" onclick="switchTab('paper-tracker')"><i class="fa-solid fa-pen-nib"></i> Scrie Manuscris</button>
                 <button class="btn btn-sm" onclick="switchTab('exp-bench')"><i class="fa-solid fa-flask"></i> Loghează Rulare</button>
-                <button class="btn btn-sm" onclick="switchTab('meeting-brief')"><i class="fa-solid fa-file-pdf"></i> Brief Coordonator</button>
+                <button class="btn btn-sm" onclick="switchTab('nutrition-hub')"><i class="fa-solid fa-utensils"></i> Analiză Masă AI</button>
               </div>
             </div>
           </div>
@@ -1260,7 +1358,7 @@ flowchart TD
                 </div>
 
                 <!-- WATERMARK PDF -->
-                <div style="margin-top: 25px; pt-2; border-top: 1px dashed #d0d7de; font-size: 0.72rem; color: #8c959f; display: flex; justify-content: space-between;">
+                <div style="margin-top: 25px; border-top: 1px dashed #d0d7de; font-size: 0.72rem; color: #8c959f; display: flex; justify-content: space-between; padding-top: 6px;">
                   <span>Document de cercetare doctorală SCOSAAR — Confidențial</span>
                   <span>Autor: Gh. Alexandru (CC BY-NC-ND 4.0)</span>
                 </div>
@@ -1525,6 +1623,13 @@ flowchart TD
   </main>
 
   <script>
+    // --- 0. HELPER PENTRU NUMĂRARE CUVINTE ---
+    function countWords(str) {
+      if (!str) return 0;
+      const matches = str.trim().match(/\S+/g);
+      return matches ? matches.length : 0;
+    }
+
     // --- 1. CONFIGURARE MERMAID ROBUSTĂ ---
     if (window.mermaid) {
       mermaid.initialize({
@@ -1552,6 +1657,7 @@ flowchart TD
     // --- 3. ROBUST TAB NAVIGATION (v8.0) ---
     const tabTitles = {
       'tab-azi': 'Azi — Tabloul de Comandă Zilnic',
+      'nutrition-hub': 'Nutriție & AI Diet Arbiter (Recuperare 135 kg)',
       'passivity-workbench': 'Passivity & Control Workbench (Bilateral Teleop)',
       'data-hub': 'Monitorizare Date, Storage & Analytics Hub',
       'etapa-view': 'Etape & Planificare Cercetare Doctorat',
@@ -1594,6 +1700,7 @@ flowchart TD
         }
 
         if (tabId === 'tab-azi') renderAziTab();
+        if (tabId === 'nutrition-hub') WeonNutrition.renderHistory();
         if (tabId === 'passivity-workbench') calculatePassivity();
         if (tabId === 'data-hub') renderDataHub();
         if (tabId === 'etapa-view') renderActiveEtapa();
@@ -1631,7 +1738,232 @@ flowchart TD
       return isNaN(num) ? fallback : num;
     }
 
-    // --- 6. PASSIVITY WORKBENCH ENGINE ---
+    // --- 6. MODULUL NUTRITIE & CAMERA AI ---
+    const WeonNutrition = {
+      currentBase64: null,
+      currentMime: null,
+
+      promptApiKey() {
+        const current = DB.get('gemini_api_key', '');
+        const key = prompt('Introdu cheia Gemini API (Google AI Studio):', current);
+        if (key !== null) {
+          DB.set('gemini_api_key', key.trim());
+          alert('Cheia API a fost salvată local!');
+        }
+      },
+
+      handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        this.currentMime = 'image/jpeg';
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_DIM = 1024;
+            let w = img.width, h = img.height;
+
+            if (w > h && w > MAX_DIM) {
+              h *= MAX_DIM / w;
+              w = MAX_DIM;
+            } else if (h > MAX_DIM) {
+              w *= MAX_DIM / h;
+              h = MAX_DIM;
+            }
+
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            this.currentBase64 = dataUrl.split(',')[1];
+
+            const preview = document.getElementById('weon-nutri-preview');
+            preview.src = dataUrl;
+            preview.style.display = 'block';
+            document.getElementById('weon-nutri-placeholder').style.display = 'none';
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
+
+      generateThumbnail() {
+        const preview = document.getElementById('weon-nutri-preview');
+        if (!preview || preview.style.display === 'none') return null;
+        const canvas = document.createElement('canvas');
+        canvas.width = 52; canvas.height = 52;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(preview, 0, 0, 52, 52);
+        return canvas.toDataURL('image/jpeg', 0.5);
+      },
+
+      async evaluateCurrentMeal() {
+        let apiKey = DB.get('gemini_api_key', '');
+        if (!apiKey) {
+          apiKey = prompt('Introdu cheia Gemini API:');
+          if (!apiKey) return;
+          DB.set('gemini_api_key', apiKey.trim());
+        }
+
+        const mealType = document.getElementById('weon-nutri-type').value;
+        const activity = document.getElementById('weon-nutri-activity').value.trim() || 'Fără activitate raportată';
+        const desc = document.getElementById('weon-nutri-desc').value.trim();
+
+        const btn = document.getElementById('weon-nutri-btn');
+        const decisionCard = document.getElementById('weon-nutri-decision-card');
+        const decisionContent = document.getElementById('weon-nutri-decision-content');
+        const verdictBadge = document.getElementById('nutri-verdict-badge');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Se analizează farfuria...';
+        decisionCard.style.display = 'block';
+        decisionContent.textContent = 'Trimit imaginea și contextul către Gemini...';
+
+        const systemPrompt = `
+Ești un arbitru chirurgical și intransigent de nutriție pentru un bărbat de 135 kg aflat în recuperare post-fractură de rotulă (sedentarism forțat, rotulă vulnerabilă, fără alergare/impact, deficit caloric agresiv necesar pentru revenire la 110 kg).
+
+Analizează imaginea farfuriei și informațiile furnizate. Răspunde strict în următorul format structurat:
+
+VERDICT: [APROBAT] | [APROBAT CU MODIFICĂRI] | [RESPINS]
+CE RĂMÂNE PE FARFURIE: (Instrucțiune chirurgicală directă despre ce nu mănâncă sau "Totul se mănâncă")
+CAPCANA IDENTIFICATĂ: (Grăsimi ascunse, ulei adăugat, carne tocată grasă, untură topită, porție carbohidrați prea mare etc.)
+IMPACT PENTRU MASA URMĂTOARE: (Cum calibrează cina sau următoarea masă)
+
+Fii scurt, direct, fără politețuri. Aplică toleranță zero la grăsimi prăjite / seu de carne tocată și carbohidrați ce depășesc mărimea unui pumn.
+`;
+
+        const userText = `Tip Masă: ${mealType}\nActivitate Fizică: ${activity}\nDetalii Gătire: ${desc || 'Fără detalii suplimentare'}`;
+        const parts = [{ text: systemPrompt + "\n\n" + userText }];
+
+        if (this.currentBase64) {
+          parts.push({
+            inline_data: {
+              mime_type: this.currentMime,
+              data: this.currentBase64
+            }
+          });
+        }
+
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts }] })
+          });
+
+          if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+          const resData = await response.json();
+          const verdictText = resData.candidates?.[0]?.content?.parts?.[0]?.text || 'Nu s-a putut genera un răspuns.';
+
+          decisionContent.textContent = verdictText;
+
+          if (verdictText.includes('[APROBAT]') && !verdictText.includes('[APROBAT CU MODIFICĂRI]')) {
+            decisionCard.style.borderLeftColor = 'var(--accent-green)';
+            verdictBadge.textContent = 'APROBAT';
+            verdictBadge.style.color = '#7ee787';
+          } else if (verdictText.includes('[APROBAT CU MODIFICĂRI]')) {
+            decisionCard.style.borderLeftColor = 'var(--accent-yellow)';
+            verdictBadge.textContent = 'MODIFICĂRI';
+            verdictBadge.style.color = '#f2cc60';
+          } else {
+            decisionCard.style.borderLeftColor = 'var(--accent-danger)';
+            verdictBadge.textContent = 'RESPINS';
+            verdictBadge.style.color = '#ff7b72';
+          }
+
+          const thumb = this.generateThumbnail();
+          const entry = {
+            id: 'nutri_' + Date.now(),
+            dateStr: new Date().toLocaleString('ro-RO', { dateStyle: 'short', timeStyle: 'short' }),
+            mealType,
+            activity,
+            description: desc,
+            verdictText,
+            thumbnail: thumb
+          };
+
+          const log = DB.get('nutrition_log', []);
+          log.unshift(entry);
+          if (log.length > 50) log.pop();
+          DB.set('nutrition_log', log);
+
+          this.renderHistory();
+          document.getElementById('weon-nutri-desc').value = '';
+          this.resetInput();
+
+        } catch (err) {
+          decisionContent.textContent = 'Eroare la procesare: ' + err.message;
+          decisionCard.style.borderLeftColor = 'var(--accent-danger)';
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Analizează Farfuria & Decide';
+        }
+      },
+
+      resetInput() {
+        this.currentBase64 = null;
+        document.getElementById('weon-nutri-img').value = '';
+        document.getElementById('weon-nutri-preview').style.display = 'none';
+        document.getElementById('weon-nutri-placeholder').style.display = 'block';
+      },
+
+      deleteEntry(id) {
+        let log = DB.get('nutrition_log', []);
+        log = log.filter(e => e.id !== id);
+        DB.set('nutrition_log', log);
+        this.renderHistory();
+      },
+
+      clearLog() {
+        if (!confirm('Sigur dorești să ștergi tot istoricul meselor?')) return;
+        DB.set('nutrition_log', []);
+        this.renderHistory();
+      },
+
+      renderHistory() {
+        const list = document.getElementById('weon-nutri-history-list');
+        const countEl = document.getElementById('nutri-log-count');
+        if (!list) return;
+
+        const log = DB.get('nutrition_log', []);
+        if (countEl) countEl.textContent = log.length;
+
+        if (log.length === 0) {
+          list.innerHTML = '<div style="color:var(--text-muted); font-size:0.85rem; text-align:center; padding:20px;">Nicio masă analizată încă.</div>';
+          return;
+        }
+
+        list.innerHTML = log.map(item => {
+          const firstLine = item.verdictText ? item.verdictText.split('\n')[0] : 'VERDICT: N/A';
+          let badgeColor = 'var(--text-muted)';
+          if (firstLine.includes('APROBAT CU MODIFICĂRI')) badgeColor = '#f2cc60';
+          else if (firstLine.includes('APROBAT')) badgeColor = '#7ee787';
+          else if (firstLine.includes('RESPINS')) badgeColor = '#ff7b72';
+
+          return `
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--surface-border); border-radius: 8px; padding: 10px; display: flex; gap: 10px; align-items: flex-start;">
+              ${item.thumbnail ? `<img src="${item.thumbnail}" style="width: 52px; height: 52px; border-radius: 6px; object-fit: cover; flex-shrink: 0;">` : '<div style="width:52px; height:52px; background:var(--surface-hover); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:1.2rem;"><i class="fa-solid fa-bowl-food"></i></div>'}
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <span style="font-size: 0.72rem; color: var(--text-muted);">${item.dateStr} • ${item.mealType}</span>
+                  <button onclick="WeonNutrition.deleteEntry('${item.id}')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.75rem;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: ${badgeColor}; margin: 2px 0;">${firstLine}</div>
+                <div style="font-size: 0.78rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.description || item.activity}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    };
+
+    // --- 7. PASSIVITY WORKBENCH ENGINE ---
     function calculatePassivity() {
       const fm = parseRoFloat(document.getElementById('po-fm').value, 12.5);
       const vm = parseRoFloat(document.getElementById('po-vm').value, 0.25);
@@ -1669,7 +2001,7 @@ flowchart TD
       document.getElementById('res-po-wave-v').textContent = wave_v.toFixed(2);
     }
 
-    // --- 7. TELEOP QOS & NETEM ENGINE ---
+    // --- 8. TELEOP QOS & NETEM ENGINE ---
     function calculateQoS() {
       const freq = parseRoFloat(document.getElementById('calc-freq').value, 100);
       const payload = parseRoFloat(document.getElementById('calc-payload').value, 256);
@@ -1718,7 +2050,7 @@ flowchart TD
       navigator.clipboard.writeText(cmd).then(() => alert('Comanda Linux NetEm a fost copiată!'));
     }
 
-    // --- 8. CLIENT-SIDE AI TEXT DETECTOR ENGINE ---
+    // --- 9. CLIENT-SIDE AI TEXT DETECTOR ENGINE ---
     function analyzeAiTextProbability(text) {
       if (!text || text.trim().length < 80) {
         return { score: 0, label: "🟢 Text Prea Scurt" };
@@ -1732,7 +2064,7 @@ flowchart TD
       const mean = sentenceLengths.reduce((a, b) => a + b, 0) / sentenceLengths.length;
       const variance = sentenceLengths.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / sentenceLengths.length;
       const stdDev = Math.sqrt(variance);
-      const cv = mean > 0 ? (stdDev / mean) : 0; // Coeficient Variație (Burstiness)
+      const cv = mean > 0 ? (stdDev / mean) : 0;
 
       const aiBuzzwords = [
         "delve", "pivotal", "testament", "underscores", "crucial", "paramount", 
@@ -1752,7 +2084,7 @@ flowchart TD
       else if (cv < 0.35) aiScore += 30;
       else if (cv < 0.45) aiScore += 10;
 
-      const totalWords = text.split(/\s+/).length;
+      const totalWords = countWords(text);
       const buzzwordDensity = (buzzwordMatches / totalWords) * 100;
       if (buzzwordDensity > 1.2) aiScore += 40;
       else if (buzzwordDensity > 0.6) aiScore += 25;
@@ -1767,7 +2099,7 @@ flowchart TD
       return { score: aiScore, badge: badgeHtml };
     }
 
-    // --- 9. MULTI-PAPER LIBRARY & IEEE TRACKER ---
+    // --- 10. MULTI-PAPER LIBRARY & IEEE TRACKER ---
     function initPaperProjects() {
       let library = DB.get('paper_library', null);
       if (!library || library.length === 0) {
@@ -1810,7 +2142,6 @@ flowchart TD
       library.push({ id: projId, name, target: 6 });
       DB.set('paper_library', library);
 
-      // Salvează conținutul curent în noul proiect
       const draftsMap = DB.get('paper_drafts_map', {});
       const currentDrafts = {};
       for (let i = 0; i <= 7; i++) {
@@ -1845,7 +2176,6 @@ flowchart TD
         if (tagEl) tagEl.textContent = `${wCount} / ~${targetSecWords} cuv`;
       }
 
-      // Per-project persistence
       const activeProjId = DB.get('active_paper_project', 'proj_default');
       const draftsMap = DB.get('paper_drafts_map', {});
       draftsMap[activeProjId] = drafts;
@@ -1860,7 +2190,6 @@ flowchart TD
       document.getElementById('stat-global-pct').textContent = `${globalPct}%`;
       document.getElementById('global-paper-progressbar').style.width = `${globalPct}%`;
 
-      // Live AI Detector
       const aiAnalysis = analyzeAiTextProbability(fullText);
       document.getElementById('stat-ai-score').textContent = `${aiAnalysis.score}%`;
       document.getElementById('stat-ai-badge').innerHTML = aiAnalysis.badge;
@@ -1921,7 +2250,7 @@ flowchart TD
       downloadFile(`phd_manuscript_${Date.now()}.md`, draft, 'text/markdown');
     }
 
-    // --- 10. SCIENTIFIC PLOT & PGFPLOTS EXPORTER ---
+    // --- 11. SCIENTIFIC PLOT & PGFPLOTS EXPORTER ---
     let scientificChart = null;
 
     function initScientificChart() {
@@ -2009,7 +2338,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 11. DATA STORAGE MONITOR & HUB ---
+    // --- 12. DATA STORAGE MONITOR & HUB ---
     let hubChart1 = null, hubChart2 = null, hubChart3 = null, hubChart4 = null;
 
     function renderDataHub() {
@@ -2021,6 +2350,7 @@ flowchart TD
       const drafts = DB.get('paper_drafts', {});
       const etape = DB.get('etape', []);
       const chain = DB.get('chain', []);
+      const nutritionLog = DB.get('nutrition_log', []);
 
       let totalStorageBytes = 0;
       for (let i = 0; i < localStorage.length; i++) {
@@ -2040,6 +2370,7 @@ flowchart TD
       document.getElementById('hub-words-count').textContent = totalDraftWords;
 
       const keysMap = [
+        { key: 'phd_nutrition_log', desc: 'Jurnal Nutriție & Decizii Masă AI', count: `${nutritionLog.length} mese`, rawKey: 'nutrition_log' },
         { key: 'phd_papers', desc: 'Baza de date articole & literatură', count: `${papers.length} articole`, rawKey: 'papers' },
         { key: 'phd_experiments', desc: 'Jurnal benchmark & măsurători latență', count: `${experiments.length} rulări`, rawKey: 'experiments' },
         { key: 'phd_paper_drafts', desc: 'Draft manuscris IEEE (secțiunile 0-7)', count: `${totalDraftWords} cuvinte`, rawKey: 'paper_drafts' },
@@ -2145,7 +2476,7 @@ flowchart TD
       navigator.clipboard.writeText(code).then(() => alert('JSON-ul brut a fost copiat!'));
     }
 
-    // --- 12. MODELUL ETAPA & MIGRARE AUTOMATĂ ---
+    // --- 13. MODELUL ETAPA & MIGRARE AUTOMATĂ ---
     const SEED_P30_WEEKS = [
       { id:'s0', name:'S0 · 29-30 aug — C1, scrisul', start:'2026-08-28', end:'2026-08-31', items:[
         { id:'mt1', o:'TU', t:'MT1 SotA extins in vocea ta (comparatie explicita cu fiecare lucrare + fraza in afara ROS 2)' },
@@ -2320,7 +2651,7 @@ flowchart TD
       renderAziTab();
     }
 
-    // --- 13. LANȚUL (DON'T BREAK THE CHAIN) ---
+    // --- 14. LANȚUL (DON'T BREAK THE CHAIN) ---
     function getChain() { return DB.get('chain', []); }
 
     function markChainDay(dateStr) {
@@ -2360,7 +2691,7 @@ flowchart TD
       return { current, max };
     }
 
-    // --- 14. RANDARE TAB AZI ---
+    // --- 15. RANDARE TAB AZI ---
     function renderAziTab() {
       const etapa = getActiveEtapa();
       const done = getEtapaDoneItems();
@@ -2482,7 +2813,7 @@ flowchart TD
       if (!timerInterval) toggleTimer();
     }
 
-    // --- 15. DAILY SPRINT ENGINE ---
+    // --- 16. DAILY SPRINT ENGINE ---
     function loadDailySprint() {
       const todayStr = new Date().toLocaleDateString('ro-RO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       document.getElementById('sprint-date-display').textContent = todayStr;
@@ -2527,7 +2858,7 @@ flowchart TD
       document.getElementById('sprint-progressbar').style.width = `${pct}%`;
     }
 
-    // --- 16. MERMAID STUDIO ---
+    // --- 17. MERMAID STUDIO ---
     let mermaidTimeout = null;
     function scheduleMermaidRender() {
       clearTimeout(mermaidTimeout);
@@ -2583,7 +2914,7 @@ flowchart TD
       downloadFile(`phd_diagram_${Date.now()}.svg`, svgData, 'image/svg+xml');
     }
 
-    // --- 17. DATASETS INDEXER ---
+    // --- 18. DATASETS INDEXER ---
     let datasets = DB.get('datasets', []);
 
     function addDataset() {
@@ -2629,7 +2960,7 @@ flowchart TD
       });
     }
 
-    // --- 18. BRIEF COORDONATOR ---
+    // --- 19. BRIEF COORDONATOR ---
     function updateBriefLivePreview() {
       const g = document.getElementById('brief-green').value;
       const y = document.getElementById('brief-yellow').value;
@@ -2678,7 +3009,7 @@ flowchart TD
       navigator.clipboard.writeText(fullText).then(() => alert('Sinteza a fost copiată în clipboard!'));
     }
 
-    // --- 19. MATH & LATEX TOOLS ---
+    // --- 20. MATH & LATEX TOOLS ---
     function renderLatexPreview() {
       const input = document.getElementById('latex-input').value;
       const box = document.getElementById('katex-render-box');
@@ -2712,7 +3043,7 @@ flowchart TD
       renderLatexPreview();
     }
 
-    // --- 20. POMODORO TIMER ---
+    // --- 21. POMODORO TIMER ---
     let timerDuration = 25 * 60;
     let timerRemaining = timerDuration;
     let timerInterval = null;
@@ -2805,7 +3136,7 @@ flowchart TD
       }
     }
 
-    // --- 21. CALENDAR ENGINE ---
+    // --- 22. CALENDAR ENGINE ---
     let deadlines = DB.get('deadlines', []);
 
     function addDeadline() {
@@ -2903,7 +3234,7 @@ flowchart TD
       }
     }
 
-    // --- 22. MATRICE LITERATURA ---
+    // --- 23. MATRICE LITERATURA ---
     let papers = DB.get('papers', []);
     function toggleBibtexImport() {
       const el = document.getElementById('bibtex-import-box');
@@ -3007,7 +3338,7 @@ flowchart TD
       downloadFile('phd_papers.csv', csv, 'text/csv');
     }
 
-    // --- 23. STYLUS CANVAS ENGINE ---
+    // --- 24. STYLUS CANVAS ENGINE ---
     const canvas = document.getElementById('sketch-canvas');
     const ctx = canvas.getContext('2d');
     let isDrawing = false, currentTool = 'pen', penColor = '#58a6ff', penSize = 4;
@@ -3135,7 +3466,7 @@ flowchart TD
       link.click();
     }
 
-    // --- 24. EXPERIMENTE & BENCHMARK ---
+    // --- 25. EXPERIMENTE & BENCHMARK ---
     let experiments = DB.get('experiments', []);
 
     function addExperiment() {
@@ -3195,7 +3526,7 @@ flowchart TD
       navigator.clipboard.writeText(latex).then(() => alert('Tabelul LaTeX a fost copiat!'));
     }
 
-    // --- 25. WHERE I LEFT OFF ---
+    // --- 26. WHERE I LEFT OFF ---
     let stateLogs = DB.get('statelogs', []);
 
     function saveStateLog() {
@@ -3232,7 +3563,7 @@ flowchart TD
       });
     }
 
-    // --- 26. SYNC & BACKUP CU SCHEMA_VERSION 8.0 ---
+    // --- 27. SYNC & BACKUP CU SCHEMA_VERSION 8.0 & NUTRITION ---
     function exportFullBackup() {
       const fullData = {
         schema_version: "8.0",
@@ -3241,6 +3572,8 @@ flowchart TD
         chainMaxStreak: DB.get('chain_max_streak', 0),
         plan30Done: DB.get('plan30_done', []),
         papers: DB.get('papers', []),
+        nutritionLog: DB.get('nutrition_log', []),
+        geminiApiKey: DB.get('gemini_api_key', ''),
         experiments: DB.get('experiments', []),
         deadlines: DB.get('deadlines', []),
         statelogs: DB.get('statelogs', []),
@@ -3270,6 +3603,8 @@ flowchart TD
           if (data.chainMaxStreak) DB.set('chain_max_streak', data.chainMaxStreak);
           if (data.plan30Done) DB.set('plan30_done', data.plan30Done);
           if (data.papers) DB.set('papers', data.papers);
+          if (data.nutritionLog) DB.set('nutrition_log', data.nutritionLog);
+          if (data.geminiApiKey) DB.set('gemini_api_key', data.geminiApiKey);
           if (data.experiments) DB.set('experiments', data.experiments);
           if (data.deadlines) DB.set('deadlines', data.deadlines);
           if (data.statelogs) DB.set('statelogs', data.statelogs);
@@ -3318,6 +3653,7 @@ flowchart TD
       renderCalendarGrid();
       loadDailySprint();
       initPaperProjects();
+      WeonNutrition.renderHistory();
       
       const savedTask = DB.get('current_focus_task', '');
       if (savedTask) document.getElementById('focus-task').value = savedTask;
